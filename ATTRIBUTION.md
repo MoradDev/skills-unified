@@ -1,5 +1,11 @@
 # Attribution
 
+> **Scope of the `LICENSE` file.** It covers the original material here: the documentation
+> (`README.md`, `README.fr.md`, `AGENTS.md`, `CLAUDE.md`, `SETUP.md`), the catalogue
+> (`catalog/repos.tsv`) and the curation itself — which skills were selected, which were
+> rejected, and why. The content under `curation/` is redistributed from upstream
+> MIT-licensed projects and remains under their respective copyrights, listed below.
+
 Everything under `curation/` is redistributed from upstream projects, all of them MIT
 licensed. Nothing here was written from scratch by this repository's maintainers — the
 contribution is the **selection**, the **de-duplication**, the **cross-reference repair**
