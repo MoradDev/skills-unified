@@ -45,9 +45,15 @@ depth must be preserved if you move things around.
 1. **Constitution.** Establish the project's non-negotiables before any code.
 2. **Clarify the idea.** If it is still vague, run `grill-me` — structured interrogation
    beats guessing at requirements.
-3. **Specify → clarify → plan → tasks → analyze → implement.** If `spec-kit` is installed,
-   these are its commands. If not, follow the same sequence by hand: the order is what
-   matters, not the tooling.
+3. **Specify → clarify → plan → tasks → analyze → implement.** This is
+   [spec-kit](https://github.com/github/spec-kit), and **every new project starts with
+   it** — run `specify init <project>` before writing any code. It is the backbone of the
+   method, not an accessory: each step produces an artefact the next one consumes, which
+   is what stops an agent from inventing requirements halfway through.
+
+   The sequence matters more than the tool, so if `specify` cannot be installed in your
+   environment, follow the same order by hand and keep the artefacts as files. But treat
+   that as a fallback, not an equivalent choice.
 4. **Map the codebase** once it grows past roughly 80 files. Beyond that size, reading
    files one by one stops being a viable way to understand the system.
 5. **Verify before declaring done.** Run the tests. Report failures with their output.

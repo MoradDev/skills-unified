@@ -105,14 +105,33 @@ If you are none of the above: the skills are ordinary Markdown with YAML frontma
 
 ---
 
-## Step 5 — Optional tooling
+## Step 5 — Install spec-kit
+
+**Not optional.** Spec-driven development is the backbone of the method described in
+`AGENTS.md`: every new project starts with it.
+
+```bash
+uv tool install specify-cli --from git+https://github.com/github/spec-kit.git
+```
+
+Then, for each new project, from the workspace root:
+
+```bash
+specify init <project-name>
+```
+
+Consult `specify init --help` for the flags your agent supports — the CLI adapts its
+output to the target harness.
+
+If `uv` or `specify` cannot be installed in this environment, say so explicitly and tell
+the human the method will have to be followed by hand, keeping each step's artefact as a
+file. Do not silently skip this step.
+
+## Step 5b — Optional tooling
 
 Offer these; do not install them unprompted.
 
 ```bash
-# Spec-driven development — recommended, this is the backbone of the method
-uv tool install specify-cli --from git+https://github.com/github/spec-kit.git
-
 # Skill security scanner — run it manually on untrusted skills, never as a gate
 uv tool install git+https://github.com/NVIDIA/skillspector.git
 

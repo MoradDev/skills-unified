@@ -37,6 +37,11 @@ Nothing is installed globally. Nothing is activated behind your back.
 
 **83 curated skills**, in two families.
 
+Plus the working method itself, built on [spec-kit](https://github.com/github/spec-kit):
+every project starts with `specify init`, then runs constitution → specify → clarify →
+plan → tasks → analyze → implement. Each step produces an artefact the next one consumes,
+which is what keeps an agent from inventing requirements halfway through.
+
 *Method* (18) — turning a vague idea into working software: structured interrogation of
 an idea before writing a spec, API design, CI/CD, security hardening, performance,
 observability, git workflow, ADRs, migration, incremental delivery, context engineering,

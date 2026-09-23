@@ -38,6 +38,11 @@ Rien n'est installé globalement. Rien n'est activé à ton insu.
 
 **83 skills sélectionnées**, en deux familles.
 
+Plus la méthode de travail elle-même, bâtie sur [spec-kit](https://github.com/github/spec-kit) :
+tout projet démarre par `specify init`, puis enchaîne constitution → specify → clarify →
+plan → tasks → analyze → implement. Chaque étape produit un artefact que la suivante
+consomme — c'est ce qui empêche un agent d'inventer des exigences en cours de route.
+
 *Méthode* (18) — transformer une idée floue en logiciel qui tourne : interrogatoire
 structuré d'une idée avant d'écrire une spec, conception d'API, CI/CD, durcissement
 sécurité, performance, observabilité, workflow git, ADR, migration, livraison
