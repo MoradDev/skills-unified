@@ -117,11 +117,25 @@ uv tool install specify-cli --from git+https://github.com/github/spec-kit.git
 Then, for each new project, from the workspace root:
 
 ```bash
-specify init <project-name>
+specify init <project-name> --integration <your-harness> --non-interactive
 ```
 
-Consult `specify init --help` for the flags your agent supports — the CLI adapts its
-output to the target harness.
+Two things that will bite you, both confirmed by testing on a clean Ubuntu 26.04:
+
+- **`specify` checks that your agent's CLI is on `PATH`** and aborts with an
+  "Agent Detection Error" if it is not — which is common when the agent runs inside a
+  container, a WSL distribution or a sandbox while its CLI lives elsewhere. Add
+  `--ignore-agent-tools` to skip that check. The project scaffolds correctly without it.
+- **Without `--non-interactive` and without a TTY, it silently defaults to Copilot.**
+  Always pass your integration explicitly.
+
+Run `specify init --help` for the full list. It creates `.specify/` and installs the
+workflow as skills named with hyphens — `speckit-constitution`, `speckit-specify`,
+`speckit-clarify`, `speckit-plan`, `speckit-tasks`, `speckit-analyze`,
+`speckit-implement`, `speckit-converge`, `speckit-checklist`, `speckit-taskstoissues`.
+
+It does **not** generate a `CLAUDE.md` or an `AGENTS.md` for the new project. Create one
+yourself, pointing at the workspace's `AGENTS.md`.
 
 If `uv` or `specify` cannot be installed in this environment, say so explicitly and tell
 the human the method will have to be followed by hand, keeping each step's artefact as a
