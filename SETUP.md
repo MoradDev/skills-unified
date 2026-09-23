@@ -49,8 +49,9 @@ Create `mes_depots/` at the workspace root and clone into it. `mes_depots/` is
 
 Read `catalog/repos.tsv` (tab-separated: `name`, `url`, `role`, `activation`).
 
-**Clone at minimum** every row whose `activation` is `default`. Those five are what the
-working method depends on. Ask the human before cloning the rest — the full set is about
+**Clone at minimum** every row whose `activation` is `default`. Those four are what the
+working method depends on. Rows marked `tooling` are **not** cloned — they install as
+command-line tools in step 5. Ask the human before cloning the rest — the full set is about
 1.7 GB, and `Anthropic-Cybersecurity-Skills` alone is 817 skills nobody needs unless the
 project is a security engagement.
 
