@@ -1,0 +1,14 @@
+# The upstream cache is disposable and rebuildable from catalog/repos.tsv.
+# Cloning it here would also create nested git repositories, which git records
+# as bare gitlink pointers — useless to anyone cloning this repo.
+/mes_depots/
+
+# Projects created inside the workspace version themselves separately.
+/*/
+!/curation/
+!/catalog/
+!/docs/
+
+# Scanner output
+*.sarif
+skillspector-report.json

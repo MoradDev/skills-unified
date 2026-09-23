@@ -1,0 +1,9 @@
+{
+  "name": "curation",
+  "version": "2.0.0",
+  "description": "Sélection maison de skills pour tout nouveau projet du Workspace. Méthode : grill-me/grilling (mattpocock) et 16 skills d'agent-skills (addyosmani) — API design, CI/CD, sécurité, perf, observabilité, git workflow, ADR, migration, livraison incrémentale, context engineering, browser testing, constraint/doubt/source-driven development. Création d'applications : 65 skills d'ECC (affaan-m) couvrant le web (React, Vue, Next, Nuxt, Angular, Vite), le mobile (SwiftUI, Kotlin/Compose, Flutter, React Native), le desktop (.NET, Rust, C++, Windows E2E), le back-end (FastAPI, Django, Laravel, Spring Boot, Rails, Go, NestJS), les bases de données et le déploiement, avec les rulesets par langage dans rules/.",
+  "author": {
+    "name": "Workspace"
+  },
+  "license": "MIT"
+}
