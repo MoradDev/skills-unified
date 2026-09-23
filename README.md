@@ -17,9 +17,13 @@ It is not tied to Claude Code. Any agent that can read Markdown can use it.
 ## Quickstart
 
 ```bash
-git clone https://github.com/MoradDev/skills-unified.git workspace
-cd workspace
+git clone https://github.com/MoradDev/skills-unified.git my-workspace
+cd my-workspace
 ```
+
+The folder name is yours to choose — nothing depends on it. Pick one that does not
+already exist: Windows and macOS have case-insensitive filesystems, so a generic name
+like `workspace` will collide with an existing `Workspace` and the clone will fail.
 
 Then open your agent in that folder and give it one instruction:
 

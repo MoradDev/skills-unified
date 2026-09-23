@@ -18,9 +18,14 @@ servir.
 ## Démarrage
 
 ```bash
-git clone https://github.com/MoradDev/skills-unified.git workspace
-cd workspace
+git clone https://github.com/MoradDev/skills-unified.git mon-workspace
+cd mon-workspace
 ```
+
+Le nom du dossier est libre, rien n'en dépend. Choisis-en un qui n'existe pas déjà :
+sous Windows et macOS le système de fichiers est insensible à la casse, donc un nom
+générique comme `workspace` entrera en collision avec un `Workspace` existant et le
+clone échouera.
 
 Ouvre ensuite ton agent dans ce dossier et donne-lui une seule instruction :
 
