@@ -3,7 +3,7 @@
 **A ready-to-use workspace for AI coding agents. Clone it, tell your agent to read
 `SETUP.md`, and it installs the rest itself.**
 
-*[Version française](README.fr.md)*
+*[Version française](README.fr.md)* · *Every command on one page: [CHEATSHEET.md](CHEATSHEET.md)*
 
 Agent skills are scattered across dozens of repositories, with overlapping names,
 competing descriptions and wildly varying quality. This repository is the result of

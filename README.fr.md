@@ -3,7 +3,7 @@
 **Un workspace prêt à l'emploi pour agents de code. On le clone, on dit à son agent de
 lire `SETUP.md`, et il installe le reste lui-même.**
 
-*[English version](README.md)*
+*[English version](README.md)* · *Toutes les commandes sur une page : [CHEATSHEET.fr.md](CHEATSHEET.fr.md)*
 
 Les skills d'agents sont dispersées dans des dizaines de dépôts, avec des noms qui se
 recouvrent, des descriptions qui se concurrencent et une qualité très inégale. Ce dépôt
