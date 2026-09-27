@@ -33,6 +33,7 @@ After cloning, the repository root **is** the workspace root. It already contain
 <workspace>/
 ├── curation/          83 skills, rules/ and references/ — the curated payload
 ├── catalog/repos.tsv  the 21 upstream repositories, with their role
+├── templates/         STATE.md template, copied into each new project
 ├── AGENTS.md          the operating procedure (read this next)
 ├── CLAUDE.md          Claude Code entry point, defers to AGENTS.md
 └── SETUP.md           this file
@@ -155,6 +156,20 @@ uv tool install graphifyy
 ```
 
 ---
+
+## Step 5c — Create the project's `STATE.md`
+
+`specify init` does not create one. Copy [`templates/STATE.md`](templates/STATE.md) to the
+project root and fill in the header — project name, today's date, your harness, and the
+current step (`constitution`, since nothing has started yet).
+
+```bash
+cp templates/STATE.md <project>/STATE.md
+```
+
+This is what lets a different agent pick the project up later. Explain to the human, in one
+sentence, that this file is the shared memory between harnesses and that every agent is
+expected to read it on arrival and update it before leaving.
 
 ## Step 6 — Report
 

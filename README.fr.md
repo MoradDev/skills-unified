@@ -129,6 +129,23 @@ couverture n'est pas totale.
 
 ---
 
+## Un projet, plusieurs agents
+
+Chaque harnais garde sa mémoire privée, et aucun ne sait lire celle d'un autre. Tu démarres
+un projet sous Claude Code, tu le reprends la semaine suivante sous Cursor, et le second
+agent arrive à l'aveugle — la spec est sur le disque, mais tout ce qui s'est décidé en
+conversation a disparu.
+
+L'état partagé vit donc dans le dépôt, dans **`STATE.md` à la racine du projet** : étape en
+cours, dernière et prochaine action, décisions prises en conversation *avec leur
+justification*, blocages, et pièges découverts à la dure. Du Markdown, rien d'autre.
+
+`AGENTS.md` rend la règle contraignante — le lire en arrivant, le mettre à jour en partant,
+même après une session qui n'a rien produit (« exploré X, impasse, ne pas réessayer » mérite
+d'être écrit). La section `Journal` est en ajout seul, donc deux agents ne peuvent pas
+s'écraser mutuellement, et une table « notes propres au harnais » sert à recopier ce que la
+mémoire privée d'un agent contient et que les autres devraient savoir.
+
 ## Fonctionne avec n'importe quel agent
 
 | Harnais | Comment |

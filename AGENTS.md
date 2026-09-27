@@ -11,6 +11,8 @@ Installation is a separate concern — see `SETUP.md`.
 | `curation/` | **yes** | 83 curated skills, plus `rules/` and `references/`. The only non-reproducible content here. |
 | `mes_depots/` | no | Disposable cache of upstream repositories. Rebuildable from `catalog/repos.tsv`. |
 | `<project>/` | separately | One folder per project, with its own git repository. |
+| `<project>/STATE.md` | **yes** | Shared working state, readable by any harness. See below. |
+| `templates/` | yes | The `STATE.md` template to copy into a new project. |
 
 **Never modify anything under `mes_depots/`.** Upstream clones stay pristine so `git pull`
 never conflicts. Anything worth keeping gets copied into `curation/` and committed there.
@@ -39,6 +41,37 @@ engineering, browser testing, and constraint-, doubt- and source-driven developm
 Rust, C#, TypeScript, Go, Java, Python, PHP, Ruby, C++, Angular, Nuxt, Vue, Perl, F#,
 ArkTS, web, common). The React skills reference them via `../../rules/`, so the relative
 depth must be preserved if you move things around.
+
+## Continuity across agents — read this first
+
+Every harness keeps its own private memory. Claude Code, Codex, Cursor, Gemini CLI and the
+rest **cannot read each other's**. A project worked on by two different agents therefore
+loses everything that was not written to a file.
+
+So this workspace keeps the shared state in the repository, in **`STATE.md` at the project
+root**. It is plain Markdown, readable and writable by anything.
+
+**Two obligations, and they are not optional:**
+
+1. **Before doing anything else in a project, read its `STATE.md`.** It tells you where the
+   work stands, what was decided and why, and what to do next. Do not re-derive it from the
+   code, and do not ask the human to repeat what is already written there.
+2. **Before you finish a session, update it** — even a session that produced nothing.
+   "Explored X, found nothing, do not retry" is valuable to the next agent.
+
+What belongs in it: the current step, the last and next action, decisions taken **in
+conversation** with their reasoning, blockers, and traps discovered the hard way. What does
+not: anything already captured in `.specify/` artefacts — spec, plan and tasks are portable
+files, no need to duplicate them.
+
+The `Journal` section at the bottom is **append-only**. Add a line, never rewrite one. That
+is what stops two agents from destroying each other's history.
+
+If your harness holds private memory, rules or context that others cannot see, **mirror the
+part that matters into the "Harness-specific notes" table** and say which harness it came
+from. A note nobody can attribute is a note nobody can trust.
+
+The template is at [`templates/STATE.md`](templates/STATE.md).
 
 ## Working order
 

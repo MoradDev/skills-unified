@@ -34,6 +34,16 @@ Namespacing affects invocation only. It does **not** stop two skills with simila
 `description` fields from competing for auto-invocation — that is decided purely by
 description matching. Check descriptions, not just names, before adding a skill.
 
+## Private memory
+
+Claude Code keeps memory under `~/.claude/` that no other harness can read — not Codex, not
+Cursor, not a future Claude session opened elsewhere. Treat it as a scratchpad, never as the
+record.
+
+Anything another agent would need in order to continue goes into the project's `STATE.md`,
+as described in `AGENTS.md` § "Continuity across agents". Mirror it there before you finish,
+and name Claude Code in the harness-specific table so the next agent knows the origin.
+
 ## Subagents
 
 If the workspace includes agent personas, copy them into `<project>/.claude/agents/`

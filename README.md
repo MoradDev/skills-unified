@@ -119,6 +119,22 @@ files were never inspected at all, due to its 1 MB per-file ceiling. Coverage is
 
 ---
 
+## One project, several agents
+
+Every harness keeps its own private memory, and none of them can read another's. Start a
+project in Claude Code, continue it in Cursor next week, and the second agent arrives
+blind — the spec is on disk, but every decision taken in conversation is gone.
+
+So the shared state lives in the repository, in **`STATE.md` at the project root**: current
+step, last and next action, decisions taken in conversation *with their reasoning*,
+blockers, and traps discovered the hard way. Plain Markdown, no tooling.
+
+`AGENTS.md` makes it binding — read it on arrival, update it before leaving, even after a
+session that produced nothing ("explored X, dead end, do not retry" is worth writing). The
+`Journal` section is append-only, so two agents can never overwrite each other's history,
+and a "harness-specific notes" table is where an agent mirrors anything its private memory
+holds that others would need.
+
 ## Works with any agent
 
 | Harness | How |
