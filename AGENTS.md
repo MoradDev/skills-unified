@@ -152,6 +152,17 @@ The tools that earn their place in this method:
 - **It is early software** (0.10.x, first released September 2026) and its own README says to
   expect rough edges. If it fails or is absent, carry on without it — never block on it.
 
+Measured on 2026-09-27, against TypeSafe direct, to calibrate expectations:
+
+| Check | Benign input | Hostile input |
+|---|---|---|
+| `jev_screen` on a text carrying a prompt injection | injection 0.02 → `pass` | injection 0.99 → `block` |
+| `jev_review` on a diff with a division by zero and no tests | safe_to_apply 0.63, correctness 1.84 | safe_to_apply 0.16, correctness 0.10, test_gap 1.98 |
+
+Note the **correct** diff scored only 0.63, not 0.9. The scoring is conservative by design, so
+calibrate your threshold against real diffs rather than assuming a good change scores high.
+Each call cost around 550 input tokens — a few hundredths of a cent.
+
 For Jev as a component of the *application being built* rather than a tool for you, see the
 `structured-decisions` skill in `curation/`.
 

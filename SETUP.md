@@ -190,8 +190,19 @@ claude mcp add jev -- npx -y @jkudish/jev-mcp
 
 Codex, OpenCode, Amp and any generic MCP client are covered in the
 [project's README](https://github.com/jkudish/jev-mcp#install). All of them read the key from
-`TYPESAFE_API_KEY` in the server environment — **never paste it into a chat or a repository**.
-Keys come from [console.typesafe.ai](https://console.typesafe.ai/settings/keys).
+the server environment — **never paste it into a chat or a repository**.
+
+**Which provider.** `jev-mcp` tries TypeSafe, OpenRouter, Cloudflare, then Vercel, and takes
+the first whose key is present. Verified on 2026-09-27:
+
+| Provider | Variable | Reality |
+|---|---|---|
+| **TypeSafe direct** | `TYPESAFE_API_KEY` | **Recommended.** $5 free credit on signup, roughly 120M input tokens. No card required. Keys from [console.typesafe.ai](https://console.typesafe.ai). Signups were paused 22–26 September; they reopened. |
+| OpenRouter | `OPENROUTER_API_KEY` | $1 free credit. `jev-mcp` implements this transport locally, with documented retry bounds — the most resilient path. |
+| Cloudflare | `CLOUDFLARE_API_TOKEN` + `CLOUDFLARE_ACCOUNT_ID` | Two values to set; pricing set in the dashboard. |
+| Vercel AI Gateway | `AI_GATEWAY_API_KEY` | **Jev is not in the free tier.** A card is required merely to service requests, and Jev then returns `RestrictedModelsError` until you buy credits — which permanently ends the $5/month free allowance. Avoid unless you already pay Vercel. |
+
+Price is the same everywhere: $0.042 per million input tokens, output free.
 
 The rules for using it are in `AGENTS.md` § "Cheap mechanical checks", and the one that
 matters is this: a low-confidence verdict means ask the human, never proceed anyway.
