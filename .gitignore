@@ -3,12 +3,16 @@
 # as bare gitlink pointers — useless to anyone cloning this repo.
 /mes_depots/
 
-# Projects created inside the workspace version themselves separately.
+# Projects created inside the workspace version themselves separately, so every
+# top-level directory is ignored by default and re-allowed explicitly below.
+#
+# ⚠️ ADDING A FOLDER TO THIS REPOSITORY? Add it here too, or git will ignore it
+# silently — `git status` will not even list it as untracked. That is how
+# templates/ was nearly published empty.
 /*/
 !/curation/
 !/catalog/
 !/templates/
-!/docs/
 
 # Scanner output
 *.sarif
