@@ -157,7 +157,27 @@ uv tool install graphifyy
 
 ---
 
-## Step 5c — Create the project's `STATE.md`
+## Step 5c — Offer Context7
+
+Context7 serves current documentation for external libraries over MCP. Offer it; install
+only if the human agrees, and **at user scope**, never per project — the credential does
+not belong in a project repository.
+
+For Claude Code:
+
+```bash
+claude mcp add --transport http --scope user context7 https://mcp.context7.com/mcp   --header "Authorization: Bearer <YOUR_CONTEXT7_API_KEY>"
+```
+
+Other harnesses: add an HTTP MCP server pointing at `https://mcp.context7.com/mcp` with an
+`Authorization: Bearer` header, using whatever configuration file your harness uses. A free
+key comes from [context7.com](https://context7.com).
+
+The rules for using it are in `AGENTS.md` § "External library documentation" — read them
+before the first call, particularly the obligation to check the documentation matches the
+version the project actually uses.
+
+## Step 5d — Create the project's `STATE.md`
 
 `specify init` does not create one. Copy [`templates/STATE.md`](templates/STATE.md) to the
 project root and fill in the header — project name, today's date, your harness, and the

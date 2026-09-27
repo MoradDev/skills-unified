@@ -73,6 +73,49 @@ from. A note nobody can attribute is a note nobody can trust.
 
 The template is at [`templates/STATE.md`](templates/STATE.md).
 
+## External library documentation — Context7
+
+Your training data lags behind every library you will touch. Context7 is an MCP server
+that serves current documentation for libraries, frameworks, SDKs and CLI tools. Two
+tools: `resolve-library-id` (name → `/org/project` identifier) and `query-docs`
+(`libraryId` + `query`).
+
+**Install it at user scope**, once, not per project — it is useful everywhere and its
+credential has no business in a project repository.
+
+**When to call it.** Only when the human asks, or when you have a genuine doubt about an
+external library's API or version. **Never by reflex.** Before each call, state in one
+line what you are looking up and why. Do not use it for refactoring, business-logic
+debugging, code review or general programming concepts — it answers questions about
+*libraries*, not about your code.
+
+**How to call it, precisely.**
+
+- Call only the tool strictly needed. If you already know the identifier (`/org/project`),
+  skip `resolve-library-id`. Otherwise resolve it **once per session** and reuse it.
+- Each `query` covers **one precise notion** — "configuring JWT auth with Express", never
+  "the Express documentation". Several notions means several calls.
+- Response size cannot be tuned. Keep the volume down by staying on one notion per query,
+  and only call again if the answer was genuinely insufficient.
+- State the version the project uses, in the query, whenever you can.
+- Reuse documentation already fetched in this session rather than calling again.
+
+**Never use it without checking the documentation is current.** This is the part that
+matters most, and it is not optional:
+
+1. Find the version the project **actually** uses — `package.json`, `build.gradle.kts`,
+   `libs.versions.toml`, `Package.swift`, `pubspec.yaml`, `requirements.txt`,
+   `pyproject.toml`, `Cargo.toml`, `go.mod`, whichever applies.
+2. Check the returned documentation matches that version, or the latest stable one, using
+   the version and update date Context7 reports when it provides them.
+3. If the documentation looks old, if several versions coexist, or if any doubt remains,
+   confirm against the official source — release notes, changelog, the project's own
+   repository — **before writing code**.
+4. Report any discrepancy to the human: a deprecated API, a breaking change between the
+   project's version and the latest, or Context7 lagging behind the official source.
+
+A confidently wrong API call costs more than the minute spent checking.
+
 ## Working order
 
 1. **Constitution.** Establish the project's non-negotiables before any code.

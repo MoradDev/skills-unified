@@ -34,6 +34,22 @@ Namespacing affects invocation only. It does **not** stop two skills with simila
 `description` fields from competing for auto-invocation — that is decided purely by
 description matching. Check descriptions, not just names, before adding a skill.
 
+## Context7 MCP server
+
+Install once, at **user scope**, so every project inherits it and no credential lands in a
+project repository:
+
+```bash
+claude mcp add --transport http --scope user context7 https://mcp.context7.com/mcp   --header "Authorization: Bearer <YOUR_CONTEXT7_API_KEY>"
+```
+
+Get a key at [context7.com](https://context7.com). Check it is live with `claude mcp list`.
+The tools then appear as `mcp__context7__resolve-library-id` and `mcp__context7__query-docs`.
+
+The usage discipline — when to call, one notion per query, and the obligation to verify the
+documentation matches the version the project actually uses — is in `AGENTS.md`
+§ "External library documentation". It applies in full.
+
 ## Private memory
 
 Claude Code keeps memory under `~/.claude/` that no other harness can read — not Codex, not
