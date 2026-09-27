@@ -6,10 +6,15 @@
 > rejected, and why. The content under `curation/` is redistributed from upstream
 > MIT-licensed projects and remains under their respective copyrights, listed below.
 
-Everything under `curation/` is redistributed from upstream projects, all of them MIT
-licensed. Nothing here was written from scratch by this repository's maintainers — the
-contribution is the **selection**, the **de-duplication**, the **cross-reference repair**
-and the **method** around them.
+Almost everything under `curation/` is redistributed from upstream projects, all of them
+MIT licensed. The contribution is the **selection**, the **de-duplication**, the
+**cross-reference repair** and the **method** around them.
+
+**One exception, written here:** `curation/skills/structured-decisions` is original, not
+redistributed. It is covered by this repository's own `LICENSE` (MIT). It describes the
+ladder from constants and rules up to classifier models and LLM calls for runtime
+decisions, and cites [TypeSafe Jev](https://vercel.com/ai-gateway/models/jev) as one
+concrete option on the fourth rung.
 
 The MIT licence permits redistribution provided the copyright notice and permission
 notice travel with the work. That is the purpose of this file. The full licence text,
@@ -74,6 +79,7 @@ here. Listed because the method depends on them and credit is due:
 | [`NVIDIA/Skillspector`](https://github.com/NVIDIA/Skillspector) | NVIDIA | Apache-2.0 |
 | [`anthropics/skills`](https://github.com/anthropics/skills) | Anthropic | see repository |
 | [`Graphify-Labs/graphify`](https://github.com/Graphify-Labs/graphify) | Graphify Labs | see repository |
+| [`jkudish/jev-mcp`](https://github.com/jkudish/jev-mcp) | Joey Kudish | MIT |
 
 The complete list, with roles, is in [`catalog/repos.tsv`](catalog/repos.tsv).
 

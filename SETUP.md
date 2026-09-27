@@ -177,6 +177,25 @@ The rules for using it are in `AGENTS.md` § "External library documentation" �
 before the first call, particularly the obligation to check the documentation matches the
 version the project actually uses.
 
+## Step 5c bis — Offer Jev MCP (optional)
+
+Only if the human wants it. It adds eleven typed judgment tools — screening fetched content
+for prompt injection, verifying claims against evidence, scoring a diff before a task is
+called done. It is paid per call and it is early software, so it is genuinely optional.
+
+```bash
+# Claude Code
+claude mcp add jev -- npx -y @jkudish/jev-mcp
+```
+
+Codex, OpenCode, Amp and any generic MCP client are covered in the
+[project's README](https://github.com/jkudish/jev-mcp#install). All of them read the key from
+`TYPESAFE_API_KEY` in the server environment — **never paste it into a chat or a repository**.
+Keys come from [console.typesafe.ai](https://console.typesafe.ai/settings/keys).
+
+The rules for using it are in `AGENTS.md` § "Cheap mechanical checks", and the one that
+matters is this: a low-confidence verdict means ask the human, never proceed anyway.
+
 ## Step 5d — Create the project's `STATE.md`
 
 `specify init` does not create one. Copy [`templates/STATE.md`](templates/STATE.md) to the

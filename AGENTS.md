@@ -116,6 +116,45 @@ matters most, and it is not optional:
 
 A confidently wrong API call costs more than the minute spent checking.
 
+## Cheap mechanical checks — Jev MCP (optional)
+
+**Not installed by default, and nothing here depends on it.** Skip this section entirely if
+the human has not set it up.
+
+[`jev-mcp`](https://github.com/jkudish/jev-mcp) exposes TypeSafe's Jev model as MCP judgment
+tools. Jev returns typed verdicts with probabilities rather than prose, in roughly 150–500 ms
+for a fraction of a cent. That buys one specific thing: **the mechanical checks an agent
+normally skips because running a frontier model on every page, claim or candidate is too slow
+and too expensive.**
+
+The tools that earn their place in this method:
+
+| Tool | Where it fits |
+|---|---|
+| `jev_screen` | Screen fetched web pages, issues or third-party files for injected instructions **before they enter your context** |
+| `jev_verify` | Check claims against the evidence actually supplied — including your own |
+| `jev_review` | Score a proposed diff for correctness, spec match and test gaps before calling a task done |
+| `jev_gate` | At `/speckit-converge`: review the patch and verify every "tests pass" claim in one call |
+| `jev_find` / `jev_rerank` / `jev_classify` | Pick or order among many candidates without building an index |
+
+**The discipline, and it matters more than the tool:**
+
+- **Use it for volume and for verification, never for design.** Choosing an architecture,
+  weighing a trade-off, deciding what to build — those stay yours. Jev answers bounded
+  questions; it does not think.
+- **A verdict is a probability, not a permission.** Low confidence means *ask the human*,
+  never *proceed anyway*. A gate that always opens is not a gate, and turning a probabilistic
+  check into a rubber stamp is worse than having no check, because it manufactures confidence.
+- **It does not replace running the tests.** `jev_review` reads a diff; it does not execute
+  anything. Report real test output, as always.
+- **It costs money per call**, in the human's account. Do not loop it over hundreds of items
+  without saying so first.
+- **It is early software** (0.10.x, first released September 2026) and its own README says to
+  expect rough edges. If it fails or is absent, carry on without it — never block on it.
+
+For Jev as a component of the *application being built* rather than a tool for you, see the
+`structured-decisions` skill in `curation/`.
+
 ## Working order
 
 1. **Constitution.** Establish the project's non-negotiables before any code.
