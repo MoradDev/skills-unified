@@ -211,6 +211,35 @@ so they are meant to be matched against the task, not read end to end.
 
 Do not load all 84 at once. That defeats the purpose and floods your context.
 
+## When two skills compete
+
+Auto-invocation is decided by matching the task against every available `description`. Two
+skills with similar descriptions therefore compete, **namespacing does not prevent it**, and
+nothing tells you which one won. The symptom is an agent doing something adjacent to what was
+asked — interrogating you about an idea you already settled, writing a generic test plan
+instead of using the language's own testing skill.
+
+These are the known cases, between the curated set and the default plugins. They are not
+bugs to be fixed by deleting something: each skill is the right one *sometimes*. Recognise
+them, and say which one you want.
+
+| Competing | Why | What to do |
+|---|---|---|
+| `superpowers:brainstorming` vs `grill-me` / `grilling` vs `/speckit-specify` | Its description opens *"You MUST use this before any creative work"* — the most forceful trigger in the whole set, and it lands on the same ground as interrogating a vague idea and as the spec step. **The one most likely to disrupt the working order below.** | If the idea is already clear, say "skip the brainstorming, go straight to `/speckit-specify`". If it is vague, pick one deliberately: `grill-me` to be interrogated, `brainstorming` to explore. |
+| `superpowers:test-driven-development` vs `python-testing`, `golang-testing`, `rust-testing`, `kotlin-testing`, `csharp-testing`, `cpp-testing`, `react-testing`, `e2e-testing` | The superpowers one is the *method* (write the failing test first) and fires on "implementing any feature or bugfix". The curated ones are the *tools* for one language. Both are right at the same moment. **The widest overlap.** | Use both on purpose: the method decides the order, the language skill decides the idioms. `react-testing` already points at `test-driven-development` by name. If only the generic one fires, name the language skill. |
+| `superpowers:using-superpowers` vs `using-agent-skills` | Both are "how to find and use skills", both trigger at the start of a conversation. **The closest thing to a true duplicate here.** | Harmless when both fire — they agree. If the preamble is long, say "skip the skill preamble". |
+| `taste-skill:high-end-visual-design` vs `make-interfaces-feel-better` | Near-identical trigger surface: fonts, spacing, shadows, the polish that makes an interface feel expensive. **The strongest collision outside superpowers.** | Either is fine for polish. Name `taste-skill` when you want a whole design direction, `make-interfaces-feel-better` when you want an existing screen tightened. |
+| `taste-skill:stitch-design-taste` / `design-taste-frontend` vs `design-system` | All generate or audit a design system; one writes it as `DESIGN.md`. | Pick by output: `design-system` for tokens and components in the codebase, taste-skill for a direction and a look. |
+| `taste-skill:gpt-taste` vs `motion-foundations` / `motion-patterns` / `motion-advanced` | `gpt-taste` is a GSAP motion engineer; the curated three own motion tokens, springs and reduced motion. | Use the curated three for accessibility-correct motion; `gpt-taste` when you want an editorial, animation-led page. |
+| `superpowers:requesting-code-review` / `receiving-code-review` vs `flutter-dart-code-review`, `doubt-driven-development` | "Code review" as a trigger phrase, against one language-specific and one decision-specific reviewer. | Fine together. `doubt-driven-development` reviews a *decision*, the others review *code*. |
+| `ponytail` vs `constraint-driven-development` | They pull in opposite directions by design: one lowers the amount of code, the other defends a quality bar. | When they disagree, that disagreement is the useful output. Decide it yourself rather than letting whichever fired first win. |
+| `superpowers:writing-skills` vs `context-engineering` | Both cover authoring the agent's own rules and skill files. | Either. |
+| `agency-agents` personas vs curated skills on the same stack | Different mechanism — personas are delegated to, they do not auto-invoke — but 71 of them touch a domain a curated skill already covers (*Frontend Developer* vs `react-patterns`, *UI Designer* vs `design-system`/`accessibility`, *Database Optimizer* vs `postgres-patterns`, *DevOps Automator* vs `deployment-patterns`…). | The risk is duplicated advice, not a misfire. Copy only the divisions the project needs (see `SETUP.md` step 4b) and the overlap mostly disappears. |
+
+**Resolving these by editing an upstream file is not an option**: everything under
+`mes_depots/` stays pristine, and these repositories are pinned to inspected commits. The
+lever is to say which skill you want, in the session.
+
 ## Adding a skill to the curation
 
 1. Copy it from `mes_depots/<repo>/skills/<name>` into `curation/skills/<name>`.
@@ -260,3 +289,8 @@ Deliberate choices, not oversights:
   only.
 - **817 cybersecurity skills.** Explicit security engagements only.
 - **Codebase graphing.** Only past the ~80-file threshold.
+- **`agency-agents`' 297 personas, as a block.** They are agents, not skills, so they do not
+  auto-invoke — but a harness that lists its agents loads every one of their `description`
+  fields into every session: about **15,800 tokens** before anything is asked, for a project
+  that will use three or four. Copied **by division**, on request, as `SETUP.md` step 4b
+  describes. `engineering` + `design` + `testing` is 84 personas instead of 297.

@@ -107,12 +107,12 @@ pourvues d'une `description`.
 
 ---
 
-## Les quatre dépôts activés par défaut
+## Les trois dépôts activés par défaut
 
-Quatre dépôts amont sont raccordés à chaque nouveau projet sans passer par la curation
-ci-dessus : `superpowers`, `taste-skill`, `ponytail` et `agency-agents`. C'est une exception
-assumée, et la raison est simple — **c'est pour moi le minimum requis pour bien coder avec un
-harnais IA.** Pas une sélection triée : un plancher.
+Trois dépôts amont sont raccordés à chaque nouveau projet sans passer par la curation
+ci-dessus : `superpowers`, `taste-skill` et `ponytail`. C'est une exception assumée, et la
+raison est simple — **c'est pour moi le minimum requis pour bien coder avec un harnais IA.**
+Pas une sélection triée : un plancher.
 
 Ce que chacun apporte réellement, d'après son propre README et ses propres skills :
 
@@ -130,23 +130,31 @@ Ce que chacun apporte réellement, d'après son propre README et ses propres ski
   plus courte qui marche et relit un diff ou un dépôt entier à la recherche de
   sur-ingénierie. Son propre benchmark annonce ~54 % de code en moins sur 12 tâches, face au
   même agent sans lui.
-- **[`msitarzewski/agency-agents`](https://github.com/msitarzewski/agency-agents)** (297
-  personas) — des sous-agents spécialistes à qui déléguer : ingénierie, design, sécurité,
-  tests, produit et bien d'autres, pour qu'une tâche étroite aille à quelque chose écrit pour
-  elle plutôt qu'au généraliste.
+
+Les trois sont des plugins de skills, chacun portant son `.claude-plugin/plugin.json` — c'est
+ce qui rend vrai, pour eux, le « on le lie et ça marche ».
+
+**[`msitarzewski/agency-agents`](https://github.com/msitarzewski/agency-agents) était le
+quatrième, il est désormais `on-demand`.** Ses 297 personas spécialistes sont réellement
+utiles — ingénierie, design, sécurité, tests, produit et bien d'autres, pour qu'une tâche
+étroite aille à quelque chose écrit pour elle plutôt qu'au généraliste. Mais ce sont des
+*agents*, pas des skills, et un harnais qui liste ses agents charge chacun de leurs champs
+`description` dans **chaque session** : mesuré, cela fait environ **15 800 tokens avant que
+l'humain ait tapé quoi que ce soit**, pour un projet qui en utilisera trois ou quatre. Payer
+ça pour les 293 autres contredit l'argument que cette page défend deux sections plus haut.
+`SETUP.md` les propose donc **par division** — `engineering` + `design` + `testing` font 84
+personas au lieu de 297 — et les copie au lieu de les lier, parce qu'un harnais lit
+directement son dossier d'agents.
 
 **Les recoupements ont été vérifiés, et aucun n'a été résolu en silence.** Les champs
-`description` de leurs skills et agents ont été comparés à ceux de `curation/skills/`, parce
+`description` des skills et des agents ont été comparés à ceux de `curation/skills/`, parce
 que l'auto-invocation se décide sur la correspondance des descriptions et que l'espace de noms
-n'empêche pas la concurrence. Plusieurs recoupements réels existent :
-`superpowers:test-driven-development` face aux skills de test par langage (`react-testing`
-pointe déjà vers lui nommément), `superpowers:using-superpowers` face à `using-agent-skills`,
-`superpowers:brainstorming` face à `grill-me` et à l'étape specify de spec-kit,
-`taste-skill:high-end-visual-design` face à `make-interfaces-feel-better`, et une poignée de
-personas d'`agency-agents` face aux skills couvrant le même stack. Ils sont listés en entier
-dans la pull request qui a ajouté cette section. Aucun n'a été retiré : le plancher reste
-entier, et savoir où deux déclencheurs se concurrencent est plus utile que de faire comme si
-ce n'était pas le cas.
+n'empêche pas la concurrence. Plusieurs recoupements réels existent. Ils sont listés, avec quoi
+faire pour chacun, dans [`AGENTS.md`](AGENTS.md) § « When two skills compete » — et pas
+enterrés dans une pull request, parce que la personne qui en a besoin est celle qui regarde
+son agent faire quelque chose qu'elle n'a pas demandé. Aucun n'a été retiré : le plancher
+reste entier, et savoir où deux déclencheurs se concurrencent est plus utile que de faire comme
+si ce n'était pas le cas.
 
 ## Pourquoi VoiceStudio, voicebox et SCAIL-2 sont au catalogue
 

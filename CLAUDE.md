@@ -62,8 +62,12 @@ and name Claude Code in the harness-specific table so the next agent knows the o
 
 ## Subagents
 
-If the workspace includes agent personas, copy them into `<project>/.claude/agents/`
-rather than linking — Claude Code reads that directory directly.
+If the human asked for agent personas, copy them into `<project>/.claude/agents/` rather
+than linking — Claude Code reads that directory directly, so a junction to a repository full
+of READMEs and scripts is not it. Copy **by division** and only files whose name starts with a
+lowercase letter; `SETUP.md` step 4b has the exact commands and the reason the whole block is
+not copied by default (about 15,800 tokens of agent descriptions per session for 297 personas,
+against three or four actually used).
 
 Note that subagents execute inside the main session, so any isolation mechanism that
 wraps the agent from the outside cannot be invoked at delegation time.

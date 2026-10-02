@@ -327,11 +327,13 @@ Codex utilise `@ponytail`, `@ponytail-review` et `@ponytail-help`.
 ## 8. agency-agents
 
 Des personas spécialisées : ingénierie, design, marketing, sécurité, tests, produit,
-jeu vidéo, SIG et d'autres (environ 300, dans `mes_depots/agency-agents/<division>/`).
+jeu vidéo, SIG et d'autres (297, dans `mes_depots/agency-agents/<division>/`). **Pas
+installées par défaut** — voir `SETUP.md` étape 4b.
 
 | Tâche | Commande |
 |---|---|
-| Les ajouter à un projet Claude Code | Copier les fichiers `.md` dans `<projet>/.claude/agents/` (copier, pas relier) |
+| Les ajouter à un projet Claude Code | Copier **une division à la fois**, seulement les noms en minuscules : `Get-ChildItem mes_depots\agency-agents\engineering -Filter *.md \| Where-Object { $_.Name -cmatch '^[a-z]' } \| Copy-Item -Destination <projet>\.claude\agents` (copier, pas relier) |
+| Savoir ce que ça coûte | ~55 tokens de `description` par persona, chargés à **chaque session**. Les 297 font ~15 800 tokens. `engineering` + `design` + `testing` en font 84. |
 | Les installer pour un autre outil | `./scripts/install.sh --tool <outil>` depuis `mes_depots/agency-agents/` |
 | En utiliser une | Demande la spécialité par son nom : *« Utilise l'agent Backend Architect pour… »* |
 

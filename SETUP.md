@@ -32,6 +32,7 @@ After cloning, the repository root **is** the workspace root. It already contain
 ```
 <workspace>/
 ├── curation/          84 skills, rules/ and references/ — the curated payload
+├── QUICKSTART.md      the short path, if you are setting this up for a human who is new
 ├── catalog/repos.tsv  the upstream repositories: role, activation, pinned commit
 ├── templates/         STATE.md template, copied into each new project
 ├── AGENTS.md          the operating procedure (read this next)
@@ -59,8 +60,9 @@ Read `catalog/repos.tsv`. It is tab-separated, with six columns:
 | `commit` | The exact commit that was inspected. **Clone this, not the branch tip.** |
 | `scanned` | The date that commit was inspected, `YYYY-MM-DD` |
 
-**Clone at minimum** every row whose `activation` is `default`. Those four are what the
-working method depends on. Rows marked `tooling` are **not** cloned — they install as
+**Clone at minimum** every row whose `activation` is `default`. Those three — `superpowers`,
+`taste-skill`, `ponytail` — are what the working method depends on, and all three are skills
+plugins. Rows marked `tooling` are **not** cloned — they install as
 command-line tools in step 5. Ask the human before cloning the rest — the full set is about
 1.7 GB, and `Anthropic-Cybersecurity-Skills` alone is 817 skills nobody needs unless the
 project is a security engagement.
@@ -122,7 +124,7 @@ Replace `.agent/skills/` with whatever path your harness actually reads (see ste
 
 | Harness | What to do |
 |---|---|
-| **Claude Code** | Link `curation/` into `<project>/.claude/skills/curation`. It carries `.claude-plugin/plugin.json`, so it auto-loads as `curation@skills-dir` — no marketplace, no install command. The human must accept the workspace-trust prompt on first launch. Also link the `default` plugins from `mes_depots/` the same way. |
+| **Claude Code** | Link `curation/` into `<project>/.claude/skills/curation`. It carries `.claude-plugin/plugin.json`, so it auto-loads as `curation@skills-dir` — no marketplace, no install command. The human must accept the workspace-trust prompt on first launch. Link the three `default` rows from `mes_depots/` the same way — each carries its own `.claude-plugin/plugin.json`. **Do not link `agency-agents` here**: it holds agent personas, not skills, and has no `plugin.json`. See step 4b. |
 | **Codex / any AGENTS.md-aware agent** | Copy or symlink `AGENTS.md` to the project root. It already tells you to consult `curation/skills/`. |
 | **Cursor** | Point a rule file at `curation/skills/`, or symlink the folder into `.cursor/rules/`. |
 | **Gemini CLI, opencode, Aider, Continue, others** | No plugin system needed. Add `AGENTS.md` to the project and load `curation/skills/<name>/SKILL.md` on demand, as described in AGENTS.md § "For agents without a plugin system". |
@@ -132,6 +134,60 @@ If you are none of the above: the skills are ordinary Markdown with YAML frontma
 `SKILL.md` when its description matches the task at hand. That is the entire mechanism.
 
 ---
+
+## Step 4b — Agent personas, only if the human asks
+
+`agency-agents` is **not** cloned or installed by default, and its `activation` is
+`on-demand` for one measurable reason: its 297 personas carry about **15,800 tokens of
+`description` frontmatter**, and a harness that lists its agents loads every one of those
+descriptions into **every session**, before the human has typed anything. A project uses
+three or four. Paying 15,800 tokens per session for the other 293 is a bad trade, and it
+contradicts this repository's own argument that every addition is context you spend.
+
+So: offer them, by division, and only install what the project will actually use.
+
+```bash
+git init agency-agents && cd agency-agents
+git remote add origin https://github.com/msitarzewski/agency-agents
+git fetch --depth 1 origin <sha from repos.tsv>
+git checkout FETCH_HEAD
+```
+
+They are **copied**, never linked — a harness reads its agents directory directly, and a
+junction to a repository full of READMEs and scripts is not that directory. Copy only the
+divisions that match the project, and only files whose name starts with a **lowercase**
+letter: everything else (`README.md`, `CONTRIBUTING.md`, `LICENSE`, `SECURITY.md`,
+`CODE_OF_CONDUCT.md`, `QUICKSTART.md`, `EXECUTIVE-BRIEF.md`…) is documentation, not a
+persona, and would be loaded as a broken agent.
+
+The divisions are `academic`, `design`, `engineering`, `finance`, `game-development`, `gis`,
+`healthcare`, `integrations`, `marketing`, `paid-media`, `product`, `project-management`,
+`research`, `sales`, `security`, `spatial-computing`, `specialized`, `strategy`, `support`,
+`testing`. For a web application, `engineering` + `design` + `testing` is a reasonable
+default; it is 84 personas instead of 297.
+
+```powershell
+# Windows — one division
+New-Item -ItemType Directory -Force "<project>\.claude\agents" | Out-Null
+Get-ChildItem "mes_depots\agency-agents\engineering" -Filter *.md |
+  Where-Object { $_.Name -cmatch '^[a-z]' } |
+  Copy-Item -Destination "<project>\.claude\agents"
+```
+
+```bash
+# macOS / Linux — one division
+mkdir -p "<project>/.claude/agents"
+find "mes_depots/agency-agents/engineering" -maxdepth 1 -name '[a-z]*.md' \
+  -exec cp {} "<project>/.claude/agents/" \;
+```
+
+Some divisions have sub-folders (`game-development/unity`, `strategy/playbooks`, …). Add
+`-Recurse` / drop `-maxdepth 1` when the human wants those too, keeping the lowercase filter
+and excluding `examples`, `scripts` and `.github`.
+
+**Tell the human the count you copied and roughly what it costs them per session** — about
+55 tokens per persona. That is the number that lets them decide, and it is the number nobody
+was given before.
 
 ## Step 5 — Install spec-kit
 
