@@ -14,6 +14,9 @@ Installation is a separate concern — see `SETUP.md`.
 | `<project>/STATE.md` | **yes** | Shared working state, readable by any harness. See below. |
 | `templates/` | yes | The `STATE.md` template to copy into a new project. |
 
+`mes_depots/` lives at the workspace root, which is this repository's own root — `SETUP.md`
+step 2 puts it there, and `scripts/check.py` looks for it there.
+
 **Never modify anything under `mes_depots/`.** Upstream clones stay pristine, so the cache
 stays disposable. Anything worth keeping gets copied into `curation/` and committed there.
 

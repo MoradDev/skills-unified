@@ -5,6 +5,7 @@
 
 *[Version française](README.fr.md)* · *Never used this before? Start with*
 *[QUICKSTART.md](QUICKSTART.md)* · *Every command on one page: [CHEATSHEET.md](CHEATSHEET.md)*
+*Dated log of every audit, with how each figure was measured: [AUDITS.fr.md](AUDITS.fr.md) (French)*
 
 Agent skills are scattered across dozens of repositories, with overlapping names,
 competing descriptions and wildly varying quality. This repository is the result of

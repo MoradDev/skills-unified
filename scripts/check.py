@@ -73,6 +73,21 @@ def walk_md():
 # --------------------------------------------------------------------------- skills
 
 
+def upstream_cache() -> str | None:
+    """Where `mes_depots/` sits, if it is here at all.
+
+    `SETUP.md` puts it at the workspace root, which is this repository's own root. Older
+    layouts kept the repository inside a wider workspace folder, so the cache was a sibling.
+    Try both, and return None when there is none — a fresh clone has no cache, and that is
+    not a failure, only fewer checks.
+    """
+    for candidate in (os.path.join(ROOT, "mes_depots"), os.path.join(ROOT, "..", "mes_depots")):
+        resolved = os.path.normpath(candidate)
+        if os.path.isdir(resolved):
+            return resolved
+    return None
+
+
 def frontmatter(text: str) -> dict[str, str] | None:
     match = re.match(r"^---\s*\n(.*?)\n---", text, re.S)
     if not match:
@@ -237,8 +252,9 @@ def check_core_personas() -> None:
 
     # The upstream clone is optional (a fresh checkout has none), but when it is there the
     # names must resolve — a typo here is a persona that never arrives, with no error.
-    cache = os.path.normpath(os.path.join(ROOT, "..", "mes_depots", "agency-agents"))
-    if os.path.isdir(cache):
+    root = upstream_cache()
+    cache = os.path.join(root, "agency-agents") if root else None
+    if cache and os.path.isdir(cache):
         missing = [n for n in sorted(reference) if not os.path.isfile(os.path.join(cache, *n.split("/")) + ".md")]
         if missing:
             fail(f"SETUP.md step 4b: these personas do not exist upstream: {missing}")
@@ -346,8 +362,9 @@ def main(verbose: bool) -> int:
 
     # Every `default` row must actually be a skills plugin, since SETUP.md links it as one.
     for name in defaults:
-        cached = os.path.join(ROOT, "..", "mes_depots", name, ".claude-plugin", "plugin.json")
-        if os.path.exists(os.path.normpath(cached)):
+        root = upstream_cache()
+        plugin = os.path.join(root, name, ".claude-plugin", "plugin.json") if root else None
+        if plugin and os.path.exists(plugin):
             ok(f"{name}: carries .claude-plugin/plugin.json, so linking it as a skills plugin works")
         # Absent cache is not a failure: a fresh clone has no mes_depots/.
 
