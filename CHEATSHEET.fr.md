@@ -79,6 +79,7 @@ agent.
 | Relier la curation à un projet (Windows) | `New-Item -ItemType Junction -Path "<projet>\.claude\skills\curation" -Target "<workspace>\curation"` |
 | Relier la curation à un projet (macOS / Linux) | `ln -s "<workspace>/curation" "<projet>/.claude/skills/curation"` |
 | Indexer les skills sans système de plugins | `find curation/skills -name SKILL.md` |
+| Contrôler le dépôt contre lui-même | `python scripts/check.py` (ou `make check`) — recompte tous les chiffres annoncés |
 
 Remplace `.claude/skills/` par le chemin que lit ton agent. Les jonctions Windows ne
 demandent pas de droits administrateur. Relie de la même façon les trois plugins

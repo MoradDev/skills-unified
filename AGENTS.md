@@ -245,9 +245,42 @@ lever is to say which skill you want, in the session.
 1. Copy it from `mes_depots/<repo>/skills/<name>` into `curation/skills/<name>`.
 2. Check no skill of that name already exists anywhere in the active set.
 3. Check its `description` does not overlap an existing one — two similar descriptions
-   compete for auto-invocation, and namespacing does **not** prevent this.
+   compete for auto-invocation, and namespacing does **not** prevent this. If it does overlap,
+   add the pair to the table above rather than leaving the next person to discover it.
 4. If it came from an untrusted source, scan it (see below).
-5. Commit.
+5. Add its line to `ATTRIBUTION.md` — provenance and upstream licence. This is what makes
+   redistribution legitimate.
+6. **Run `python scripts/check.py`** and fix what it reports: the counts in both READMEs, both
+   cheatsheets, `AGENTS.md` and `SETUP.md`, and the skill's own row in the cheatsheet tables.
+7. Commit.
+
+## Checking the repository against itself
+
+```bash
+python scripts/check.py          # or: make check
+```
+
+Standard library only, no network, about a second. It is also a GitHub Action
+([`.github/workflows/check.yml`](.github/workflows/check.yml)) on every push and pull request.
+
+It exists because **every number this repository announced was wrong at least once**, and
+nothing recounted them: the skill total said 83 with 84 on disk, the rulesets said 21 with 22,
+the catalogue said 21 with 22 rows. Prose drifts from the filesystem silently. So it verifies:
+
+- the skill count, the two family counts, and every per-category count in both cheatsheets —
+  and that the categories list exactly the skills that exist on disk, no more, no fewer
+- every skill's frontmatter: a `name` that matches its directory, a `description` without which
+  it can never auto-invoke, and no duplicate names
+- the ruleset count
+- `catalog/repos.tsv`: column arity against the header, 40-hex commits, ISO dates, `https` URLs,
+  no duplicate names, and that its `default` rows are the ones the READMEs claim
+- every relative Markdown link in the repository, and every in-page anchor
+- that the English and French documents state the same numbers
+- the executable files shipped under `curation/`, by name, so a new one cannot appear unnoticed
+
+**Fix the cause, not the check.** The one case where editing the check is right is when prose
+was deliberately rewritten and the pattern it looks for no longer exists — it says so
+explicitly when that happens, rather than silently passing.
 
 ## Scanning an untrusted skill
 

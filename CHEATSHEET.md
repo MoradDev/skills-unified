@@ -76,6 +76,7 @@ The full procedure is in [`SETUP.md`](SETUP.md), written for an agent to execute
 | Link the curation into a project (Windows) | `New-Item -ItemType Junction -Path "<project>\.claude\skills\curation" -Target "<workspace>\curation"` |
 | Link the curation into a project (macOS / Linux) | `ln -s "<workspace>/curation" "<project>/.claude/skills/curation"` |
 | Index skills without a plugin system | `find curation/skills -name SKILL.md` |
+| Check the repository against itself | `python scripts/check.py` (or `make check`) — recounts every number the docs state |
 
 Replace `.claude/skills/` with the path your agent reads. Windows junctions need no
 administrator rights. Link the three `default` plugins (superpowers, taste-skill, ponytail)
