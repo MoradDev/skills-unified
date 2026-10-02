@@ -1,0 +1,136 @@
+name: Upstream watch
+
+# Compares the commit pinned in catalog/repos.tsv against the tip of each
+# upstream's default branch, and keeps one issue listing what has moved.
+# It only reports: it never updates a pin and never fails the build.
+
+on:
+  schedule:
+    # 06:17 UTC on the 1st of every month. Off the hour on purpose: GitHub
+    # drops scheduled runs when too many land in the same minute.
+    - cron: '17 6 1 * *'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  issues: write
+
+concurrency:
+  group: upstream-watch
+  cancel-in-progress: false
+
+jobs:
+  compare:
+    runs-on: ubuntu-latest
+    env:
+      ISSUE_TITLE: Upstream updates to review
+    steps:
+      - name: Check out the catalogue
+        uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+
+      - name: Compare each pin against its branch tip
+        id: compare
+        shell: bash
+        run: |
+          set -uo pipefail
+          tsv=catalog/repos.tsv
+          if [ ! -f "$tsv" ]; then
+            echo "::error::$tsv not found"
+            exit 1
+          fi
+
+          moved=0
+          errors=0
+          body=.upstream-watch-body.md
+          : > "$body"
+
+          while IFS=$'\t' read -r name url role activation commit scanned; do
+            case "$name" in ''|'#'*) continue ;; esac
+            if [ -z "${commit:-}" ]; then
+              printf -- '- **%s** — no pinned commit in the catalogue\n' "$name" >> "$body"
+              errors=$((errors + 1))
+              continue
+            fi
+
+            # Resolve the default branch tip without cloning. HEAD in a bare
+            # ls-remote is the remote's default branch.
+            head_sha="$(git ls-remote "$url" HEAD 2>/dev/null | awk 'NR==1 {print $1}')"
+            if [ -z "$head_sha" ]; then
+              printf -- '- **%s** — could not reach `%s`\n' "$name" "$url" >> "$body"
+              errors=$((errors + 1))
+              continue
+            fi
+
+            if [ "$head_sha" = "$commit" ]; then
+              continue
+            fi
+
+            moved=$((moved + 1))
+            slug="${url#https://github.com/}"
+            slug="${slug%.git}"
+            printf -- '- **%s** (`%s`, %s) — pinned `%s`, scanned %s → now `%s`\n  https://github.com/%s/compare/%s...%s\n' \
+              "$name" "$role" "$activation" "${commit:0:7}" "${scanned:-unknown}" "${head_sha:0:7}" \
+              "$slug" "$commit" "$head_sha" >> "$body"
+          done < "$tsv"
+
+          echo "moved=$moved" >> "$GITHUB_OUTPUT"
+          echo "errors=$errors" >> "$GITHUB_OUTPUT"
+          echo "Moved: $moved, unreachable or unpinned: $errors"
+          cat "$body"
+
+      - name: Open or update the review issue
+        if: steps.compare.outputs.moved != '0' || steps.compare.outputs.errors != '0'
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          REPO: ${{ github.repository }}
+          RUN_URL: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
+          MOVED: ${{ steps.compare.outputs.moved }}
+          ERRORS: ${{ steps.compare.outputs.errors }}
+        shell: bash
+        run: |
+          set -euo pipefail
+
+          {
+            printf '%s upstream repositories have moved past their pinned commit.\n\n' "$MOVED"
+            cat .upstream-watch-body.md
+            printf '\n'
+            if [ "$ERRORS" != "0" ]; then
+              printf '%s entries could not be checked (see the list above).\n\n' "$ERRORS"
+            fi
+            printf -- '---\n\n'
+            printf 'Nothing has been changed. Moving a pin is deliberate and manual: read the\n'
+            printf 'comparison, scan only the executable files the diff touched, review them\n'
+            printf 'yourself, then write the new SHA and date into `catalog/repos.tsv`. The\n'
+            printf 'procedure is in `README.md` § "Pinned upstreams, and updating one".\n\n'
+            printf 'The scanner is never an automatic gate.\n\n'
+            printf 'Refreshed by [`upstream-watch`](%s) on %s.\n' "$RUN_URL" "$(date -u +%Y-%m-%d)"
+          } > issue-body.md
+
+          existing="$(gh issue list --repo "$REPO" --state open --search "$ISSUE_TITLE in:title" \
+            --json number,title --jq "[.[] | select(.title == \"$ISSUE_TITLE\")] | .[0].number // empty")"
+
+          if [ -n "$existing" ]; then
+            gh issue edit "$existing" --repo "$REPO" --body-file issue-body.md
+            echo "Updated issue #$existing"
+          else
+            gh issue create --repo "$REPO" --title "$ISSUE_TITLE" --body-file issue-body.md
+          fi
+
+      - name: Close the issue when every pin is current
+        if: steps.compare.outputs.moved == '0' && steps.compare.outputs.errors == '0'
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          REPO: ${{ github.repository }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          existing="$(gh issue list --repo "$REPO" --state open --search "$ISSUE_TITLE in:title" \
+            --json number,title --jq "[.[] | select(.title == \"$ISSUE_TITLE\")] | .[0].number // empty")"
+          if [ -n "$existing" ]; then
+            gh issue close "$existing" --repo "$REPO" \
+              --comment "Every pin in \`catalog/repos.tsv\` now matches its branch tip. Closing; it will reopen as a new issue when one moves again."
+          else
+            echo "Every pin is current, and there is no open issue to close."
+          fi
