@@ -177,35 +177,71 @@ The rules for using it are in `AGENTS.md` § "External library documentation" �
 before the first call, particularly the obligation to check the documentation matches the
 version the project actually uses.
 
-## Step 5c bis — Offer Jev MCP (optional)
+## Step 5c bis — Offer Laya MCP (optional)
 
-Only if the human wants it. It adds eleven typed judgment tools — screening fetched content
-for prompt injection, verifying claims against evidence, scoring a diff before a task is
-called done. It is paid per call and it is early software, so it is genuinely optional.
+Only if the human wants it. [Laya](https://github.com/NandhaKishorM/laya) is an open-source
+(Apache-2.0) non-autoregressive decision model: you hand it a block of state and typed
+questions, it returns typed answers with probabilities and confidence in a single forward
+pass. No text generation, so nothing to parse and nothing to hallucinate. Its own MCP server
+ships in the same repository, so **everything runs locally and costs nothing per call** —
+there is no API key and no account.
+
+That buys one specific thing for the method: **the mechanical checks an agent normally skips
+because running a frontier model on every page, claim or candidate is too slow.** The rules
+for using it are in `AGENTS.md` § "Cheap mechanical checks".
+
+**Prerequisites**, from the project's own README:
+
+- **Python 3.10 or newer** (its `huggingface_hub` 1.x, `transformers` 5.x and `torch` 2.14
+  dependencies set that floor).
+- **CPU or GPU.** `LAYA_DEVICE` selects one; CPU works, a GPU is faster.
+- **Room for the weights.** The first prediction downloads a checkpoint from Hugging Face
+  into the `huggingface_hub` cache (`HF_HUB_CACHE` moves it). The English and
+  typed-decisions checkpoints are about 421M parameters, the multilingual one about 322M.
+  Nothing is downloaded until the first call.
+
+Install, with the version pinned so what you get is what was checked:
 
 ```bash
-# Claude Code
-claude mcp add jev -- npx -y @jkudish/jev-mcp
+pip install "laya[mcp]==0.3.23"
 ```
 
-Codex, OpenCode, Amp and any generic MCP client are covered in the
-[project's README](https://github.com/jkudish/jev-mcp#install). All of them read the key from
-the server environment — **never paste it into a chat or a repository**.
+`laya[mcp]` is an optional extra — the core package carries no `mcp` dependency. It
+installs the `laya-mcp-server` entry point (`python -m laya.mcp.server` is the same thing).
 
-**Which provider.** `jev-mcp` tries TypeSafe, OpenRouter, Cloudflare, then Vercel, and takes
-the first whose key is present. Verified on 2026-09-27:
+Register it in Claude Code. `-e` sets an environment variable, then `--` separates Claude's
+own options from the server command (verified against `claude mcp add --help`):
 
-| Provider | Variable | Reality |
-|---|---|---|
-| **TypeSafe direct** | `TYPESAFE_API_KEY` | **Recommended.** $5 free credit on signup, roughly 120M input tokens. No card required. Keys from [console.typesafe.ai](https://console.typesafe.ai). Signups were paused 22–26 September; they reopened. |
-| OpenRouter | `OPENROUTER_API_KEY` | $1 free credit. `jev-mcp` implements this transport locally, with documented retry bounds — the most resilient path. |
-| Cloudflare | `CLOUDFLARE_API_TOKEN` + `CLOUDFLARE_ACCOUNT_ID` | Two values to set; pricing set in the dashboard. |
-| Vercel AI Gateway | `AI_GATEWAY_API_KEY` | **Jev is not in the free tier.** A card is required merely to service requests, and Jev then returns `RestrictedModelsError` until you buy credits — which permanently ends the $5/month free allowance. Avoid unless you already pay Vercel. |
+```bash
+claude mcp add --scope user laya -e LAYA_DEVICE=cpu -- laya-mcp-server
+```
 
-Price is the same everywhere: $0.042 per million input tokens, output free.
+Use `--scope user` so every project inherits it; there is no credential to keep out of a
+repository, but there is no reason to repeat the registration either. Set
+`LAYA_DEVICE=cuda` (or `mps`) instead of `cpu` where the machine has a GPU.
 
-The rules for using it are in `AGENTS.md` § "Cheap mechanical checks", and the one that
-matters is this: a low-confidence verdict means ask the human, never proceed anyway.
+For any other MCP client, the equivalent stdio configuration from the project's README is:
+
+```json
+{
+  "mcpServers": {
+    "laya": {
+      "command": "laya-mcp-server",
+      "env": { "LAYA_DEVICE": "cpu" }
+    }
+  }
+}
+```
+
+The server exposes `laya_predict`, `laya_predict_batch`, `laya_route`, `laya_route_batch`,
+`laya_decide`, `laya_shortlist`, `laya_preset` and `laya_status`. Other environment
+variables it reads: `LAYA_PRELOAD` (build checkpoints at startup rather than lazily,
+default `1`), `LAYA_MODELS` (comma list to preload, default `english,multilingual`),
+`LAYA_THREADS` (cap torch intra-op threads on CPU) and `LAYA_AUTO_TASK`.
+
+Two things worth saying to the human before they install it: the first call is slow because
+it downloads weights, and **a low-confidence verdict means ask a human, never proceed
+anyway.**
 
 ## Step 5d — Create the project's `STATE.md`
 

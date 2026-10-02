@@ -11,7 +11,7 @@ Anthropic-Cybersecurity-Skills	https://github.com/mukul975/Anthropic-Cybersecuri
 agency-agents	https://github.com/msitarzewski/agency-agents	agents	default
 graphify	https://github.com/Graphify-Labs/graphify	cli	threshold
 Skillspector	https://github.com/NVIDIA/Skillspector	cli	manual
-jev-mcp	https://github.com/jkudish/jev-mcp	mcp	opt-in
+laya	https://github.com/NandhaKishorM/laya	mcp	opt-in
 awesome-claude-skills	https://github.com/ComposioHQ/awesome-claude-skills	index	reference
 andrej-karpathy-skills	https://github.com/multica-ai/andrej-karpathy-skills	rules	reference
 headroom	https://github.com/headroomlabs-ai/headroom	tool	on-demand

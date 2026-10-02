@@ -12,9 +12,10 @@ MIT licensed. The contribution is the **selection**, the **de-duplication**, the
 
 **One exception, written here:** `curation/skills/structured-decisions` is original, not
 redistributed. It is covered by this repository's own `LICENSE` (MIT). It describes the
-ladder from constants and rules up to classifier models and LLM calls for runtime
-decisions, and cites [TypeSafe Jev](https://vercel.com/ai-gateway/models/jev) as one
-concrete option on the fourth rung.
+ladder from constants and rules up to typed-output classification models and LLM calls for
+runtime decisions, and cites [`NandhaKishorM/laya`](https://github.com/NandhaKishorM/laya)
+(Apache-2.0) as one concrete open-source option on the fourth rung. No code of Laya's is
+redistributed here; the skill quotes its documented Python API as an example.
 
 The MIT licence permits redistribution provided the copyright notice and permission
 notice travel with the work. That is the purpose of this file. The full licence text,
@@ -66,8 +67,9 @@ No other content was altered. All 18 remaining relative links resolve.
 
 ## Referenced but not redistributed
 
-These are cloned by `SETUP.md` from their own repositories. No file of theirs is shipped
-here. Listed because the method depends on them and credit is due:
+These are cloned or installed by `SETUP.md` from their own repositories and package
+registries. No file of theirs is shipped here. Listed because the method depends on them and
+credit is due:
 
 | Project | Author | Licence |
 |---|---|---|
@@ -79,7 +81,7 @@ here. Listed because the method depends on them and credit is due:
 | [`NVIDIA/Skillspector`](https://github.com/NVIDIA/Skillspector) | NVIDIA | Apache-2.0 |
 | [`anthropics/skills`](https://github.com/anthropics/skills) | Anthropic | see repository |
 | [`Graphify-Labs/graphify`](https://github.com/Graphify-Labs/graphify) | Graphify Labs | see repository |
-| [`jkudish/jev-mcp`](https://github.com/jkudish/jev-mcp) | Joey Kudish | MIT |
+| [`NandhaKishorM/laya`](https://github.com/NandhaKishorM/laya) | Nandakishor M (Convai Innovations) | Apache-2.0 |
 
 The complete list, with roles, is in [`catalog/repos.tsv`](catalog/repos.tsv).
 
