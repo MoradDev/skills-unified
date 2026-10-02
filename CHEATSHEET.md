@@ -1,6 +1,6 @@
 # Cheat sheet
 
-*[Version française](CHEATSHEET.fr.md)*
+*[Version française](CHEATSHEET.fr.md)* · *First time here? [QUICKSTART.md](QUICKSTART.md) is shorter.*
 
 Every command this workspace gives you, on one page. Claude Code gets a short section;
 everything the workspace itself ships or installs is listed in full.

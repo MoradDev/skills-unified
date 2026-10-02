@@ -1,6 +1,6 @@
 # Aide-mémoire
 
-*[English version](CHEATSHEET.md)*
+*[English version](CHEATSHEET.md)* · *Première fois ici ? [QUICKSTART.fr.md](QUICKSTART.fr.md) est plus court.*
 
 Toutes les commandes que ce workspace te donne, sur une seule page. Claude Code a droit à
 une section courte ; tout ce que le workspace fournit ou installe lui-même est listé en
