@@ -22,7 +22,7 @@ une explicitement. Quand c'est le cas :
 1. [L'essentiel de Claude Code](#1-lessentiel-de-claude-code)
 2. [Installer et entretenir le workspace](#2-installer-et-entretenir-le-workspace)
 3. [spec-kit](#3-spec-kit)
-4. [Skills de la curation (83)](#4-skills-de-la-curation-83)
+4. [Skills de la curation (84)](#4-skills-de-la-curation-84)
 5. [superpowers (15)](#5-superpowers-15)
 6. [taste-skill (13)](#6-taste-skill-13)
 7. [ponytail (6)](#7-ponytail-6)
@@ -74,8 +74,8 @@ agent.
 |---|---|
 | Cloner le workspace | `git clone https://github.com/MoradDev/skills-unified.git mon-workspace` |
 | Laisser l'agent l'installer | Dis-lui : *« Lis SETUP.md et installe ce workspace. »* |
-| Remplir le cache amont | `git clone --depth 1 <url> mes_depots/<nom>` pour chaque ligne `default` de `catalog/repos.tsv` |
-| Mettre à jour un dépôt du cache | `git -C mes_depots/<nom> pull` (ne jamais y modifier de fichier) |
+| Remplir le cache amont | Pour chaque ligne `default` de `catalog/repos.tsv` : `git init mes_depots/<nom>`, `git remote add origin <url>`, `git fetch --depth 1 origin <commit>`, `git checkout FETCH_HEAD` |
+| Mettre à jour un dépôt du cache | Jamais de `git pull`. Déplace l'épinglage — voir README § « Dépôts amont épinglés » — puis supprime le dossier et re-clone. Ne jamais y modifier de fichier. |
 | Relier la curation à un projet (Windows) | `New-Item -ItemType Junction -Path "<projet>\.claude\skills\curation" -Target "<workspace>\curation"` |
 | Relier la curation à un projet (macOS / Linux) | `ln -s "<workspace>/curation" "<projet>/.claude/skills/curation"` |
 | Indexer les skills sans système de plugins | `find curation/skills -name SKILL.md` |
@@ -94,7 +94,7 @@ La colonne vertébrale de la méthode : tout nouveau projet commence ici.
 
 | Commande | Effet |
 |---|---|
-| `uv tool install specify-cli --from git+https://github.com/github/spec-kit.git` | Installer le CLI `specify` (une fois) |
+| `uv tool install specify-cli --from git+https://github.com/github/spec-kit.git@<commit>` | Installer le CLI `specify` (une fois), épinglé au commit `spec-kit` de `catalog/repos.tsv` |
 | `specify init <projet> --integration <agent> --non-interactive` | Créer un nouveau projet |
 | `specify init … --ignore-agent-tools` | Sauter la vérification du CLI de l'agent dans le `PATH` (conteneurs, WSL, sandbox) |
 | `specify init --help` | Toutes les options, dont la liste des intégrations |
@@ -127,7 +127,7 @@ Dans Claude Code, on les appelle `/speckit-constitution`, `/speckit-specify`, et
 
 ---
 
-## 4. Skills de la curation (83)
+## 4. Skills de la curation (84)
 
 Toutes dans `curation/skills/`. Les règles par langage sont dans `curation/rules/`.
 
@@ -174,7 +174,7 @@ Toutes dans `curation/skills/`. Les règles par langage sont dans `curation/rule
 | `motion-advanced` | Glisser-déposer, gestes, animations de texte et de SVG |
 | `ui-demo` | Enregistrer des vidéos de démo d'une application web avec Playwright |
 
-### Web back-end (16)
+### Web back-end (17)
 
 | Skill | Pour |
 |---|---|
@@ -194,6 +194,7 @@ Toutes dans `curation/skills/`. Les règles par langage sont dans `curation/rule
 | `hexagonal-architecture` | Ports et adaptateurs, frontières du domaine |
 | `contract-first` | Schémas d'API ou d'événements partagés par plusieurs consommateurs |
 | `error-handling` | Erreurs typées, relances, disjoncteurs (TS, Python, Go) |
+| `structured-decisions` | Choisir comment l'app décide à chaque requête : règle, score, classifieur ou LLM |
 
 ### Données (5)
 
@@ -342,13 +343,15 @@ Proposés par `SETUP.md`, jamais installés sans qu'on le demande.
 
 | Outil | Commande | Quand |
 |---|---|---|
-| graphify | `uv tool install graphifyy`, puis `graphify install` | Quand un projet dépasse environ 80 fichiers |
+| graphify | `uv tool install graphifyy==0.9.73`, puis `graphify install` | Quand un projet dépasse environ 80 fichiers |
 | graphify | `/graphify .` | Construire le graphe du code, puis lire `graph.html` / `GRAPH_REPORT.md` |
-| Skillspector | `uv tool install git+https://github.com/NVIDIA/skillspector.git` | Avant de faire confiance à une skill de source inconnue |
+| Skillspector | `uv tool install git+https://github.com/NVIDIA/Skillspector.git@<commit>` | Avant de faire confiance à une skill de source inconnue. Épingle-le au commit `Skillspector` de `catalog/repos.tsv`. |
 | Skillspector | `skillspector scan <dossier-de-la-skill> --no-llm` | L'analyser. Seuls comptent les résultats sur des fichiers `.py`, `.sh`, `.js`, `.ts`, `.ps1`. |
 
 ---
 
-*Les listes des plugins reflètent les dépôts amont au 25/09/2026 : superpowers `5bf4e78`,
-taste-skill `c184364`, ponytail `e3ba2aa`, agency-agents `053ddbb`. Elles ont pu évoluer
-depuis ; les skills de la curation (§4) ne changent qu'avec ce dépôt.*
+*Les listes des plugins reflètent les commits épinglés dans
+[`catalog/repos.tsv`](catalog/repos.tsv), inspectés le 02/10/2026 : superpowers `8ca22db`,
+taste-skill `ce26fc2`, ponytail `e3ba2aa`, agency-agents `d3f71c4`. Leurs branches ont très
+probablement bougé depuis — c'est tout l'objet de l'épinglage. Les skills de la curation (§4)
+ne changent qu'avec ce dépôt.*

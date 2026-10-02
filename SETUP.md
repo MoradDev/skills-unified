@@ -31,8 +31,8 @@ After cloning, the repository root **is** the workspace root. It already contain
 
 ```
 <workspace>/
-├── curation/          83 skills, rules/ and references/ — the curated payload
-├── catalog/repos.tsv  the 21 upstream repositories, with their role
+├── curation/          84 skills, rules/ and references/ — the curated payload
+├── catalog/repos.tsv  the upstream repositories: role, activation, pinned commit
 ├── templates/         STATE.md template, copied into each new project
 ├── AGENTS.md          the operating procedure (read this next)
 ├── CLAUDE.md          Claude Code entry point, defers to AGENTS.md
@@ -48,7 +48,16 @@ Nothing in `curation/` needs installing. It is plain Markdown and works as-is.
 Create `mes_depots/` at the workspace root and clone into it. `mes_depots/` is
 **deliberately not versioned** — it is a disposable cache, fully rebuildable.
 
-Read `catalog/repos.tsv` (tab-separated: `name`, `url`, `role`, `activation`).
+Read `catalog/repos.tsv`. It is tab-separated, with six columns:
+
+| Column | Meaning |
+|---|---|
+| `name` | The folder name to clone into, under `mes_depots/` |
+| `url` | The upstream repository |
+| `role` | What it is: `skills`, `agents`, `source`, `cli`, `mcp`, `tool`, `index`, `rules`, `marketplace`, `app-tool` |
+| `activation` | `default`, `tooling`, `curated`, `on-demand`, `threshold`, `manual`, `opt-in`, `reference`, `linux-only`, `stock` |
+| `commit` | The exact commit that was inspected. **Clone this, not the branch tip.** |
+| `scanned` | The date that commit was inspected, `YYYY-MM-DD` |
 
 **Clone at minimum** every row whose `activation` is `default`. Those four are what the
 working method depends on. Rows marked `tooling` are **not** cloned — they install as
@@ -56,14 +65,31 @@ command-line tools in step 5. Ask the human before cloning the rest — the full
 1.7 GB, and `Anthropic-Cybersecurity-Skills` alone is 817 skills nobody needs unless the
 project is a security engagement.
 
+**Clone the pinned commit, not the branch tip.** The `commit` column holds the state that was
+actually inspected; a branch tip moves and may carry code nobody here has looked at. Since
+`git clone --depth 1` cannot target a SHA, fetch it explicitly:
+
 ```bash
 mkdir -p mes_depots && cd mes_depots
-# for each selected row:
-git clone --depth 1 <url> <name>
+# for each selected row — <name>, <url> and <sha> from repos.tsv:
+git init <name> && cd <name>
+git remote add origin <url>
+git fetch --depth 1 origin <sha>
+git checkout FETCH_HEAD
+cd ..
 ```
 
-Use `--depth 1` unless the human wants the full history: these are consumed as content,
-not as repositories to contribute to.
+This leaves the clone on a detached HEAD at exactly `<sha>`, with no history: these are
+consumed as content, not as repositories to contribute to. Confirm it with
+`git -C <name> rev-parse HEAD` and compare against the TSV.
+
+If a `git fetch` of a specific SHA is refused, the server has
+`uploadpack.allowReachableSHA1InWant` disabled. Fall back to `git clone <url> <name> &&
+git -C <name> checkout <sha>` — a full clone, then the same pinned state — and say so.
+
+If the human explicitly wants the current branch tip instead, that is their call: clone with
+`git clone --depth 1 <url> <name>`, and **tell them plainly that what they got is not what
+was scanned.** Do not make that the default.
 
 > **Rule that matters: never modify anything inside `mes_depots/`.** It must stay pristine
 > so `git pull` can never conflict. Anything worth keeping is copied into `curation/`
@@ -113,8 +139,12 @@ If you are none of the above: the skills are ordinary Markdown with YAML frontma
 `AGENTS.md`: every new project starts with it.
 
 ```bash
-uv tool install specify-cli --from git+https://github.com/github/spec-kit.git
+uv tool install specify-cli --from git+https://github.com/github/spec-kit.git@838f1184d1b2ed254a99e8b818dbc23aa80a7f1f
 ```
+
+The `@<sha>` suffix pins the install to the commit recorded in `catalog/repos.tsv`, for the
+same reason step 2 pins the clones. Drop it only if the human asks for the latest, and tell
+them that is unscanned code.
 
 Then, for each new project, from the workspace root:
 
@@ -147,12 +177,14 @@ file. Do not silently skip this step.
 
 Offer these; do not install them unprompted.
 
+Both are pinned, for the same reason as step 2.
+
 ```bash
 # Skill security scanner — run it manually on untrusted skills, never as a gate
-uv tool install git+https://github.com/NVIDIA/skillspector.git
+uv tool install git+https://github.com/NVIDIA/Skillspector.git@2226747e4ca97198bb82faf5085b8a75f2e1dc02
 
 # Codebase graph — only once a project exceeds ~80 files
-uv tool install graphifyy
+uv tool install graphifyy==0.9.73
 ```
 
 ---
@@ -177,35 +209,71 @@ The rules for using it are in `AGENTS.md` § "External library documentation" �
 before the first call, particularly the obligation to check the documentation matches the
 version the project actually uses.
 
-## Step 5c bis — Offer Jev MCP (optional)
+## Step 5c bis — Offer Laya MCP (optional)
 
-Only if the human wants it. It adds eleven typed judgment tools — screening fetched content
-for prompt injection, verifying claims against evidence, scoring a diff before a task is
-called done. It is paid per call and it is early software, so it is genuinely optional.
+Only if the human wants it. [Laya](https://github.com/NandhaKishorM/laya) is an open-source
+(Apache-2.0) non-autoregressive decision model: you hand it a block of state and typed
+questions, it returns typed answers with probabilities and confidence in a single forward
+pass. No text generation, so nothing to parse and nothing to hallucinate. Its own MCP server
+ships in the same repository, so **everything runs locally and costs nothing per call** —
+there is no API key and no account.
+
+That buys one specific thing for the method: **the mechanical checks an agent normally skips
+because running a frontier model on every page, claim or candidate is too slow.** The rules
+for using it are in `AGENTS.md` § "Cheap mechanical checks".
+
+**Prerequisites**, from the project's own README:
+
+- **Python 3.10 or newer** (its `huggingface_hub` 1.x, `transformers` 5.x and `torch` 2.14
+  dependencies set that floor).
+- **CPU or GPU.** `LAYA_DEVICE` selects one; CPU works, a GPU is faster.
+- **Room for the weights.** The first prediction downloads a checkpoint from Hugging Face
+  into the `huggingface_hub` cache (`HF_HUB_CACHE` moves it). The English and
+  typed-decisions checkpoints are about 421M parameters, the multilingual one about 322M.
+  Nothing is downloaded until the first call.
+
+Install, with the version pinned so what you get is what was checked:
 
 ```bash
-# Claude Code
-claude mcp add jev -- npx -y @jkudish/jev-mcp
+pip install "laya[mcp]==0.3.23"
 ```
 
-Codex, OpenCode, Amp and any generic MCP client are covered in the
-[project's README](https://github.com/jkudish/jev-mcp#install). All of them read the key from
-the server environment — **never paste it into a chat or a repository**.
+`laya[mcp]` is an optional extra — the core package carries no `mcp` dependency. It
+installs the `laya-mcp-server` entry point (`python -m laya.mcp.server` is the same thing).
 
-**Which provider.** `jev-mcp` tries TypeSafe, OpenRouter, Cloudflare, then Vercel, and takes
-the first whose key is present. Verified on 2026-09-27:
+Register it in Claude Code. `-e` sets an environment variable, then `--` separates Claude's
+own options from the server command (verified against `claude mcp add --help`):
 
-| Provider | Variable | Reality |
-|---|---|---|
-| **TypeSafe direct** | `TYPESAFE_API_KEY` | **Recommended.** $5 free credit on signup, roughly 120M input tokens. No card required. Keys from [console.typesafe.ai](https://console.typesafe.ai). Signups were paused 22–26 September; they reopened. |
-| OpenRouter | `OPENROUTER_API_KEY` | $1 free credit. `jev-mcp` implements this transport locally, with documented retry bounds — the most resilient path. |
-| Cloudflare | `CLOUDFLARE_API_TOKEN` + `CLOUDFLARE_ACCOUNT_ID` | Two values to set; pricing set in the dashboard. |
-| Vercel AI Gateway | `AI_GATEWAY_API_KEY` | **Jev is not in the free tier.** A card is required merely to service requests, and Jev then returns `RestrictedModelsError` until you buy credits — which permanently ends the $5/month free allowance. Avoid unless you already pay Vercel. |
+```bash
+claude mcp add --scope user laya -e LAYA_DEVICE=cpu -- laya-mcp-server
+```
 
-Price is the same everywhere: $0.042 per million input tokens, output free.
+Use `--scope user` so every project inherits it; there is no credential to keep out of a
+repository, but there is no reason to repeat the registration either. Set
+`LAYA_DEVICE=cuda` (or `mps`) instead of `cpu` where the machine has a GPU.
 
-The rules for using it are in `AGENTS.md` § "Cheap mechanical checks", and the one that
-matters is this: a low-confidence verdict means ask the human, never proceed anyway.
+For any other MCP client, the equivalent stdio configuration from the project's README is:
+
+```json
+{
+  "mcpServers": {
+    "laya": {
+      "command": "laya-mcp-server",
+      "env": { "LAYA_DEVICE": "cpu" }
+    }
+  }
+}
+```
+
+The server exposes `laya_predict`, `laya_predict_batch`, `laya_route`, `laya_route_batch`,
+`laya_decide`, `laya_shortlist`, `laya_preset` and `laya_status`. Other environment
+variables it reads: `LAYA_PRELOAD` (build checkpoints at startup rather than lazily,
+default `1`), `LAYA_MODELS` (comma list to preload, default `english,multilingual`),
+`LAYA_THREADS` (cap torch intra-op threads on CPU) and `LAYA_AUTO_TASK`.
+
+Two things worth saying to the human before they install it: the first call is slow because
+it downloads weights, and **a low-confidence verdict means ask a human, never proceed
+anyway.**
 
 ## Step 5d — Create the project's `STATE.md`
 

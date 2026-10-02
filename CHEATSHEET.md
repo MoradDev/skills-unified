@@ -20,7 +20,7 @@ everything the workspace itself ships or installs is listed in full.
 1. [Claude Code essentials](#1-claude-code-essentials)
 2. [Workspace setup and maintenance](#2-workspace-setup-and-maintenance)
 3. [spec-kit](#3-spec-kit)
-4. [Curated skills (83)](#4-curated-skills-83)
+4. [Curated skills (84)](#4-curated-skills-84)
 5. [superpowers (15)](#5-superpowers-15)
 6. [taste-skill (13)](#6-taste-skill-13)
 7. [ponytail (6)](#7-ponytail-6)
@@ -71,8 +71,8 @@ The full procedure is in [`SETUP.md`](SETUP.md), written for an agent to execute
 |---|---|
 | Clone the workspace | `git clone https://github.com/MoradDev/skills-unified.git my-workspace` |
 | Let your agent install it | Say: *"Read SETUP.md and set up this workspace."* |
-| Fill the upstream cache | `git clone --depth 1 <url> mes_depots/<name>` for each `default` row of `catalog/repos.tsv` |
-| Update a cached repo | `git -C mes_depots/<name> pull` (never edit files there) |
+| Fill the upstream cache | For each `default` row of `catalog/repos.tsv`: `git init mes_depots/<name>`, `git remote add origin <url>`, `git fetch --depth 1 origin <commit>`, `git checkout FETCH_HEAD` |
+| Update a cached repo | Never `git pull` it. Move the pin instead — see README § "Pinned upstreams, and updating one" — then delete the folder and re-clone. Never edit files there. |
 | Link the curation into a project (Windows) | `New-Item -ItemType Junction -Path "<project>\.claude\skills\curation" -Target "<workspace>\curation"` |
 | Link the curation into a project (macOS / Linux) | `ln -s "<workspace>/curation" "<project>/.claude/skills/curation"` |
 | Index skills without a plugin system | `find curation/skills -name SKILL.md` |
@@ -91,7 +91,7 @@ The backbone of the method: every new project starts here.
 
 | Command | What it does |
 |---|---|
-| `uv tool install specify-cli --from git+https://github.com/github/spec-kit.git` | Install the `specify` CLI (once) |
+| `uv tool install specify-cli --from git+https://github.com/github/spec-kit.git@<commit>` | Install the `specify` CLI (once), pinned to the `spec-kit` commit in `catalog/repos.tsv` |
 | `specify init <project> --integration <agent> --non-interactive` | Scaffold a new project |
 | `specify init … --ignore-agent-tools` | Skip the check that your agent's CLI is on `PATH` (containers, WSL, sandboxes) |
 | `specify init --help` | Every option, including the list of integrations |
@@ -124,7 +124,7 @@ In Claude Code these are called as `/speckit-constitution`, `/speckit-specify`, 
 
 ---
 
-## 4. Curated skills (83)
+## 4. Curated skills (84)
 
 All in `curation/skills/`. Per-language rulesets live in `curation/rules/`.
 
@@ -171,7 +171,7 @@ All in `curation/skills/`. Per-language rulesets live in `curation/rules/`.
 | `motion-advanced` | Drag and drop, gestures, text and SVG animation |
 | `ui-demo` | Recording demo videos of a web app with Playwright |
 
-### Web back-end (16)
+### Web back-end (17)
 
 | Skill | Use it for |
 |---|---|
@@ -191,6 +191,7 @@ All in `curation/skills/`. Per-language rulesets live in `curation/rules/`.
 | `hexagonal-architecture` | Ports and adapters, domain boundaries |
 | `contract-first` | API or event schemas shared by several consumers |
 | `error-handling` | Typed errors, retries, circuit breakers (TS, Python, Go) |
+| `structured-decisions` | Choosing how the app decides on every request: rule, score, classifier or LLM |
 
 ### Data (5)
 
@@ -339,13 +340,14 @@ Offered by `SETUP.md`, never installed unprompted.
 
 | Tool | Command | When |
 |---|---|---|
-| graphify | `uv tool install graphifyy`, then `graphify install` | Once a project passes ~80 files |
+| graphify | `uv tool install graphifyy==0.9.73`, then `graphify install` | Once a project passes ~80 files |
 | graphify | `/graphify .` | Build the codebase graph, then read `graph.html` / `GRAPH_REPORT.md` |
-| Skillspector | `uv tool install git+https://github.com/NVIDIA/skillspector.git` | Before trusting a skill from an unknown source |
+| Skillspector | `uv tool install git+https://github.com/NVIDIA/Skillspector.git@<commit>` | Before trusting a skill from an unknown source. Pin to the `Skillspector` commit in `catalog/repos.tsv`. |
 | Skillspector | `skillspector scan <skill-folder> --no-llm` | Scan it. Only findings in `.py`, `.sh`, `.js`, `.ts`, `.ps1` files matter. |
 
 ---
 
-*Plugin lists reflect the upstream repositories on 2026-09-25: superpowers `5bf4e78`,
-taste-skill `c184364`, ponytail `e3ba2aa`, agency-agents `053ddbb`. They may have moved
-since; the curated skills in §4 only change when this repository does.*
+*Plugin lists reflect the commits pinned in [`catalog/repos.tsv`](catalog/repos.tsv),
+inspected on 2026-10-02: superpowers `8ca22db`, taste-skill `ce26fc2`, ponytail `e3ba2aa`,
+agency-agents `d3f71c4`. Their branches have very likely moved since — that is the point of
+the pin. The curated skills in §4 only change when this repository does.*
