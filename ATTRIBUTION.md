@@ -21,7 +21,10 @@ The MIT licence permits redistribution provided the copyright notice and permiss
 notice travel with the work. That is the purpose of this file. The full licence text,
 identical for all three sources, is reproduced at the end.
 
-## Provenance of the 83 curated skills
+## Provenance of the 84 curated skills
+
+83 of the 84 are redistributed from upstream, and listed below. The 84th,
+`structured-decisions`, is original — see the exception stated above.
 
 ### 65 skills from [`affaan-m/ECC`](https://github.com/affaan-m/ECC)
 

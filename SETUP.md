@@ -31,7 +31,7 @@ After cloning, the repository root **is** the workspace root. It already contain
 
 ```
 <workspace>/
-├── curation/          83 skills, rules/ and references/ — the curated payload
+├── curation/          84 skills, rules/ and references/ — the curated payload
 ├── catalog/repos.tsv  the upstream repositories: role, activation, pinned commit
 ├── templates/         STATE.md template, copied into each new project
 ├── AGENTS.md          the operating procedure (read this next)

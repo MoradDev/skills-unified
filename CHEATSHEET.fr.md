@@ -22,7 +22,7 @@ une explicitement. Quand c'est le cas :
 1. [L'essentiel de Claude Code](#1-lessentiel-de-claude-code)
 2. [Installer et entretenir le workspace](#2-installer-et-entretenir-le-workspace)
 3. [spec-kit](#3-spec-kit)
-4. [Skills de la curation (83)](#4-skills-de-la-curation-83)
+4. [Skills de la curation (84)](#4-skills-de-la-curation-84)
 5. [superpowers (15)](#5-superpowers-15)
 6. [taste-skill (13)](#6-taste-skill-13)
 7. [ponytail (6)](#7-ponytail-6)
@@ -127,7 +127,7 @@ Dans Claude Code, on les appelle `/speckit-constitution`, `/speckit-specify`, et
 
 ---
 
-## 4. Skills de la curation (83)
+## 4. Skills de la curation (84)
 
 Toutes dans `curation/skills/`. Les règles par langage sont dans `curation/rules/`.
 
@@ -174,7 +174,7 @@ Toutes dans `curation/skills/`. Les règles par langage sont dans `curation/rule
 | `motion-advanced` | Glisser-déposer, gestes, animations de texte et de SVG |
 | `ui-demo` | Enregistrer des vidéos de démo d'une application web avec Playwright |
 
-### Web back-end (16)
+### Web back-end (17)
 
 | Skill | Pour |
 |---|---|
@@ -194,6 +194,7 @@ Toutes dans `curation/skills/`. Les règles par langage sont dans `curation/rule
 | `hexagonal-architecture` | Ports et adaptateurs, frontières du domaine |
 | `contract-first` | Schémas d'API ou d'événements partagés par plusieurs consommateurs |
 | `error-handling` | Erreurs typées, relances, disjoncteurs (TS, Python, Go) |
+| `structured-decisions` | Choisir comment l'app décide à chaque requête : règle, score, classifieur ou LLM |
 
 ### Données (5)
 

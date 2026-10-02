@@ -20,7 +20,7 @@ everything the workspace itself ships or installs is listed in full.
 1. [Claude Code essentials](#1-claude-code-essentials)
 2. [Workspace setup and maintenance](#2-workspace-setup-and-maintenance)
 3. [spec-kit](#3-spec-kit)
-4. [Curated skills (83)](#4-curated-skills-83)
+4. [Curated skills (84)](#4-curated-skills-84)
 5. [superpowers (15)](#5-superpowers-15)
 6. [taste-skill (13)](#6-taste-skill-13)
 7. [ponytail (6)](#7-ponytail-6)
@@ -124,7 +124,7 @@ In Claude Code these are called as `/speckit-constitution`, `/speckit-specify`, 
 
 ---
 
-## 4. Curated skills (83)
+## 4. Curated skills (84)
 
 All in `curation/skills/`. Per-language rulesets live in `curation/rules/`.
 
@@ -171,7 +171,7 @@ All in `curation/skills/`. Per-language rulesets live in `curation/rules/`.
 | `motion-advanced` | Drag and drop, gestures, text and SVG animation |
 | `ui-demo` | Recording demo videos of a web app with Playwright |
 
-### Web back-end (16)
+### Web back-end (17)
 
 | Skill | Use it for |
 |---|---|
@@ -191,6 +191,7 @@ All in `curation/skills/`. Per-language rulesets live in `curation/rules/`.
 | `hexagonal-architecture` | Ports and adapters, domain boundaries |
 | `contract-first` | API or event schemas shared by several consumers |
 | `error-handling` | Typed errors, retries, circuit breakers (TS, Python, Go) |
+| `structured-decisions` | Choosing how the app decides on every request: rule, score, classifier or LLM |
 
 ### Data (5)
 

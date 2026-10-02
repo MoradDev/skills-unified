@@ -7,8 +7,10 @@ lire `SETUP.md`, et il installe le reste lui-même.**
 
 Les skills d'agents sont dispersées dans des dizaines de dépôts, avec des noms qui se
 recouvrent, des descriptions qui se concurrencent et une qualité très inégale. Ce dépôt
-est le résultat de l'audit de 21 d'entre eux — 2808 fichiers de skills au total — dont on
-a gardé les 83 qui méritent leur place, en laissant le raisonnement à découvert.
+est le résultat de l'audit des 22 dépôts catalogués dans
+[`catalog/repos.tsv`](catalog/repos.tsv) — 2920 fichiers de skills à eux tous, comptés aux
+commits désormais épinglés — dont on a gardé les 84 qui méritent leur place, en laissant le
+raisonnement à découvert.
 
 **C'est l'inverse du vibe coding.** Rien ici ne consiste à laisser un agent improviser
 jusqu'au résultat : tout projet démarre sur une constitution écrite et une spec, chaque skill
@@ -46,7 +48,7 @@ Rien n'est installé globalement. Rien n'est activé à ton insu.
 
 ## Ce que tu obtiens
 
-**83 skills sélectionnées**, en deux familles.
+**84 skills sélectionnées**, en deux familles.
 
 Plus la méthode de travail elle-même, bâtie sur [spec-kit](https://github.com/github/spec-kit) :
 tout projet démarre par `specify init`, puis enchaîne constitution → specify → clarify →
@@ -59,19 +61,20 @@ sécurité, performance, observabilité, workflow git, ADR, migration, livraison
 incrémentale, ingénierie de contexte, tests navigateur, et développement piloté par les
 contraintes, par le doute et par les sources.
 
-*Création d'applications* (65) — le métier proprement dit :
+*Création d'applications* (66) — le métier proprement dit :
 
 | Cible | Couverture |
 |---|---|
 | **Web — front** | React (patterns, perf, tests), Vue, Nuxt 4, Next.js/Turbopack, Angular, Vite, design systems, accessibilité WCAG 2.2, motion design |
 | **Web — back** | FastAPI, Django, NestJS, Laravel, Spring Boot, Rails, Go, architecture hexagonale, contract-first, gestion d'erreurs — avec des skills sécurité dédiées pour Django, Laravel et Spring Boot |
 | **Données** | PostgreSQL, MySQL, Redis, Prisma, migrations |
+| **Décisions à l'exécution** | Choisir comment une application décide à chaque requête : règle, fonction de score, classifieur à sortie typée ou appel LLM |
 | **Mobile** | SwiftUI, concurrence Swift 6.2, Liquid Glass, modèles de fondation embarqués, architecture clean Android, Kotlin, Compose Multiplatform, Flutter/Dart, React Native |
 | **Desktop** | .NET, Rust, C++, tests E2E Windows natif, Bun |
 | **Tests & livraison** | Playwright, tests Python/Go/C#, Docker, Kubernetes, déploiement |
 
-Plus les **rulesets par langage** pour 21 langages et frameworks, et un **catalogue** de
-21 dépôts amont avec leur rôle et leur politique d'activation.
+Plus les **rulesets par langage** pour 22 langages et frameworks, et un **catalogue** de
+22 dépôts amont avec leur rôle, leur politique d'activation et leur commit épinglé.
 
 ---
 
@@ -84,7 +87,9 @@ aussi du contexte dépensé.
 
 La sélection écarte donc plus qu'elle ne retient :
 
-- **227 des 292 skills d'ECC** — hors sujet pour la plupart des projets (santé,
+Comptés aux commits épinglés dans `catalog/repos.tsv` :
+
+- **228 des 293 skills d'ECC** — hors sujet pour la plupart des projets (santé,
   logistique, trading, homelab) ou redondantes avec l'existant.
 - **832 des 864 d'awesome-claude-skills** — des connecteurs SaaS, conservés comme simple
   annuaire de veille.
@@ -96,7 +101,7 @@ La sélection écarte donc plus qu'elle ne retient :
 
 La sélection est **fermée sous ses propres références croisées** : chaque lien
 `../skill/SKILL.md` a été suivi transitivement pour que rien ne pointe dans le vide.
-Contrôle final : 18 liens relatifs, 0 cassé. 83 skills, 83 noms distincts, toutes
+Contrôle final : 18 liens relatifs, 0 cassé. 84 skills, 84 noms distincts, toutes
 pourvues d'une `description`.
 
 ---
@@ -153,7 +158,9 @@ méthode.
 
 ## Sur l'analyse de sécurité des skills
 
-Tout a été scanné avec [NVIDIA SkillSpector](https://github.com/NVIDIA/Skillspector).
+Tout a été scanné avec [NVIDIA SkillSpector](https://github.com/NVIDIA/Skillspector), une
+première fois le 23/09/2026 puis le 02/10/2026 aux commits désormais épinglés dans
+`catalog/repos.tsv`.
 **Aucun code malveillant trouvé.** Mais le rapport brut disait l'inverse — 4969 findings,
 157 CRITICAL — et cet écart mérite d'être publié, parce que quiconque scanne des skills
 va le rencontrer.

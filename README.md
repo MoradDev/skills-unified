@@ -7,7 +7,8 @@
 
 Agent skills are scattered across dozens of repositories, with overlapping names,
 competing descriptions and wildly varying quality. This repository is the result of
-auditing 21 of them — 2808 skill files in total — and keeping the 83 that earn their
+auditing the 22 catalogued in [`catalog/repos.tsv`](catalog/repos.tsv) — 2920 skill files
+between them, counted at the commits now pinned there — and keeping the 84 that earn their
 place, with the reasoning kept in the open.
 
 **It is the opposite of vibe coding.** Nothing here is about letting an agent improvise its
@@ -44,7 +45,7 @@ Nothing is installed globally. Nothing is activated behind your back.
 
 ## What you get
 
-**83 curated skills**, in two families.
+**84 curated skills**, in two families.
 
 Plus the working method itself, built on [spec-kit](https://github.com/github/spec-kit):
 every project starts with `specify init`, then runs constitution → specify → clarify →
@@ -56,19 +57,20 @@ an idea before writing a spec, API design, CI/CD, security hardening, performanc
 observability, git workflow, ADRs, migration, incremental delivery, context engineering,
 browser testing, and constraint-, doubt- and source-driven development.
 
-*Application building* (65) — the actual craft:
+*Application building* (66) — the actual craft:
 
 | Target | Coverage |
 |---|---|
 | **Web front-end** | React (patterns, performance, testing), Vue, Nuxt 4, Next.js/Turbopack, Angular, Vite, design systems, WCAG 2.2 accessibility, motion design |
 | **Web back-end** | FastAPI, Django, NestJS, Laravel, Spring Boot, Rails, Go, hexagonal architecture, contract-first, error handling — with dedicated security skills for Django, Laravel and Spring Boot |
 | **Data** | PostgreSQL, MySQL, Redis, Prisma, migrations |
+| **Runtime decisions** | Choosing how an application decides on every request: rule, scoring function, typed-output classifier or LLM call |
 | **Mobile** | SwiftUI, Swift 6.2 concurrency, Liquid Glass, on-device foundation models, Android clean architecture, Kotlin, Compose Multiplatform, Flutter/Dart, React Native |
 | **Desktop** | .NET, Rust, C++, native Windows E2E testing, Bun |
 | **Testing & delivery** | Playwright, Python/Go/C# testing, Docker, Kubernetes, deployment |
 
-Plus **per-language rulesets** for 21 languages and frameworks, and a **catalogue** of 21
-upstream repositories with their role and activation policy.
+Plus **per-language rulesets** for 22 languages and frameworks, and a **catalogue** of 22
+upstream repositories with their role, activation policy and pinned commit.
 
 ---
 
@@ -80,7 +82,9 @@ namespacing does not prevent it. Every skill you add is also context you spend.
 
 So the selection rejects more than it keeps:
 
-- **227 of ECC's 292 skills** — off-topic for most projects (healthcare, logistics,
+Counted at the commits pinned in `catalog/repos.tsv`:
+
+- **228 of ECC's 293 skills** — off-topic for most projects (healthcare, logistics,
   trading, homelab) or duplicating what is already here.
 - **832 of awesome-claude-skills' 864** — SaaS connectors, kept as a reference index only.
 - **9 of agent-skills' 25** — one exact name collision on `test-driven-development`, plus
@@ -91,7 +95,7 @@ So the selection rejects more than it keeps:
 
 The selection is **closed under its own cross-references**: every `../skill/SKILL.md`
 link was followed transitively so nothing points into the void. Final check: 18 relative
-links, 0 broken. 83 skills, 83 distinct names, every one carrying a `description`.
+links, 0 broken. 84 skills, 84 distinct names, every one carrying a `description`.
 
 ---
 
@@ -143,7 +147,8 @@ method.
 
 ## On scanning skills for safety
 
-Everything here was scanned with [NVIDIA SkillSpector](https://github.com/NVIDIA/Skillspector).
+Everything here was scanned with [NVIDIA SkillSpector](https://github.com/NVIDIA/Skillspector),
+first on 2026-09-23 and again on 2026-10-02 at the commits now pinned in `catalog/repos.tsv`.
 **No malicious code was found.** But the raw report said otherwise — 4969 findings, 157
 CRITICAL — and that gap is worth publishing, because anyone scanning skills will hit it.
 

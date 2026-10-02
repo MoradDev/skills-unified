@@ -8,7 +8,7 @@ Installation is a separate concern — see `SETUP.md`.
 
 | Path | Versioned? | What it is |
 |---|---|---|
-| `curation/` | **yes** | 83 curated skills, plus `rules/` and `references/`. The only non-reproducible content here. |
+| `curation/` | **yes** | 84 curated skills, plus `rules/` and `references/`. The only non-reproducible content here. |
 | `mes_depots/` | no | Disposable cache of upstream repositories, each pinned to the commit recorded in `catalog/repos.tsv`. Rebuildable from that file. |
 | `<project>/` | separately | One folder per project, with its own git repository. |
 | `<project>/STATE.md` | **yes** | Shared working state, readable by any harness. See below. |
@@ -25,27 +25,28 @@ ends with deleting the folder and re-cloning at the new SHA.
 
 ## The two families of skills
 
-`curation/skills/` holds 83 skills in two groups:
+`curation/skills/` holds 84 skills in two groups:
 
 **Method** (18) — how to work: `grill-me` and `grilling` for interrogating a vague idea
 into a spec; then API design, CI/CD, security hardening, performance, observability, git
 workflow, ADRs, deprecation and migration, incremental implementation, context
 engineering, browser testing, and constraint-, doubt- and source-driven development.
 
-**Application building** (65) — what to build with:
+**Application building** (66) — what to build with:
 
 | Target | Coverage |
 |---|---|
 | Web front-end | React (patterns, performance, testing), Vue, Nuxt 4, Next.js/Turbopack, Angular, Vite, design systems, WCAG 2.2 accessibility, motion design |
 | Web back-end | FastAPI, Django (+ security), NestJS, Laravel (+ security), Spring Boot (+ security), Rails, Go, hexagonal architecture, contract-first, error handling |
 | Data | PostgreSQL, MySQL, Redis, Prisma, migrations |
+| Runtime decisions | Choosing how an application decides on every request: rule, scoring function, typed-output classifier or LLM call |
 | Mobile | SwiftUI, Swift 6.2 concurrency, Liquid Glass, on-device foundation models, Android clean architecture, Kotlin, Compose Multiplatform, Flutter/Dart, React Native |
 | Desktop | .NET, Rust, C++, native Windows E2E testing, Bun |
 | Testing & delivery | Playwright, Python/Go/C# testing, Docker, Kubernetes, deployment |
 
-`curation/rules/` holds per-language rulesets (React, React Native, Swift, Kotlin, Dart,
-Rust, C#, TypeScript, Go, Java, Python, PHP, Ruby, C++, Angular, Nuxt, Vue, Perl, F#,
-ArkTS, web, common). The React skills reference them via `../../rules/`, so the relative
+`curation/rules/` holds per-language rulesets for 22 languages and frameworks (React,
+React Native, Swift, Kotlin, Dart, Rust, C#, TypeScript, Go, Java, Python, PHP, Ruby, C++,
+Angular, Nuxt, Vue, Perl, F#, ArkTS, web, common). The React skills reference them via `../../rules/`, so the relative
 depth must be preserved if you move things around.
 
 ## Continuity across agents — read this first
@@ -208,7 +209,7 @@ skill when its description matches what you are about to do. That is the whole m
 Descriptions are written as triggers ("Use when building or reviewing React components"),
 so they are meant to be matched against the task, not read end to end.
 
-Do not load all 83 at once. That defeats the purpose and floods your context.
+Do not load all 84 at once. That defeats the purpose and floods your context.
 
 ## Adding a skill to the curation
 
@@ -250,7 +251,7 @@ updating one" has the commands.
 Deliberate choices, not oversights:
 
 - **The full `ECC` plugin.** Its 65 best application skills are already in `curation/`.
-  The other 227 are off-topic for most projects (healthcare, logistics, trading, homelab)
+  The other 228 are off-topic for most projects (healthcare, logistics, trading, homelab)
   or duplicate the stack.
 - **The full `agent-skills` plugin.** Its 16 best skills are already here. Linking all of
   it reintroduces an exact name collision on `test-driven-development` plus 8 conceptual
