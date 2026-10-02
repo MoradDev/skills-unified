@@ -32,7 +32,7 @@ After cloning, the repository root **is** the workspace root. It already contain
 ```
 <workspace>/
 ├── curation/          83 skills, rules/ and references/ — the curated payload
-├── catalog/repos.tsv  the 21 upstream repositories, with their role
+├── catalog/repos.tsv  the upstream repositories: role, activation, pinned commit
 ├── templates/         STATE.md template, copied into each new project
 ├── AGENTS.md          the operating procedure (read this next)
 ├── CLAUDE.md          Claude Code entry point, defers to AGENTS.md
@@ -48,7 +48,16 @@ Nothing in `curation/` needs installing. It is plain Markdown and works as-is.
 Create `mes_depots/` at the workspace root and clone into it. `mes_depots/` is
 **deliberately not versioned** — it is a disposable cache, fully rebuildable.
 
-Read `catalog/repos.tsv` (tab-separated: `name`, `url`, `role`, `activation`).
+Read `catalog/repos.tsv`. It is tab-separated, with six columns:
+
+| Column | Meaning |
+|---|---|
+| `name` | The folder name to clone into, under `mes_depots/` |
+| `url` | The upstream repository |
+| `role` | What it is: `skills`, `agents`, `source`, `cli`, `mcp`, `tool`, `index`, `rules`, `marketplace`, `app-tool` |
+| `activation` | `default`, `tooling`, `curated`, `on-demand`, `threshold`, `manual`, `opt-in`, `reference`, `linux-only`, `stock` |
+| `commit` | The exact commit that was inspected. **Clone this, not the branch tip.** |
+| `scanned` | The date that commit was inspected, `YYYY-MM-DD` |
 
 **Clone at minimum** every row whose `activation` is `default`. Those four are what the
 working method depends on. Rows marked `tooling` are **not** cloned — they install as
@@ -56,14 +65,31 @@ command-line tools in step 5. Ask the human before cloning the rest — the full
 1.7 GB, and `Anthropic-Cybersecurity-Skills` alone is 817 skills nobody needs unless the
 project is a security engagement.
 
+**Clone the pinned commit, not the branch tip.** The `commit` column holds the state that was
+actually inspected; a branch tip moves and may carry code nobody here has looked at. Since
+`git clone --depth 1` cannot target a SHA, fetch it explicitly:
+
 ```bash
 mkdir -p mes_depots && cd mes_depots
-# for each selected row:
-git clone --depth 1 <url> <name>
+# for each selected row — <name>, <url> and <sha> from repos.tsv:
+git init <name> && cd <name>
+git remote add origin <url>
+git fetch --depth 1 origin <sha>
+git checkout FETCH_HEAD
+cd ..
 ```
 
-Use `--depth 1` unless the human wants the full history: these are consumed as content,
-not as repositories to contribute to.
+This leaves the clone on a detached HEAD at exactly `<sha>`, with no history: these are
+consumed as content, not as repositories to contribute to. Confirm it with
+`git -C <name> rev-parse HEAD` and compare against the TSV.
+
+If a `git fetch` of a specific SHA is refused, the server has
+`uploadpack.allowReachableSHA1InWant` disabled. Fall back to `git clone <url> <name> &&
+git -C <name> checkout <sha>` — a full clone, then the same pinned state — and say so.
+
+If the human explicitly wants the current branch tip instead, that is their call: clone with
+`git clone --depth 1 <url> <name>`, and **tell them plainly that what they got is not what
+was scanned.** Do not make that the default.
 
 > **Rule that matters: never modify anything inside `mes_depots/`.** It must stay pristine
 > so `git pull` can never conflict. Anything worth keeping is copied into `curation/`
@@ -113,8 +139,12 @@ If you are none of the above: the skills are ordinary Markdown with YAML frontma
 `AGENTS.md`: every new project starts with it.
 
 ```bash
-uv tool install specify-cli --from git+https://github.com/github/spec-kit.git
+uv tool install specify-cli --from git+https://github.com/github/spec-kit.git@838f1184d1b2ed254a99e8b818dbc23aa80a7f1f
 ```
+
+The `@<sha>` suffix pins the install to the commit recorded in `catalog/repos.tsv`, for the
+same reason step 2 pins the clones. Drop it only if the human asks for the latest, and tell
+them that is unscanned code.
 
 Then, for each new project, from the workspace root:
 
@@ -147,12 +177,14 @@ file. Do not silently skip this step.
 
 Offer these; do not install them unprompted.
 
+Both are pinned, for the same reason as step 2.
+
 ```bash
 # Skill security scanner — run it manually on untrusted skills, never as a gate
-uv tool install git+https://github.com/NVIDIA/skillspector.git
+uv tool install git+https://github.com/NVIDIA/Skillspector.git@2226747e4ca97198bb82faf5085b8a75f2e1dc02
 
 # Codebase graph — only once a project exceeds ~80 files
-uv tool install graphifyy
+uv tool install graphifyy==0.9.73
 ```
 
 ---

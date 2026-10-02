@@ -9,13 +9,19 @@ Installation is a separate concern — see `SETUP.md`.
 | Path | Versioned? | What it is |
 |---|---|---|
 | `curation/` | **yes** | 83 curated skills, plus `rules/` and `references/`. The only non-reproducible content here. |
-| `mes_depots/` | no | Disposable cache of upstream repositories. Rebuildable from `catalog/repos.tsv`. |
+| `mes_depots/` | no | Disposable cache of upstream repositories, each pinned to the commit recorded in `catalog/repos.tsv`. Rebuildable from that file. |
 | `<project>/` | separately | One folder per project, with its own git repository. |
 | `<project>/STATE.md` | **yes** | Shared working state, readable by any harness. See below. |
 | `templates/` | yes | The `STATE.md` template to copy into a new project. |
 
-**Never modify anything under `mes_depots/`.** Upstream clones stay pristine so `git pull`
-never conflicts. Anything worth keeping gets copied into `curation/` and committed there.
+**Never modify anything under `mes_depots/`.** Upstream clones stay pristine, so the cache
+stays disposable. Anything worth keeping gets copied into `curation/` and committed there.
+
+**And never `git pull` one either.** Each clone sits on a detached HEAD at the `commit`
+recorded in `catalog/repos.tsv` — the state that was actually inspected. Pulling replaces it
+with unscanned code and leaves the TSV lying. To take an upstream update, move the pin
+deliberately: the procedure is in `README.md` § "Pinned upstreams, and updating one", and it
+ends with deleting the folder and re-cloning at the new SHA.
 
 ## The two families of skills
 
@@ -234,6 +240,10 @@ So: **only consider findings whose location is an executable file** (`.py`, `.sh
 nothing. A "Data Exfiltration" finding inside a `.py` deserves a line-by-line read.
 
 Never wire this scan in as an automatic gate. It would block official skills.
+
+The same filter applies to an upstream update: scan only the executable files the diff
+touched, read them yourself, and then move the pin. `README.md` § "Pinned upstreams, and
+updating one" has the commands.
 
 ## Not enabled by default
 

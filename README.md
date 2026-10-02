@@ -119,6 +119,36 @@ files were never inspected at all, due to its 1 MB per-file ceiling. Coverage is
 
 ---
 
+## Pinned upstreams, and updating one
+
+`catalog/repos.tsv` carries a `commit` column and a `scanned` date for every upstream
+repository. `SETUP.md` clones **that commit**, not the branch tip, so what you install is the
+state that was actually inspected. Without the pin, the scan above describes a past state of
+a moving branch and says nothing about the code on your disk.
+
+A pin has to be moved by hand, on purpose. The procedure:
+
+1. **Read the diff.** `git -C mes_depots/<name> fetch origin && git -C mes_depots/<name> diff
+   <old-sha>..origin/HEAD --stat`, or `https://github.com/<owner>/<repo>/compare/<old-sha>...<new-sha>`
+   in a browser.
+2. **Scan only the executable files the diff touched.** `git diff --name-only
+   <old-sha>..<new-sha> -- '*.py' '*.sh' '*.js' '*.ts' '*.ps1'` gives the list. Extract the
+   outbound domains, and look for `curl | sh`, `base64 -d | sh` and `eval` on a network
+   response. Markdown changes are prose: read them if you like, but a scanner finding on a
+   `.md` means nothing (see above).
+3. **Read it yourself.** A human looks at every executable change before the pin moves. The
+   scanner is an aid to that reading, never a substitute — and **never wire it in as an
+   automatic gate**: it classifies Anthropic's own official skills as "DO NOT INSTALL", so a
+   gate built on it would block correct code and teach everyone to skip it.
+4. **Move the pin.** Write the new SHA into the `commit` column and the date you inspected it
+   into `scanned`. Commit the TSV change on its own, with the comparison link in the message.
+5. **Re-clone.** Delete `mes_depots/<name>` and run step 2 of `SETUP.md` again. Never
+   `git pull` inside a pinned clone — that is how a cache quietly drifts away from its record.
+
+A monthly GitHub Action ([`.github/workflows/upstream-watch.yml`](.github/workflows/upstream-watch.yml))
+compares each pin against its branch tip and keeps a single issue listing what has moved. It
+only reports. It changes nothing and blocks nothing.
+
 ## One project, several agents
 
 Every harness keeps its own private memory, and none of them can read another's. Start a

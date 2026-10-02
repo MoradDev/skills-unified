@@ -129,6 +129,39 @@ couverture n'est pas totale.
 
 ---
 
+## Dépôts amont épinglés, et comment en mettre un à jour
+
+`catalog/repos.tsv` porte une colonne `commit` et une date `scanned` pour chaque dépôt amont.
+`SETUP.md` clone **ce commit**, pas la pointe de la branche : ce que tu installes est donc
+l'état réellement inspecté. Sans l'épinglage, le scan décrit plus haut porte sur un état passé
+d'une branche qui bouge, et ne dit rien du code posé sur ton disque.
+
+Un épinglage se déplace à la main, délibérément. La procédure :
+
+1. **Lis le diff.** `git -C mes_depots/<nom> fetch origin && git -C mes_depots/<nom> diff
+   <ancien-sha>..origin/HEAD --stat`, ou `https://github.com/<owner>/<repo>/compare/<ancien-sha>...<nouveau-sha>`
+   dans un navigateur.
+2. **Ne scanne que les fichiers exécutables touchés par le diff.** `git diff --name-only
+   <ancien-sha>..<nouveau-sha> -- '*.py' '*.sh' '*.js' '*.ts' '*.ps1'` en donne la liste.
+   Extrais les domaines sortants, et cherche `curl | sh`, `base64 -d | sh` et `eval` sur une
+   réponse réseau. Les changements Markdown sont de la prose : lis-les si tu veux, mais un
+   finding de scanner sur un `.md` ne veut rien dire (voir plus haut).
+3. **Relis-le toi-même.** Un humain regarde chaque changement exécutable avant que
+   l'épinglage ne bouge. Le scanner aide cette lecture, il ne la remplace jamais — et **ne le
+   câble jamais en garde-barrière automatique** : il classe les skills officielles d'Anthropic
+   en « DO NOT INSTALL », donc une barrière bâtie dessus bloquerait du code correct et
+   apprendrait à tout le monde à la contourner.
+4. **Déplace l'épinglage.** Écris le nouveau SHA dans la colonne `commit` et la date
+   d'inspection dans `scanned`. Committe la modification du TSV seule, avec le lien de
+   comparaison dans le message.
+5. **Re-clone.** Supprime `mes_depots/<nom>` et rejoue l'étape 2 de `SETUP.md`. Ne fais jamais
+   `git pull` dans un clone épinglé — c'est comme ça qu'un cache dérive en silence loin de ce
+   qui est écrit.
+
+Une GitHub Action mensuelle ([`.github/workflows/upstream-watch.yml`](.github/workflows/upstream-watch.yml))
+compare chaque épinglage à la pointe de sa branche et tient à jour une issue unique listant ce
+qui a bougé. Elle se contente de signaler. Elle ne change rien et ne bloque rien.
+
 ## Un projet, plusieurs agents
 
 Chaque harnais garde sa mémoire privée, et aucun ne sait lire celle d'un autre. Tu démarres
