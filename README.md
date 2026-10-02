@@ -90,6 +90,52 @@ links, 0 broken. 83 skills, 83 distinct names, every one carrying a `description
 
 ---
 
+## The four repositories enabled by default
+
+Four upstream repositories are linked into every new project without passing through the
+curation above: `superpowers`, `taste-skill`, `ponytail` and `agency-agents`. That is a
+deliberate exception, and the reason is plain — **for me this is the minimum required to code
+well with an AI harness.** Not a vetted selection: a floor.
+
+What each one actually contributes, from its own README and its own skills:
+
+- **[`obra/superpowers`](https://github.com/obra/superpowers)** (15 skills) — a complete
+  development methodology rather than a skill pack: it makes the agent tease a spec out of the
+  conversation, write a plan a junior engineer could follow, then execute it through subagents
+  under red/green TDD, with code review and a verification step before anything is called done.
+- **[`Leonxlnx/taste-skill`](https://github.com/Leonxlnx/taste-skill)** (13 skills) — visual
+  judgement. It carries a concrete design direction per style (editorial minimalist, Swiss
+  brutalist, agency-grade polish) with the exact fonts, spacing and shadow rules, so a
+  generated interface stops looking templated.
+- **[`DietrichGebert/ponytail`](https://github.com/DietrichGebert/ponytail)** (6 skills) — a
+  permanent YAGNI mode, active from session start, that pushes the agent to the shortest
+  solution that works and reviews a diff or a whole repository for over-engineering. Its own
+  benchmark reports ~54 % less code across 12 feature tasks against the same agent without it.
+- **[`msitarzewski/agency-agents`](https://github.com/msitarzewski/agency-agents)** (297
+  personas) — specialist subagents to delegate to, across engineering, design, security,
+  testing, product and more, so a narrow task goes to something written for it instead of to
+  the generalist.
+
+**The overlaps were checked, and nothing was silently resolved.** Their skill and agent
+`description` fields were compared against those of `curation/skills/`, because auto-invocation
+is decided by description matching and namespacing does not prevent competition. Several real
+overlaps exist — `superpowers:test-driven-development` against the per-language testing skills
+(`react-testing` already points at it by name), `superpowers:using-superpowers` against
+`using-agent-skills`, `superpowers:brainstorming` against `grill-me` and against spec-kit's own
+specify step, `taste-skill:high-end-visual-design` against `make-interfaces-feel-better`, and a
+handful of `agency-agents` personas against the skills covering the same stack. They are listed
+in full in the pull request that added this section. None was removed: the floor stays whole,
+and knowing where two triggers compete is more useful than pretending they do not.
+
+## Why VoiceStudio, voicebox and SCAIL-2 are in the catalogue
+
+They are never enabled — their `activation` is `stock`, meaning they sit in the catalogue as
+parts, not as skills, and no agent loads them on its own. They are listed because the
+applications bootstrapped here routinely ship AI of their own, and when one needs speech or a
+vision-language model it is better to reach for a known, already-inspected project than to
+improvise one. Propose them as components of the application being built, never as part of the
+method.
+
 ## On scanning skills for safety
 
 Everything here was scanned with [NVIDIA SkillSpector](https://github.com/NVIDIA/Skillspector).

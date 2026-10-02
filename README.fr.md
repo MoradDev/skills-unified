@@ -96,6 +96,56 @@ pourvues d'une `description`.
 
 ---
 
+## Les quatre dépôts activés par défaut
+
+Quatre dépôts amont sont raccordés à chaque nouveau projet sans passer par la curation
+ci-dessus : `superpowers`, `taste-skill`, `ponytail` et `agency-agents`. C'est une exception
+assumée, et la raison est simple — **c'est pour moi le minimum requis pour bien coder avec un
+harnais IA.** Pas une sélection triée : un plancher.
+
+Ce que chacun apporte réellement, d'après son propre README et ses propres skills :
+
+- **[`obra/superpowers`](https://github.com/obra/superpowers)** (15 skills) — une méthode de
+  développement complète plutôt qu'un paquet de skills : elle fait extraire une spec de la
+  conversation par l'agent, écrire un plan qu'un junior pourrait suivre, puis l'exécuter via
+  des sous-agents en TDD rouge/vert, avec revue de code et étape de vérification avant que
+  quoi que ce soit ne soit déclaré fini.
+- **[`Leonxlnx/taste-skill`](https://github.com/Leonxlnx/taste-skill)** (13 skills) — le
+  jugement visuel. Il porte une direction artistique concrète par style (minimalisme
+  éditorial, brutalisme suisse, finition d'agence) avec les polices, espacements et règles
+  d'ombre exacts, pour qu'une interface générée cesse d'avoir l'air d'un gabarit.
+- **[`DietrichGebert/ponytail`](https://github.com/DietrichGebert/ponytail)** (6 skills) — un
+  mode YAGNI permanent, actif dès le début de session, qui pousse l'agent vers la solution la
+  plus courte qui marche et relit un diff ou un dépôt entier à la recherche de
+  sur-ingénierie. Son propre benchmark annonce ~54 % de code en moins sur 12 tâches, face au
+  même agent sans lui.
+- **[`msitarzewski/agency-agents`](https://github.com/msitarzewski/agency-agents)** (297
+  personas) — des sous-agents spécialistes à qui déléguer : ingénierie, design, sécurité,
+  tests, produit et bien d'autres, pour qu'une tâche étroite aille à quelque chose écrit pour
+  elle plutôt qu'au généraliste.
+
+**Les recoupements ont été vérifiés, et aucun n'a été résolu en silence.** Les champs
+`description` de leurs skills et agents ont été comparés à ceux de `curation/skills/`, parce
+que l'auto-invocation se décide sur la correspondance des descriptions et que l'espace de noms
+n'empêche pas la concurrence. Plusieurs recoupements réels existent :
+`superpowers:test-driven-development` face aux skills de test par langage (`react-testing`
+pointe déjà vers lui nommément), `superpowers:using-superpowers` face à `using-agent-skills`,
+`superpowers:brainstorming` face à `grill-me` et à l'étape specify de spec-kit,
+`taste-skill:high-end-visual-design` face à `make-interfaces-feel-better`, et une poignée de
+personas d'`agency-agents` face aux skills couvrant le même stack. Ils sont listés en entier
+dans la pull request qui a ajouté cette section. Aucun n'a été retiré : le plancher reste
+entier, et savoir où deux déclencheurs se concurrencent est plus utile que de faire comme si
+ce n'était pas le cas.
+
+## Pourquoi VoiceStudio, voicebox et SCAIL-2 sont au catalogue
+
+Ils ne sont jamais activés — leur `activation` vaut `stock` : ils sont au catalogue comme des
+pièces, pas comme des skills, et aucun agent ne les charge de lui-même. Ils y figurent parce
+que les applications qu'on amorce ici embarquent souvent de l'IA, et que lorsqu'il faut de la
+parole ou un modèle vision-langage, mieux vaut prendre un projet connu et déjà inspecté que
+d'improviser. À proposer comme briques de l'application construite, jamais comme partie de la
+méthode.
+
 ## Sur l'analyse de sécurité des skills
 
 Tout a été scanné avec [NVIDIA SkillSpector](https://github.com/NVIDIA/Skillspector).
