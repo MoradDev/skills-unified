@@ -10,6 +10,11 @@ competing descriptions and wildly varying quality. This repository is the result
 auditing 21 of them — 2808 skill files in total — and keeping the 83 that earn their
 place, with the reasoning kept in the open.
 
+**It is the opposite of vibe coding.** Nothing here is about letting an agent improvise its
+way to a result: every project starts from a written constitution and a spec, every skill in
+the selection was argued for in the open, and every upstream repository is pinned to a commit
+somebody inspected. The method is the product.
+
 It is not tied to Claude Code. Any agent that can read Markdown can use it.
 
 ---

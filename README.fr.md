@@ -10,6 +10,11 @@ recouvrent, des descriptions qui se concurrencent et une qualité très inégale
 est le résultat de l'audit de 21 d'entre eux — 2808 fichiers de skills au total — dont on
 a gardé les 83 qui méritent leur place, en laissant le raisonnement à découvert.
 
+**C'est l'inverse du vibe coding.** Rien ici ne consiste à laisser un agent improviser
+jusqu'au résultat : tout projet démarre sur une constitution écrite et une spec, chaque skill
+retenue a été argumentée à découvert, et chaque dépôt amont est épinglé à un commit que
+quelqu'un a inspecté. La méthode est le produit.
+
 Il n'est pas lié à Claude Code. N'importe quel agent sachant lire du Markdown peut s'en
 servir.
 
