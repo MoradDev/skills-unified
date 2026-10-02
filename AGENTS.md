@@ -189,6 +189,19 @@ tool for you, see the `structured-decisions` skill in `curation/`.
    that as a fallback, not an equivalent choice.
 4. **Map the codebase** once it grows past roughly 80 files. Beyond that size, reading
    files one by one stops being a viable way to understand the system.
+
+   This is a step you have to *trigger*, because nothing counts for you. Before any
+   structural change — a wide refactor, a new module, work in an area you have not read —
+   count the source files:
+
+   ```bash
+   git ls-files | grep -vE '^(node_modules|dist|build|vendor|\.venv)/' | wc -l
+   ```
+
+   Past ~80, propose `uv tool install graphifyy==0.9.73`, then `graphify install` and
+   `/graphify .`, and read `graph.html` / `GRAPH_REPORT.md` before touching anything. Below
+   ~80, do not — it is overhead with no return. Never install it without asking: it is a tool
+   on the human's machine, not a file in the project.
 5. **Verify before declaring done.** Run the tests. Report failures with their output.
 
 ## For agents without a plugin system
@@ -322,8 +335,9 @@ Deliberate choices, not oversights:
   only.
 - **817 cybersecurity skills.** Explicit security engagements only.
 - **Codebase graphing.** Only past the ~80-file threshold.
-- **`agency-agents`' 297 personas, as a block.** They are agents, not skills, so they do not
-  auto-invoke — but a harness that lists its agents loads every one of their `description`
-  fields into every session: about **15,800 tokens** before anything is asked, for a project
-  that will use three or four. Copied **by division**, on request, as `SETUP.md` step 4b
-  describes. `engineering` + `design` + `testing` is 84 personas instead of 297.
+- **`agency-agents`' 297 personas, as a block.** A core of **14** is copied into every project
+  by default — architecture, backend, frontend, review, database, devops, prototyping, UI, UX,
+  test automation, accessibility, appsec, technical writing — for about **600 tokens per
+  session**. All 297 would cost about **15,800 tokens** in every session, before anything is
+  asked, for a project that will use a handful. The rest are offered **by division**, on
+  request. `SETUP.md` step 4b has the list and the commands.

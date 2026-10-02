@@ -190,6 +190,63 @@ def check_anchors() -> None:
     ok("every in-page anchor matches a heading")
 
 
+# ------------------------------------------------------------------ core persona set
+
+
+def check_core_personas() -> None:
+    """SETUP.md step 4b names a core set copied into every project, in three places: a plain
+    list, a PowerShell array and a bash loop. Three copies of the same 14 names drift, and a
+    typo in one of them is a persona that silently never arrives. So: all three must agree,
+    the count stated in prose must match, and — when the upstream cache happens to be present —
+    every named file must exist."""
+    text = read("SETUP.md")
+    start = text.index("## Step 4b")
+    section = text[start:text.index("## Step 5 — Install spec-kit")]
+
+    stated = re.search(r"a core of (\d+)", section)
+    pattern = re.compile(r"(academic|design|engineering|finance|game-development|gis|healthcare"
+                         r"|integrations|marketing|paid-media|product|project-management|research"
+                         r"|sales|security|spatial-computing|specialized|strategy|support|testing)"
+                         r"[/\\]([a-z][a-z0-9-]+)")
+
+    groups = {}
+    for block in re.findall(r"```(?:powershell|bash)?\n(.*?)```", section, re.S):
+        if "$core" in block:
+            groups["powershell"] = block
+        elif "for p in" in block:
+            groups["bash"] = block
+        elif "engineering/" in block and "Get-ChildItem" not in block and "find " not in block:
+            groups.setdefault("list", block)  # the plain two-column listing, first fence
+    if set(groups) != {"list", "powershell", "bash"}:
+        fail(f"SETUP.md step 4b: expected a plain list, a PowerShell array and a bash loop, found {sorted(groups)}")
+        return
+
+    sets = {}
+    for label, block in groups.items():
+        sets[label] = {f"{d}/{n}" for d, n in pattern.findall(block)}
+    reference = sets["list"]
+    for label in ("powershell", "bash"):
+        if sets[label] != reference:
+            only_here = sorted(sets[label] - reference)
+            only_there = sorted(reference - sets[label])
+            fail(f"SETUP.md step 4b: the {label} block disagrees with the list "
+                 f"(only in {label}: {only_here}; missing from it: {only_there})")
+
+    if stated and int(stated.group(1)) != len(reference):
+        fail(f"SETUP.md step 4b: prose says a core of {stated.group(1)}, the list names {len(reference)}")
+
+    # The upstream clone is optional (a fresh checkout has none), but when it is there the
+    # names must resolve — a typo here is a persona that never arrives, with no error.
+    cache = os.path.normpath(os.path.join(ROOT, "..", "mes_depots", "agency-agents"))
+    if os.path.isdir(cache):
+        missing = [n for n in sorted(reference) if not os.path.isfile(os.path.join(cache, *n.split("/")) + ".md")]
+        if missing:
+            fail(f"SETUP.md step 4b: these personas do not exist upstream: {missing}")
+        else:
+            ok(f"the {len(reference)} core personas all exist in the upstream cache")
+    ok(f"SETUP.md step 4b: {len(reference)} core personas, identical across the list, PowerShell and bash")
+
+
 # ------------------------------------------------------------------- declared numbers
 
 
@@ -293,6 +350,8 @@ def main(verbose: bool) -> int:
         if os.path.exists(os.path.normpath(cached)):
             ok(f"{name}: carries .claude-plugin/plugin.json, so linking it as a skills plugin works")
         # Absent cache is not a failure: a fresh clone has no mes_depots/.
+
+    check_core_personas()
 
     check_cheatsheet("CHEATSHEET.md", "## 4. Curated skills", skills)
     check_cheatsheet("CHEATSHEET.fr.md", "## 4. Skills de la curation", skills)

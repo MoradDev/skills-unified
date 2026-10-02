@@ -56,13 +56,17 @@ Read `catalog/repos.tsv`. It is tab-separated, with six columns:
 | `name` | The folder name to clone into, under `mes_depots/` |
 | `url` | The upstream repository |
 | `role` | What it is: `skills`, `agents`, `source`, `cli`, `mcp`, `tool`, `index`, `rules`, `marketplace`, `app-tool` |
-| `activation` | `default`, `tooling`, `curated`, `on-demand`, `threshold`, `manual`, `opt-in`, `reference`, `linux-only`, `stock` |
+| `activation` | `default`, `core-set`, `tooling`, `curated`, `on-demand`, `threshold`, `manual`, `opt-in`, `reference`, `linux-only`, `stock` |
 | `commit` | The exact commit that was inspected. **Clone this, not the branch tip.** |
 | `scanned` | The date that commit was inspected, `YYYY-MM-DD` |
 
 **Clone at minimum** every row whose `activation` is `default`. Those three — `superpowers`,
 `taste-skill`, `ponytail` — are what the working method depends on, and all three are skills
-plugins. Rows marked `tooling` are **not** cloned — they install as
+plugins.
+
+**Also clone the one `core-set` row**, `agency-agents`, unless the human declines: step 4b
+copies a named core of 14 personas from it into every project. It is 7.5 MB and it is not a
+skills plugin — do not link it as one. Rows marked `tooling` are **not** cloned — they install as
 command-line tools in step 5. Ask the human before cloning the rest — the full set is about
 1.7 GB, and `Anthropic-Cybersecurity-Skills` alone is 817 skills nobody needs unless the
 project is a security engagement.
@@ -135,59 +139,84 @@ If you are none of the above: the skills are ordinary Markdown with YAML frontma
 
 ---
 
-## Step 4b — Agent personas, only if the human asks
+## Step 4b — Agent personas: a core of 14, then more on request
 
-`agency-agents` is **not** cloned or installed by default, and its `activation` is
-`on-demand` for one measurable reason: its 297 personas carry about **15,800 tokens of
-`description` frontmatter**, and a harness that lists its agents loads every one of those
-descriptions into **every session**, before the human has typed anything. A project uses
-three or four. Paying 15,800 tokens per session for the other 293 is a bad trade, and it
-contradicts this repository's own argument that every addition is context you spend.
+**Copy the core set into every project, without being asked.** These 14 cover building an
+application end to end, and cost about **600 tokens of `description` per session** — measured,
+not estimated:
 
-So: offer them, by division, and only install what the project will actually use.
-
-```bash
-git init agency-agents && cd agency-agents
-git remote add origin https://github.com/msitarzewski/agency-agents
-git fetch --depth 1 origin <sha from repos.tsv>
-git checkout FETCH_HEAD
+```
+engineering/engineering-software-architect      design/design-ui-designer
+engineering/engineering-backend-architect       design/design-ux-architect
+engineering/engineering-frontend-developer      testing/testing-test-automation-engineer
+engineering/engineering-code-reviewer           testing/testing-accessibility-auditor
+engineering/engineering-senior-developer        security/security-appsec-engineer
+engineering/engineering-database-optimizer      engineering/engineering-technical-writer
+engineering/engineering-devops-automator
+engineering/engineering-rapid-prototyper
 ```
 
-They are **copied**, never linked — a harness reads its agents directory directly, and a
-junction to a repository full of READMEs and scripts is not that directory. Copy only the
-divisions that match the project, and only files whose name starts with a **lowercase**
-letter: everything else (`README.md`, `CONTRIBUTING.md`, `LICENSE`, `SECURITY.md`,
-`CODE_OF_CONDUCT.md`, `QUICKSTART.md`, `EXECUTIVE-BRIEF.md`…) is documentation, not a
-persona, and would be loaded as a broken agent.
+```powershell
+# Windows
+$core = @(
+  'engineering\engineering-software-architect',   'engineering\engineering-backend-architect',
+  'engineering\engineering-frontend-developer',   'engineering\engineering-code-reviewer',
+  'engineering\engineering-senior-developer',     'engineering\engineering-database-optimizer',
+  'engineering\engineering-devops-automator',     'engineering\engineering-rapid-prototyper',
+  'design\design-ui-designer',                    'design\design-ux-architect',
+  'testing\testing-test-automation-engineer',     'testing\testing-accessibility-auditor',
+  'security\security-appsec-engineer',            'engineering\engineering-technical-writer'
+)
+New-Item -ItemType Directory -Force "<project>\.claude\agents" | Out-Null
+foreach ($p in $core) { Copy-Item "mes_depots\agency-agents\$p.md" "<project>\.claude\agents" }
+```
 
-The divisions are `academic`, `design`, `engineering`, `finance`, `game-development`, `gis`,
+```bash
+# macOS / Linux
+mkdir -p "<project>/.claude/agents"
+for p in engineering/engineering-software-architect engineering/engineering-backend-architect          engineering/engineering-frontend-developer engineering/engineering-code-reviewer          engineering/engineering-senior-developer engineering/engineering-database-optimizer          engineering/engineering-devops-automator engineering/engineering-rapid-prototyper          design/design-ui-designer design/design-ux-architect          testing/testing-test-automation-engineer testing/testing-accessibility-auditor          security/security-appsec-engineer engineering/engineering-technical-writer; do
+  cp "mes_depots/agency-agents/$p.md" "<project>/.claude/agents/"
+done
+```
+
+**Then offer more, by division, and only what the project will use.** Copying all 297 is the
+thing to avoid: they carry about **15,800 tokens of `description`**, and a harness that lists
+its agents loads every one of them into **every session**, before the human has typed
+anything, for a project that will use a handful. That is the same cost this repository refuses
+to pay for skills.
+
+The 20 divisions are `academic`, `design`, `engineering`, `finance`, `game-development`, `gis`,
 `healthcare`, `integrations`, `marketing`, `paid-media`, `product`, `project-management`,
 `research`, `sales`, `security`, `spatial-computing`, `specialized`, `strategy`, `support`,
-`testing`. For a web application, `engineering` + `design` + `testing` is a reasonable
-default; it is 84 personas instead of 297.
+`testing`. Count on roughly **55 tokens per persona** when telling the human what a division
+costs — a whole division is 9 to 65 of them.
+
+Whole-division copies take the same shape, with one rule that is not optional: **only files
+whose name starts with a lowercase letter.** Everything else (`README.md`, `CONTRIBUTING.md`,
+`LICENSE`, `SECURITY.md`, `CODE_OF_CONDUCT.md`, `QUICKSTART.md`, `EXECUTIVE-BRIEF.md`…) is
+documentation, and a harness would load it as a broken agent.
 
 ```powershell
-# Windows — one division
-New-Item -ItemType Directory -Force "<project>\.claude\agents" | Out-Null
+# Windows — one whole division
 Get-ChildItem "mes_depots\agency-agents\engineering" -Filter *.md |
   Where-Object { $_.Name -cmatch '^[a-z]' } |
   Copy-Item -Destination "<project>\.claude\agents"
 ```
 
 ```bash
-# macOS / Linux — one division
-mkdir -p "<project>/.claude/agents"
-find "mes_depots/agency-agents/engineering" -maxdepth 1 -name '[a-z]*.md' \
-  -exec cp {} "<project>/.claude/agents/" \;
+# macOS / Linux — one whole division
+find "mes_depots/agency-agents/engineering" -maxdepth 1 -name '[a-z]*.md'   -exec cp {} "<project>/.claude/agents/" \;
 ```
 
 Some divisions have sub-folders (`game-development/unity`, `strategy/playbooks`, …). Add
-`-Recurse` / drop `-maxdepth 1` when the human wants those too, keeping the lowercase filter
-and excluding `examples`, `scripts` and `.github`.
+`-Recurse` / drop `-maxdepth 1` for those, keeping the lowercase filter and excluding
+`examples`, `scripts` and `.github`.
 
-**Tell the human the count you copied and roughly what it costs them per session** — about
-55 tokens per persona. That is the number that lets them decide, and it is the number nobody
-was given before.
+They are **copied, never linked**: a harness reads its agents directory directly, and a
+junction to a repository full of READMEs and scripts is not that directory.
+
+**Report the count you copied and what it costs per session.** That is the number that lets
+the human decide, and it is the number nobody was given before.
 
 ## Step 5 — Install spec-kit
 
@@ -243,6 +272,26 @@ uv tool install git+https://github.com/NVIDIA/Skillspector.git@2226747e4ca97198b
 uv tool install graphifyy==0.9.73
 ```
 
+**Do not install `graphifyy` now** — a fresh project has no codebase to map. The threshold is a
+rule the agent has to *act on later*, so put it where it will fire rather than trusting anyone
+to remember it. When you write the project's `CLAUDE.md` or `AGENTS.md` (step 5 above), copy
+this in verbatim:
+
+```markdown
+## Codebase mapping threshold
+
+Before any structural change — a wide refactor, a new module, work in an unfamiliar area —
+count the project's source files, excluding dependencies, `.git` and build output:
+
+    git ls-files | grep -vE '^(node_modules|dist|build|vendor|\.venv)/' | wc -l
+
+Past ~80, reading files one at a time stops being a viable way to understand the system.
+Propose `uv tool install graphifyy==0.9.73 && graphify install && /graphify .` to the human,
+then read `graph.html` / `GRAPH_REPORT.md`. Below ~80, do not: it is pure overhead.
+```
+
+Tell the human the count the project starts at, so they know how far they are from it.
+
 ---
 
 ## Step 5c — Offer Context7
@@ -265,9 +314,25 @@ The rules for using it are in `AGENTS.md` § "External library documentation" �
 before the first call, particularly the obligation to check the documentation matches the
 version the project actually uses.
 
-## Step 5c bis — Offer Laya MCP (optional)
+## Step 5c bis — Offer Laya MCP
 
-Only if the human wants it. [Laya](https://github.com/NandhaKishorM/laya) is an open-source
+**Offer it out loud, every time, with the figures below. Install it only if the human says
+yes.** It stays optional because it is a multi-gigabyte install that many projects never call,
+but it must not be silently skipped either: a human who is never told it exists cannot choose
+it. State the cost and the benefit in one breath, then do what they decide.
+
+**What it costs, before anything else** — these are its published dependencies, not estimates:
+
+| | |
+|---|---|
+| `torch>=2.0.0` | the heavy one, of the order of a gigabyte installed |
+| `transformers>=4.48.0`, `safetensors`, `huggingface_hub`, `numpy` | ~100 MB together |
+| First call | downloads a checkpoint of 322–421 M parameters from Hugging Face |
+| Per call afterwards | nothing. Local, no API key, no account, no quota. |
+
+So: free and private at runtime, expensive once on disk. Say both.
+
+ [Laya](https://github.com/NandhaKishorM/laya) is an open-source
 (Apache-2.0) non-autoregressive decision model: you hand it a block of state and typed
 questions, it returns typed answers with probabilities and confidence in a single forward
 pass. No text generation, so nothing to parse and nothing to hallucinate. Its own MCP server

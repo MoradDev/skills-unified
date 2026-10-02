@@ -328,8 +328,9 @@ Codex utilise `@ponytail`, `@ponytail-review` et `@ponytail-help`.
 ## 8. agency-agents
 
 Des personas spécialisées : ingénierie, design, marketing, sécurité, tests, produit,
-jeu vidéo, SIG et d'autres (297, dans `mes_depots/agency-agents/<division>/`). **Pas
-installées par défaut** — voir `SETUP.md` étape 4b.
+jeu vidéo, SIG et d'autres (297, dans `mes_depots/agency-agents/<division>/`). **Un noyau de
+14 est copié dans chaque projet ; le reste est proposé par division** — voir `SETUP.md`
+étape 4b.
 
 | Tâche | Commande |
 |---|---|

@@ -325,8 +325,8 @@ Claude Code may show the skills namespaced (`/ponytail:ponytail-review`). Codex 
 ## 8. agency-agents
 
 Specialist personas: engineering, design, marketing, security, testing, product, game
-development, GIS and more (297, in `mes_depots/agency-agents/<division>/`). **Not installed by
-default** — see `SETUP.md` step 4b.
+development, GIS and more (297, in `mes_depots/agency-agents/<division>/`). **A core of 14 is
+copied into every project; the rest are offered by division** — see `SETUP.md` step 4b.
 
 | Task | Command |
 |---|---|

@@ -125,16 +125,18 @@ What each one actually contributes, from its own README and its own skills:
 All three are skills plugins, each carrying its own `.claude-plugin/plugin.json`, which is
 what makes "link it and it works" true for them.
 
-**[`msitarzewski/agency-agents`](https://github.com/msitarzewski/agency-agents) used to be a
-fourth, and is now `on-demand`.** Its 297 specialist personas are genuinely useful —
+**[`msitarzewski/agency-agents`](https://github.com/msitarzewski/agency-agents) is the fourth,
+handled differently.** Its 297 specialist personas are genuinely useful —
 engineering, design, security, testing, product and more, so a narrow task goes to something
 written for it instead of to the generalist. But they are *agents*, not skills, and a harness
 that lists its agents loads every one of their `description` fields into **every session**:
 measured, that is about **15,800 tokens before the human has typed anything**, for a project
 that will use three or four of them. Paying that for the other 293 contradicts the argument
-this page makes two sections above. So `SETUP.md` now offers them **by division** —
-`engineering` + `design` + `testing` is 84 personas instead of 297 — and copies rather than
-links them, because a harness reads its agents directory directly.
+this page makes two sections above. So `SETUP.md` copies a **core of 14** into every project — architecture, backend, frontend,
+review, database, devops, prototyping, UI, UX, test automation, accessibility, appsec,
+technical writing — for about **600 tokens per session**, and offers the rest **by division**
+on request. They are copied, never linked, because a harness reads its agents directory
+directly.
 
 **The overlaps were checked, and nothing was silently resolved.** The skill and agent
 `description` fields were compared against those of `curation/skills/`, because auto-invocation
