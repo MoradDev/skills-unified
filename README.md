@@ -3,7 +3,8 @@
 **A ready-to-use workspace for AI coding agents. Clone it, tell your agent to read
 `SETUP.md`, and it installs the rest itself.**
 
-*[Version française](README.fr.md)* · *Every command on one page: [CHEATSHEET.md](CHEATSHEET.md)*
+*[Version française](README.fr.md)* · *Never used this before? Start with*
+*[QUICKSTART.md](QUICKSTART.md)* · *Every command on one page: [CHEATSHEET.md](CHEATSHEET.md)*
 
 Agent skills are scattered across dozens of repositories, with overlapping names,
 competing descriptions and wildly varying quality. This repository is the result of
@@ -99,12 +100,12 @@ links, 0 broken. 84 skills, 84 distinct names, every one carrying a `description
 
 ---
 
-## The four repositories enabled by default
+## The three repositories enabled by default
 
-Four upstream repositories are linked into every new project without passing through the
-curation above: `superpowers`, `taste-skill`, `ponytail` and `agency-agents`. That is a
-deliberate exception, and the reason is plain — **for me this is the minimum required to code
-well with an AI harness.** Not a vetted selection: a floor.
+Three upstream repositories are linked into every new project without passing through the
+curation above: `superpowers`, `taste-skill` and `ponytail`. That is a deliberate exception,
+and the reason is plain — **for me this is the minimum required to code well with an AI
+harness.** Not a vetted selection: a floor.
 
 What each one actually contributes, from its own README and its own skills:
 
@@ -120,21 +121,31 @@ What each one actually contributes, from its own README and its own skills:
   permanent YAGNI mode, active from session start, that pushes the agent to the shortest
   solution that works and reviews a diff or a whole repository for over-engineering. Its own
   benchmark reports ~54 % less code across 12 feature tasks against the same agent without it.
-- **[`msitarzewski/agency-agents`](https://github.com/msitarzewski/agency-agents)** (297
-  personas) — specialist subagents to delegate to, across engineering, design, security,
-  testing, product and more, so a narrow task goes to something written for it instead of to
-  the generalist.
 
-**The overlaps were checked, and nothing was silently resolved.** Their skill and agent
+All three are skills plugins, each carrying its own `.claude-plugin/plugin.json`, which is
+what makes "link it and it works" true for them.
+
+**[`msitarzewski/agency-agents`](https://github.com/msitarzewski/agency-agents) is the fourth,
+handled differently.** Its 297 specialist personas are genuinely useful —
+engineering, design, security, testing, product and more, so a narrow task goes to something
+written for it instead of to the generalist. But they are *agents*, not skills, and a harness
+that lists its agents loads every one of their `description` fields into **every session**:
+measured, that is about **15,800 tokens before the human has typed anything**, for a project
+that will use three or four of them. Paying that for the other 293 contradicts the argument
+this page makes two sections above. So `SETUP.md` copies a **core of 14** into every project — architecture, backend, frontend,
+review, database, devops, prototyping, UI, UX, test automation, accessibility, appsec,
+technical writing — for about **600 tokens per session**, and offers the rest **by division**
+on request. They are copied, never linked, because a harness reads its agents directory
+directly.
+
+**The overlaps were checked, and nothing was silently resolved.** The skill and agent
 `description` fields were compared against those of `curation/skills/`, because auto-invocation
 is decided by description matching and namespacing does not prevent competition. Several real
-overlaps exist — `superpowers:test-driven-development` against the per-language testing skills
-(`react-testing` already points at it by name), `superpowers:using-superpowers` against
-`using-agent-skills`, `superpowers:brainstorming` against `grill-me` and against spec-kit's own
-specify step, `taste-skill:high-end-visual-design` against `make-interfaces-feel-better`, and a
-handful of `agency-agents` personas against the skills covering the same stack. They are listed
-in full in the pull request that added this section. None was removed: the floor stays whole,
-and knowing where two triggers compete is more useful than pretending they do not.
+overlaps exist. They are listed, with what to do about each, in
+[`AGENTS.md`](AGENTS.md) § "When two skills compete" — not buried in a pull request, because
+the person who needs them is the person watching an agent do something they did not ask for.
+None was removed: the floor stays whole, and knowing where two triggers compete is more useful
+than pretending they do not.
 
 ## Why VoiceStudio, voicebox and SCAIL-2 are in the catalogue
 

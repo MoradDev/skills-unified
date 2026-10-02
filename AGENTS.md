@@ -189,6 +189,19 @@ tool for you, see the `structured-decisions` skill in `curation/`.
    that as a fallback, not an equivalent choice.
 4. **Map the codebase** once it grows past roughly 80 files. Beyond that size, reading
    files one by one stops being a viable way to understand the system.
+
+   This is a step you have to *trigger*, because nothing counts for you. Before any
+   structural change — a wide refactor, a new module, work in an area you have not read —
+   count the source files:
+
+   ```bash
+   git ls-files | grep -vE '^(node_modules|dist|build|vendor|\.venv)/' | wc -l
+   ```
+
+   Past ~80, propose `uv tool install graphifyy==0.9.73`, then `graphify install` and
+   `/graphify .`, and read `graph.html` / `GRAPH_REPORT.md` before touching anything. Below
+   ~80, do not — it is overhead with no return. Never install it without asking: it is a tool
+   on the human's machine, not a file in the project.
 5. **Verify before declaring done.** Run the tests. Report failures with their output.
 
 ## For agents without a plugin system
@@ -211,14 +224,76 @@ so they are meant to be matched against the task, not read end to end.
 
 Do not load all 84 at once. That defeats the purpose and floods your context.
 
+## When two skills compete
+
+Auto-invocation is decided by matching the task against every available `description`. Two
+skills with similar descriptions therefore compete, **namespacing does not prevent it**, and
+nothing tells you which one won. The symptom is an agent doing something adjacent to what was
+asked — interrogating you about an idea you already settled, writing a generic test plan
+instead of using the language's own testing skill.
+
+These are the known cases, between the curated set and the default plugins. They are not
+bugs to be fixed by deleting something: each skill is the right one *sometimes*. Recognise
+them, and say which one you want.
+
+| Competing | Why | What to do |
+|---|---|---|
+| `superpowers:brainstorming` vs `grill-me` / `grilling` vs `/speckit-specify` | Its description opens *"You MUST use this before any creative work"* — the most forceful trigger in the whole set, and it lands on the same ground as interrogating a vague idea and as the spec step. **The one most likely to disrupt the working order below.** | If the idea is already clear, say "skip the brainstorming, go straight to `/speckit-specify`". If it is vague, pick one deliberately: `grill-me` to be interrogated, `brainstorming` to explore. |
+| `superpowers:test-driven-development` vs `python-testing`, `golang-testing`, `rust-testing`, `kotlin-testing`, `csharp-testing`, `cpp-testing`, `react-testing`, `e2e-testing` | The superpowers one is the *method* (write the failing test first) and fires on "implementing any feature or bugfix". The curated ones are the *tools* for one language. Both are right at the same moment. **The widest overlap.** | Use both on purpose: the method decides the order, the language skill decides the idioms. `react-testing` already points at `test-driven-development` by name. If only the generic one fires, name the language skill. |
+| `superpowers:using-superpowers` vs `using-agent-skills` | Both are "how to find and use skills", both trigger at the start of a conversation. **The closest thing to a true duplicate here.** | Harmless when both fire — they agree. If the preamble is long, say "skip the skill preamble". |
+| `taste-skill:high-end-visual-design` vs `make-interfaces-feel-better` | Near-identical trigger surface: fonts, spacing, shadows, the polish that makes an interface feel expensive. **The strongest collision outside superpowers.** | Either is fine for polish. Name `taste-skill` when you want a whole design direction, `make-interfaces-feel-better` when you want an existing screen tightened. |
+| `taste-skill:stitch-design-taste` / `design-taste-frontend` vs `design-system` | All generate or audit a design system; one writes it as `DESIGN.md`. | Pick by output: `design-system` for tokens and components in the codebase, taste-skill for a direction and a look. |
+| `taste-skill:gpt-taste` vs `motion-foundations` / `motion-patterns` / `motion-advanced` | `gpt-taste` is a GSAP motion engineer; the curated three own motion tokens, springs and reduced motion. | Use the curated three for accessibility-correct motion; `gpt-taste` when you want an editorial, animation-led page. |
+| `superpowers:requesting-code-review` / `receiving-code-review` vs `flutter-dart-code-review`, `doubt-driven-development` | "Code review" as a trigger phrase, against one language-specific and one decision-specific reviewer. | Fine together. `doubt-driven-development` reviews a *decision*, the others review *code*. |
+| `ponytail` vs `constraint-driven-development` | They pull in opposite directions by design: one lowers the amount of code, the other defends a quality bar. | When they disagree, that disagreement is the useful output. Decide it yourself rather than letting whichever fired first win. |
+| `superpowers:writing-skills` vs `context-engineering` | Both cover authoring the agent's own rules and skill files. | Either. |
+| `agency-agents` personas vs curated skills on the same stack | Different mechanism — personas are delegated to, they do not auto-invoke — but 71 of them touch a domain a curated skill already covers (*Frontend Developer* vs `react-patterns`, *UI Designer* vs `design-system`/`accessibility`, *Database Optimizer* vs `postgres-patterns`, *DevOps Automator* vs `deployment-patterns`…). | The risk is duplicated advice, not a misfire. Copy only the divisions the project needs (see `SETUP.md` step 4b) and the overlap mostly disappears. |
+
+**Resolving these by editing an upstream file is not an option**: everything under
+`mes_depots/` stays pristine, and these repositories are pinned to inspected commits. The
+lever is to say which skill you want, in the session.
+
 ## Adding a skill to the curation
 
 1. Copy it from `mes_depots/<repo>/skills/<name>` into `curation/skills/<name>`.
 2. Check no skill of that name already exists anywhere in the active set.
 3. Check its `description` does not overlap an existing one — two similar descriptions
-   compete for auto-invocation, and namespacing does **not** prevent this.
+   compete for auto-invocation, and namespacing does **not** prevent this. If it does overlap,
+   add the pair to the table above rather than leaving the next person to discover it.
 4. If it came from an untrusted source, scan it (see below).
-5. Commit.
+5. Add its line to `ATTRIBUTION.md` — provenance and upstream licence. This is what makes
+   redistribution legitimate.
+6. **Run `python scripts/check.py`** and fix what it reports: the counts in both READMEs, both
+   cheatsheets, `AGENTS.md` and `SETUP.md`, and the skill's own row in the cheatsheet tables.
+7. Commit.
+
+## Checking the repository against itself
+
+```bash
+python scripts/check.py          # or: make check
+```
+
+Standard library only, no network, about a second. It is also a GitHub Action
+([`.github/workflows/check.yml`](.github/workflows/check.yml)) on every push and pull request.
+
+It exists because **every number this repository announced was wrong at least once**, and
+nothing recounted them: the skill total said 83 with 84 on disk, the rulesets said 21 with 22,
+the catalogue said 21 with 22 rows. Prose drifts from the filesystem silently. So it verifies:
+
+- the skill count, the two family counts, and every per-category count in both cheatsheets —
+  and that the categories list exactly the skills that exist on disk, no more, no fewer
+- every skill's frontmatter: a `name` that matches its directory, a `description` without which
+  it can never auto-invoke, and no duplicate names
+- the ruleset count
+- `catalog/repos.tsv`: column arity against the header, 40-hex commits, ISO dates, `https` URLs,
+  no duplicate names, and that its `default` rows are the ones the READMEs claim
+- every relative Markdown link in the repository, and every in-page anchor
+- that the English and French documents state the same numbers
+- the executable files shipped under `curation/`, by name, so a new one cannot appear unnoticed
+
+**Fix the cause, not the check.** The one case where editing the check is right is when prose
+was deliberately rewritten and the pattern it looks for no longer exists — it says so
+explicitly when that happens, rather than silently passing.
 
 ## Scanning an untrusted skill
 
@@ -260,3 +335,9 @@ Deliberate choices, not oversights:
   only.
 - **817 cybersecurity skills.** Explicit security engagements only.
 - **Codebase graphing.** Only past the ~80-file threshold.
+- **`agency-agents`' 297 personas, as a block.** A core of **14** is copied into every project
+  by default — architecture, backend, frontend, review, database, devops, prototyping, UI, UX,
+  test automation, accessibility, appsec, technical writing — for about **600 tokens per
+  session**. All 297 would cost about **15,800 tokens** in every session, before anything is
+  asked, for a project that will use a handful. The rest are offered **by division**, on
+  request. `SETUP.md` step 4b has the list and the commands.

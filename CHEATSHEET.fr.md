@@ -1,6 +1,6 @@
 # Aide-mémoire
 
-*[English version](CHEATSHEET.md)*
+*[English version](CHEATSHEET.md)* · *Première fois ici ? [QUICKSTART.fr.md](QUICKSTART.fr.md) est plus court.*
 
 Toutes les commandes que ce workspace te donne, sur une seule page. Claude Code a droit à
 une section courte ; tout ce que le workspace fournit ou installe lui-même est listé en
@@ -79,6 +79,7 @@ agent.
 | Relier la curation à un projet (Windows) | `New-Item -ItemType Junction -Path "<projet>\.claude\skills\curation" -Target "<workspace>\curation"` |
 | Relier la curation à un projet (macOS / Linux) | `ln -s "<workspace>/curation" "<projet>/.claude/skills/curation"` |
 | Indexer les skills sans système de plugins | `find curation/skills -name SKILL.md` |
+| Contrôler le dépôt contre lui-même | `python scripts/check.py` (ou `make check`) — recompte tous les chiffres annoncés |
 
 Remplace `.claude/skills/` par le chemin que lit ton agent. Les jonctions Windows ne
 demandent pas de droits administrateur. Relie de la même façon les trois plugins
@@ -327,11 +328,14 @@ Codex utilise `@ponytail`, `@ponytail-review` et `@ponytail-help`.
 ## 8. agency-agents
 
 Des personas spécialisées : ingénierie, design, marketing, sécurité, tests, produit,
-jeu vidéo, SIG et d'autres (environ 300, dans `mes_depots/agency-agents/<division>/`).
+jeu vidéo, SIG et d'autres (297, dans `mes_depots/agency-agents/<division>/`). **Un noyau de
+14 est copié dans chaque projet ; le reste est proposé par division** — voir `SETUP.md`
+étape 4b.
 
 | Tâche | Commande |
 |---|---|
-| Les ajouter à un projet Claude Code | Copier les fichiers `.md` dans `<projet>/.claude/agents/` (copier, pas relier) |
+| Les ajouter à un projet Claude Code | Copier **une division à la fois**, seulement les noms en minuscules : `Get-ChildItem mes_depots\agency-agents\engineering -Filter *.md \| Where-Object { $_.Name -cmatch '^[a-z]' } \| Copy-Item -Destination <projet>\.claude\agents` (copier, pas relier) |
+| Savoir ce que ça coûte | ~55 tokens de `description` par persona, chargés à **chaque session**. Les 297 font ~15 800 tokens. `engineering` + `design` + `testing` en font 84. |
 | Les installer pour un autre outil | `./scripts/install.sh --tool <outil>` depuis `mes_depots/agency-agents/` |
 | En utiliser une | Demande la spécialité par son nom : *« Utilise l'agent Backend Architect pour… »* |
 

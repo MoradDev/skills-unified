@@ -1,0 +1,28 @@
+name: Check
+
+# Recounts everything this repository claims about itself. No dependencies, no network:
+# scripts/check.py is standard library only, so this job is a checkout and one command.
+
+on:
+  push:
+    branches: ['**']
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Recount what the documentation claims
+        run: python scripts/check.py --verbose
