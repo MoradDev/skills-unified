@@ -102,6 +102,43 @@ workspace ». `Workspace/` était une coquille extérieure qui réimplémentait 
 règle de synchronisation des deux documentations, et la section « miroir public » — il n'y a
 plus de miroir, il n'y a qu'un dépôt.
 
+## 2026-10-03 — Vérification d'intégrité et de cohérence
+
+**Intégrité, sans écart dans le dépôt.** `git fsck --full` propre ; `main` local et distant
+identiques (`5534e6e`) ; `check.py` 30/30 ; CI verte sur les cinq derniers passages.
+
+**Cache `mes_depots/`, comparé ligne à ligne à `catalog/repos.tsv`** (`HEAD`, URL d'origine,
+`git status --porcelain` pour chaque clone) : 20 des 22 à leur SHA épinglé, propres.
+Deux écarts, laissés tels quels :
+- `Anthropic-Cybersecurity-Skills` : un fichier absent de l'arbre de travail,
+  `skills/detecting-fileless-malware-techniques/SKILL.md`. `Get-MpThreatDetection` montre que
+  Defender a mis ce même fichier en quarantaine le 02/10 dans un autre clone : c'est
+  l'antivirus, pas une modification. Un `git checkout` serait de nouveau effacé ; la décision
+  d'une exclusion revient à l'humain.
+- `laya` non cloné. Activation `opt-in`, cache reconstructible : pas une erreur.
+
+**Cohérence, deux contradictions que `check.py` ne pouvait pas voir**, parce que chaque
+nombre était juste et que seule leur somme était fausse :
+1. Les deux README créditaient 65 + 16 + 2 = 83 skills et affirmaient qu'aucune n'avait été
+   écrite ici, alors que le disque en compte 84 et qu'`ATTRIBUTION.md` déclare
+   `structured-decisions` originale. Corrigé dans les deux README. **Nouveau contrôle**
+   `check_provenance` : chaque skill du disque attribuée une seule fois dans
+   `ATTRIBUTION.md`, chaque titre de section égal au nombre de noms listés, et les deux README
+   créditant les mêmes nombres et nommant chaque skill originale. Vérifié en remettant les
+   anciens README : 2 échecs, comme attendu. 38 contrôles, 0 échec.
+2. L'enchaînement spec-kit s'arrêtait à `implement` dans les README et dans `AGENTS.md`, sans
+   la boucle `converge` que les `CHEATSHEET`, `SETUP.md` et le `QUICKSTART` décrivent — et que
+   le `spec-kit` épinglé fournit bien (`templates/commands/converge.md`). Ajoutée.
+
+**Accord EN/FR des README** : relus en entier côte à côte, et contre-vérifiés par une
+comparaison Jev (`jev_compare`, six aspects — nombres de skills, rejets, chiffres du scan,
+personas, provenance, procédure d'épinglage) : `same_fact` sur les six, confiance 1,0. Jev
+reste retiré du dépôt (voir l'entrée du 2026-10-02) ; l'appel a été fait à la demande, depuis
+la session.
+
+**Rangement** : les branches fusionnées `maintenance/pinning-and-laya` et
+`maintenance/onboarding-and-checks` supprimées du dépôt distant.
+
 ---
 
 ## Avant de modifier ce fichier

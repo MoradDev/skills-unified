@@ -14,6 +14,9 @@ What it refuses to let drift:
   * the ruleset count
   * catalog/repos.tsv: column arity, 40-hex commits, ISO dates, no duplicate names, and
     agreement between its `default` rows and what the docs claim
+  * provenance: every skill on disk attributed exactly once in ATTRIBUTION.md, either to an
+    upstream or as original, and both READMEs crediting the same upstream counts and
+    naming every original skill
   * every relative Markdown link in the repository
   * the numbers the English and French documents state, which must agree with each other
 """
@@ -301,8 +304,57 @@ def check_cheatsheet(path: str, heading: str, skills: set[str]) -> None:
     ok(f"{path}: {total} skills listed, every category count correct, matches the disk exactly")
 
 
+def check_provenance(skills: set[str]) -> None:
+    """Every skill comes from somewhere, once — and the READMEs must say the same thing.
+
+    The READMEs once credited 65 + 16 + 2 = 83 skills and claimed none was written here,
+    while the disk held 84 and ATTRIBUTION.md named the original one. Each number was right;
+    only the sum was not, so no count check saw it.
+    """
+    text = read("ATTRIBUTION.md")
+    section = re.search(r"^## Provenance.*?$(.*?)(?=^## )", text, re.M | re.S)
+    if not section:
+        fail("ATTRIBUTION.md: the provenance section is gone — update the check or the file")
+        return
+    upstream: dict[str, int] = {}
+    attributed: list[str] = []
+    for count, repo, body in re.findall(
+            r"^### (\d+) skills from \[`([\w.-]+/[\w.-]+)`\]\([^)]*\)$(.*?)(?=^### |\Z)",
+            section.group(1), re.M | re.S):
+        names = re.findall(r"`([a-z0-9][a-z0-9-]*)`", body)
+        check(f"ATTRIBUTION.md: {repo} lists as many skills as its heading says", len(names), int(count))
+        upstream[repo] = int(count)
+        attributed += names
+    originals = re.findall(r"`curation/skills/([a-z0-9-]+)` is original", text)
+    attributed += originals
+    duplicates = sorted({n for n in attributed if attributed.count(n) > 1})
+    if duplicates:
+        fail(f"ATTRIBUTION.md: attributed more than once: {duplicates}")
+    missing, unknown = sorted(skills - set(attributed)), sorted(set(attributed) - skills)
+    if missing or unknown:
+        fail(f"ATTRIBUTION.md: not attributed {missing}, attributed but not on disk {unknown}")
+    if not (duplicates or missing or unknown):
+        ok(f"ATTRIBUTION.md: {len(skills)} skills, each attributed once "
+           f"({sum(upstream.values())} upstream, {len(originals)} original)")
+
+    for path, heading in (("README.md", "## Licence and credit"), ("README.fr.md", "## Licence et crédit")):
+        credit = read(path).partition(heading)[2]
+        if not credit:
+            fail(f"{path}: the credit section is gone — update the check or the prose")
+            continue
+        stated = {repo: int(n) for repo, n in
+                  re.findall(r"\[`([\w.-]+/[\w.-]+)`\]\([^)]*\) \((\d+)\)", credit)}
+        check(f"{path}: upstream credit counts match ATTRIBUTION.md", stated, upstream)
+        unnamed = [n for n in originals if f"`{n}`" not in credit]
+        if unnamed:
+            fail(f"{path}: the credit section does not name the original skills {unnamed}")
+        else:
+            ok(f"{path}: the credit section names every original skill")
+
+
 def main(verbose: bool) -> int:
     skills = check_skills()
+    check_provenance(skills)
     n_skills, n_rules = len(skills), check_rules()
     rows = check_catalog()
 

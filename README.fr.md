@@ -54,8 +54,9 @@ Rien n'est installé globalement. Rien n'est activé à ton insu.
 
 Plus la méthode de travail elle-même, bâtie sur [spec-kit](https://github.com/github/spec-kit) :
 tout projet démarre par `specify init`, puis enchaîne constitution → specify → clarify →
-plan → tasks → analyze → implement. Chaque étape produit un artefact que la suivante
-consomme — c'est ce qui empêche un agent d'inventer des exigences en cours de route.
+plan → tasks → analyze → implement → converge, en répétant les deux derniers jusqu'à ce que
+converge ne trouve plus d'écart. Chaque étape produit un artefact que la suivante consomme —
+c'est ce qui empêche un agent d'inventer des exigences en cours de route.
 
 *Méthode* (18) — transformer une idée floue en logiciel qui tourne : interrogatoire
 structuré d'une idée avant d'écrire une spec, conception d'API, CI/CD, durcissement
@@ -270,10 +271,11 @@ d'installation, écrite pour être exécutée par un agent plutôt que lue par u
 
 ## Licence et crédit
 
-MIT. **Aucune des skills n'a été écrite ici** — la contribution, c'est la sélection, la
-déduplication, la réparation des références croisées et la méthode qui les entoure.
+MIT. **83 des 84 skills n'ont pas été écrites ici** — pour celles-là, la contribution, c'est
+la sélection, la déduplication, la réparation des références croisées et la méthode qui les
+entoure. La 84e, `structured-decisions`, est originale et couverte par la licence de ce dépôt.
 
-Elles viennent de [`affaan-m/ECC`](https://github.com/affaan-m/ECC) (65),
+Les 83 viennent de [`affaan-m/ECC`](https://github.com/affaan-m/ECC) (65),
 [`addyosmani/agent-skills`](https://github.com/addyosmani/agent-skills) (16) et
 [`mattpocock/skills`](https://github.com/mattpocock/skills) (2), toutes en MIT.
 Provenance complète skill par skill, les trois modifications apportées et les projets

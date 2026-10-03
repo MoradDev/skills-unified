@@ -181,11 +181,13 @@ tool for you, see the `structured-decisions` skill in `curation/`.
 1. **Constitution.** Establish the project's non-negotiables before any code.
 2. **Clarify the idea.** If it is still vague, run `grill-me` — structured interrogation
    beats guessing at requirements.
-3. **Specify → clarify → plan → tasks → analyze → implement.** This is
+3. **Specify → clarify → plan → tasks → analyze → implement → converge.** This is
    [spec-kit](https://github.com/github/spec-kit), and **every new project starts with
    it** — run `specify init <project>` before writing any code. It is the backbone of the
    method, not an accessory: each step produces an artefact the next one consumes, which
-   is what stops an agent from inventing requirements halfway through.
+   is what stops an agent from inventing requirements halfway through. `analyze` is an
+   optional cross-check; `converge` is not — repeat implement → converge until it finds no
+   gap left between the code and the spec.
 
    The sequence matters more than the tool, so if `specify` cannot be installed in your
    environment, follow the same order by hand and keep the artefacts as files. But treat
