@@ -51,8 +51,9 @@ Nothing is installed globally. Nothing is activated behind your back.
 
 Plus the working method itself, built on [spec-kit](https://github.com/github/spec-kit):
 every project starts with `specify init`, then runs constitution → specify → clarify →
-plan → tasks → analyze → implement. Each step produces an artefact the next one consumes,
-which is what keeps an agent from inventing requirements halfway through.
+plan → tasks → analyze → implement → converge, repeating the last two until converge finds
+no gap left. Each step produces an artefact the next one consumes, which is what keeps an
+agent from inventing requirements halfway through.
 
 *Method* (18) — turning a vague idea into working software: structured interrogation of
 an idea before writing a spec, API design, CI/CD, security hardening, performance,
@@ -250,10 +251,11 @@ by an agent rather than read by a human.
 
 ## Licence and credit
 
-MIT. **None of the skills were written here** — the contribution is the selection, the
-de-duplication, the cross-reference repair and the method around them.
+MIT. **83 of the 84 skills were not written here** — for those, the contribution is the
+selection, the de-duplication, the cross-reference repair and the method around them. The
+84th, `structured-decisions`, is original and covered by this repository's own licence.
 
-They come from [`affaan-m/ECC`](https://github.com/affaan-m/ECC) (65),
+The 83 come from [`affaan-m/ECC`](https://github.com/affaan-m/ECC) (65),
 [`addyosmani/agent-skills`](https://github.com/addyosmani/agent-skills) (16) and
 [`mattpocock/skills`](https://github.com/mattpocock/skills) (2), all MIT.
 Full provenance, skill by skill, plus the three modifications made and the projects
