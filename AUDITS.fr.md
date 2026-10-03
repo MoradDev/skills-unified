@@ -136,8 +136,10 @@ personas, provenance, procédure d'épinglage) : `same_fact` sur les six, confia
 reste retiré du dépôt (voir l'entrée du 2026-10-02) ; l'appel a été fait à la demande, depuis
 la session.
 
-**Rangement** : les branches fusionnées `maintenance/pinning-and-laya` et
-`maintenance/onboarding-and-checks` supprimées du dépôt distant.
+**Rangement** : les branches `maintenance/pinning-and-laya` et
+`maintenance/onboarding-and-checks` sont toutes deux ancêtres de `main`
+(`git merge-base --is-ancestor`), donc supprimables sans perte. Suppression du distant laissée
+à l'humain.
 
 ---
 
