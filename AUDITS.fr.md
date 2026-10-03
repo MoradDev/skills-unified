@@ -138,8 +138,8 @@ la session.
 
 **Rangement** : les branches `maintenance/pinning-and-laya` et
 `maintenance/onboarding-and-checks` sont toutes deux ancêtres de `main`
-(`git merge-base --is-ancestor`), donc supprimables sans perte. Suppression du distant laissée
-à l'humain.
+(`git merge-base --is-ancestor`), donc supprimables sans perte. Supprimées du distant par
+l'humain le même jour.
 
 ---
 
