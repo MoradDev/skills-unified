@@ -141,6 +141,65 @@ la session.
 (`git merge-base --is-ancestor`), donc supprimables sans perte. Supprimées du distant par
 l'humain le même jour.
 
+## 2026-10-04 — Audit : trois ajouts, deux rejets, une liste de harnais
+
+Candidats tirés des dépôts étoilés de l'humain (65), triés sur leur fiche GitHub puis audités.
+Méthode, pour chacun : clone au commit noté ci-dessous, lecture du code exécutable, extraction
+des domaines sortants, recherche des motifs `curl | sh`, `irm | iex`, `base64 -d | sh`, `eval`
+sur réponse réseau, puis Skillspector v2.11.2 en statique (`--no-llm`) — findings sur `.md`
+ignorés, selon la règle du 2026-09-23.
+
+**Ajoutés au catalogue (25 lignes) :**
+- `humanizer` (`skills`, `on-demand`, `225a6f3`, MIT) — 1 skill, réécrit la prose qui sent
+  l'IA. Seul exécutable : un validateur de paquet local, sans réseau. Skillspector 49/100,
+  7 findings, tous sur `.md`. Recoupement avec `anthropics-skills/doc-coauthoring` écarté par
+  Jev (`jev_compare`, `different_facts`, confiance 0,89 et 0,93 sur les deux aspects
+  « tâche » et « requête déclenchante »). Aucun recoupement dans `curation/`.
+- `i-have-adhd` (`skills`, `on-demand`, `839872f`, MIT) — mise en forme des réponses, la
+  réponse d'abord. `disable-model-invocation: true` : invocation manuelle seulement, donc
+  aucune concurrence de déclenchement. Le plugin apporte un hook `SessionStart` (Node, repli
+  sh/ps1), lu en entier : inerte sans le fichier `~/.claude/.i-have-adhd-always`, local, sans
+  réseau. Skillspector 100/100 ; ses 7 findings HIGH sur exécutables relus un par un, tous
+  faux positifs (dont une « exfiltration » qui est un environnement de test **retirant** les
+  clés d'API).
+- `claude-quickstarts` (`app-tool`, `stock`, `3994db7`, MIT, Anthropic) — même rôle que
+  VoiceStudio/voicebox/SCAIL-2, pour une application qui appelle l'API Claude ; le `stock` n'a
+  pas été élargi. Domaines : Anthropic, SEC, Linear, Slack, Sentry, Archil, tous attendus.
+  Skillspector 100/100 ; ses 2 CRITICAL sont une démo qui lit l'API publique de la SEC.
+  **Couverture Skillspector : 0 %** (plafond de temps atteint) ; la passe manuelle domaines et
+  motifs a couvert ses 626 fichiers, mais les scripts de démo n'ont pas été relus ligne à
+  ligne.
+
+**Rejetés :**
+- `cloudflare/computer` (`2f76387`) — un système de fichiers virtuel dans un Durable Object,
+  marqué « PREVIEW ONLY, NOT suitable for production » par son propre README. Ne comble pas
+  l'absence de bac à sable hors Linux que laisse `code-on-incus`.
+- `iOfficeAI/OfficeCLI` (`b590a43`) — doublon de `docx`/`xlsx`/`pptx` d'`anthropics-skills`,
+  et surtout : `open()`/`create()` de ses SDK ont `autoInstall = true` par défaut, contrairement
+  à leur propre commentaire, et lancent `(curl d.officecli.ai || curl github) | bash` ou
+  `irm … | iex` — miroir tiers en premier. La somme de contrôle est sautée si `SHA256SUMS`
+  manque, et elle vient du même miroir. Les findings « analysis-evasion » sont des octets NUL
+  servant de séparateurs dans des littéraux C#, inoffensifs.
+
+**Chiffre corrigé : 2920 → 2921 fichiers `SKILL.md` aux 22 commits épinglés.** Le 2920 du
+2026-10-02 a été compté sur l'arbre de travail au moment où Defender venait de mettre en
+quarantaine `Anthropic-Cybersecurity-Skills/skills/detecting-fileless-malware-techniques/SKILL.md`
+(voir l'entrée du 2026-10-03). Recompté sur l'arbre git (`git ls-tree -r HEAD`, nom exact
+`SKILL.md`) : 2921 ; sur le disque : 2920, l'écart est ce fichier. Avec les trois ajouts
+(1 + 2 + 3) : **2927**. `claude-quickstarts` contient en plus 8 `skill.md` en minuscules, non
+comptés, comme le veut la méthode.
+
+`laya` recloné à son commit épinglé : le cache compte de nouveau toutes les lignes du catalogue.
+
+**Harnais, listés dans les README sans entrer au catalogue** (Open Interpreter, OpenClaw,
+Hermes Agent, Pi, Omnigent, Ruflo, DeepSeek Harness, supercli). Décision de l'humain, sur cette
+recommandation : un harnais exécute des commandes sur la machine, un audit sommaire ne peut pas
+s'en porter garant, et une date `scanned` l'aurait prétendu ; un épinglage ne correspond pas à
+ce qu'on installe depuis npm ou pip ; et ces dépôts bougeant chaque jour, `upstream-watch` en
+aurait signalé onze chaque mois. Ce que la liste dit de chacun vient de son propre README, rien
+d'autre. Écartés de la liste : `kimi-cli` (archivé), `openfox` (sans licence), `openclaude`
+(licence non identifiable).
+
 ---
 
 ## Avant de modifier ce fichier

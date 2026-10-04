@@ -9,8 +9,8 @@ lire `SETUP.md`, et il installe le reste lui-même.**
 
 Les skills d'agents sont dispersées dans des dizaines de dépôts, avec des noms qui se
 recouvrent, des descriptions qui se concurrencent et une qualité très inégale. Ce dépôt
-est le résultat de l'audit des 22 dépôts catalogués dans
-[`catalog/repos.tsv`](catalog/repos.tsv) — 2920 fichiers de skills à eux tous, comptés aux
+est le résultat de l'audit des 25 dépôts catalogués dans
+[`catalog/repos.tsv`](catalog/repos.tsv) — 2927 fichiers de skills à eux tous, comptés aux
 commits désormais épinglés — dont on a gardé les 84 qui méritent leur place, en laissant le
 raisonnement à découvert.
 
@@ -77,7 +77,7 @@ contraintes, par le doute et par les sources.
 | **Tests & livraison** | Playwright, tests Python/Go/C#, Docker, Kubernetes, déploiement |
 
 Plus les **rulesets par langage** pour 22 langages et frameworks, et un **catalogue** de
-22 dépôts amont avec leur rôle, leur politique d'activation et leur commit épinglé.
+25 dépôts amont avec leur rôle, leur politique d'activation et leur commit épinglé.
 
 ---
 
@@ -160,14 +160,16 @@ son agent faire quelque chose qu'elle n'a pas demandé. Aucun n'a été retiré 
 reste entier, et savoir où deux déclencheurs se concurrencent est plus utile que de faire comme
 si ce n'était pas le cas.
 
-## Pourquoi VoiceStudio, voicebox et SCAIL-2 sont au catalogue
+## Pourquoi VoiceStudio, voicebox, SCAIL-2 et claude-quickstarts sont au catalogue
 
 Ils ne sont jamais activés — leur `activation` vaut `stock` : ils sont au catalogue comme des
 pièces, pas comme des skills, et aucun agent ne les charge de lui-même. Ils y figurent parce
 que les applications qu'on amorce ici embarquent souvent de l'IA, et que lorsqu'il faut de la
 parole ou un modèle vision-langage, mieux vaut prendre un projet connu et déjà inspecté que
-d'improviser. À proposer comme briques de l'application construite, jamais comme partie de la
-méthode.
+d'improviser. `claude-quickstarts` tient le même rôle pour une application qui appelle l'API
+Claude : les points de départ d'Anthropic pour un agent de support, un analyste de données,
+l'usage d'un ordinateur et les agents gérés. À proposer comme briques de l'application
+construite, jamais comme partie de la méthode.
 
 ## Sur l'analyse de sécurité des skills
 
@@ -262,6 +264,24 @@ mémoire privée d'un agent contient et que les autres devraient savoir.
 | **Codex** et autres agents qui lisent `AGENTS.md` | `AGENTS.md` est déjà écrit pour toi. |
 | **Cursor** | Fais pointer un fichier de règles vers `curation/skills/`. |
 | **Gemini CLI, opencode, Aider, Continue…** | Aucun système de plugins nécessaire — indexe les `description` du frontmatter et ouvre un `SKILL.md` quand il correspond à la tâche. |
+
+**Autres harnais, listés mais non audités.** Ils ont été regardés, pas vérifiés : aucun n'est
+au catalogue, aucun n'est épinglé, et rien ici ne se porte garant d'un code qui exécute des
+commandes sur ta machine. La colonne de droite reprend ce que dit le README de chaque projet.
+
+| Harnais | Licence | Ce que documente son README |
+|---|---|---|
+| [Open Interpreter](https://github.com/openinterpreter/openinterpreter) | Apache-2.0 | Lit le `AGENTS.md` d'un dépôt, les dossiers `.agents/skills` et MCP — le plus proche de ce workspace. |
+| [OpenClaw](https://github.com/openclaw/openclaw) | MIT | Son propre système de skills et de plugins, avec un registre (ClawHub). |
+| [Hermes Agent](https://github.com/NousResearch/hermes-agent) | MIT | Son propre système de skills, qui écrit et réécrit des skills à partir de l'expérience, et MCP. |
+| [Pi](https://github.com/earendil-works/pi) | MIT | Ses propres skills, extensions et modèles de prompts. |
+| [Omnigent](https://github.com/omnigent-ai/omnigent) | Apache-2.0 | Une couche au-dessus de Claude Code, Codex, Cursor et d'autres ; il lit ce que lit le harnais qu'il pilote. |
+| [Ruflo](https://github.com/ruvnet/ruflo) | MIT | Tourne par-dessus Claude Code. Son installation complète **écrit `CLAUDE.md` et `.claude/` dans le workspace**, ce qui écraserait ceux de ce dépôt. |
+| [DeepSeek Harness](https://github.com/deepseek-ai/deepseek-harness) | MIT | Rien sur la lecture des instructions d'un workspace. |
+| [supercli](https://github.com/yashdev9274/supercli) | MIT | Rien sur la lecture des instructions d'un workspace. |
+
+Écartés tant que ce n'est pas tranché : `kimi-cli` (archivé), `openfox` (sans licence),
+`openclaude` (licence non identifiable).
 
 `AGENTS.md` est neutre vis-à-vis du harnais et contient la méthode de travail.
 `CLAUDE.md` n'ajoute que ce qui est propre à Claude Code. `SETUP.md` est la procédure

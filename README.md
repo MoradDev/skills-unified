@@ -9,7 +9,7 @@
 
 Agent skills are scattered across dozens of repositories, with overlapping names,
 competing descriptions and wildly varying quality. This repository is the result of
-auditing the 22 catalogued in [`catalog/repos.tsv`](catalog/repos.tsv) — 2920 skill files
+auditing the 25 catalogued in [`catalog/repos.tsv`](catalog/repos.tsv) — 2927 skill files
 between them, counted at the commits now pinned there — and keeping the 84 that earn their
 place, with the reasoning kept in the open.
 
@@ -72,7 +72,7 @@ browser testing, and constraint-, doubt- and source-driven development.
 | **Desktop** | .NET, Rust, C++, native Windows E2E testing, Bun |
 | **Testing & delivery** | Playwright, Python/Go/C# testing, Docker, Kubernetes, deployment |
 
-Plus **per-language rulesets** for 22 languages and frameworks, and a **catalogue** of 22
+Plus **per-language rulesets** for 22 languages and frameworks, and a **catalogue** of 25
 upstream repositories with their role, activation policy and pinned commit.
 
 ---
@@ -149,13 +149,15 @@ the person who needs them is the person watching an agent do something they did 
 None was removed: the floor stays whole, and knowing where two triggers compete is more useful
 than pretending they do not.
 
-## Why VoiceStudio, voicebox and SCAIL-2 are in the catalogue
+## Why VoiceStudio, voicebox, SCAIL-2 and claude-quickstarts are in the catalogue
 
 They are never enabled — their `activation` is `stock`, meaning they sit in the catalogue as
 parts, not as skills, and no agent loads them on its own. They are listed because the
 applications bootstrapped here routinely ship AI of their own, and when one needs speech or a
 vision-language model it is better to reach for a known, already-inspected project than to
-improvise one. Propose them as components of the application being built, never as part of the
+improvise one. `claude-quickstarts` plays the same part for an application that calls the Claude
+API: Anthropic's own starting points for a support agent, a data analyst, computer use and
+managed agents. Propose them as components of the application being built, never as part of the
 method.
 
 ## On scanning skills for safety
@@ -242,6 +244,24 @@ holds that others would need.
 | **Codex** and other `AGENTS.md`-aware agents | `AGENTS.md` is already written for you. |
 | **Cursor** | Point a rule file at `curation/skills/`. |
 | **Gemini CLI, opencode, Aider, Continue, …** | No plugin system needed — index the `description` frontmatter and open a `SKILL.md` when it matches the task. |
+
+**Other harnesses, listed but not audited.** These were looked at, not vetted: none is in the
+catalogue, none is pinned, and nothing here vouches for code that runs commands on your
+machine. What the right-hand column says comes from each project's own README.
+
+| Harness | Licence | What its README documents |
+|---|---|---|
+| [Open Interpreter](https://github.com/openinterpreter/openinterpreter) | Apache-2.0 | Reads a repository's `AGENTS.md` and `.agents/skills` directories, and MCP — the closest fit here. |
+| [OpenClaw](https://github.com/openclaw/openclaw) | MIT | Its own skills and plugins system, with a registry (ClawHub). |
+| [Hermes Agent](https://github.com/NousResearch/hermes-agent) | MIT | Its own skills system, which writes and rewrites skills from experience, and MCP. |
+| [Pi](https://github.com/earendil-works/pi) | MIT | Its own skills, extensions and prompt templates. |
+| [Omnigent](https://github.com/omnigent-ai/omnigent) | Apache-2.0 | A layer over Claude Code, Codex, Cursor and others; it reads whatever the harness it drives reads. |
+| [Ruflo](https://github.com/ruvnet/ruflo) | MIT | Runs on top of Claude Code. Its full install **writes `CLAUDE.md` and `.claude/` into the workspace**, which would overwrite this repository's own. |
+| [DeepSeek Harness](https://github.com/deepseek-ai/deepseek-harness) | MIT | Nothing about reading a workspace's instructions. |
+| [supercli](https://github.com/yashdev9274/supercli) | MIT | Nothing about reading a workspace's instructions. |
+
+Left out until resolved: `kimi-cli` (archived), `openfox` (no licence), `openclaude` (licence
+not identifiable).
 
 `AGENTS.md` is harness-neutral and holds the working method. `CLAUDE.md` adds only what
 is Claude Code specific. `SETUP.md` is the installation procedure, written to be executed
