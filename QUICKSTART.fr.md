@@ -83,6 +83,7 @@ Tu n'invoques pas ces choses. Elles se déclenchent sur ce que tu fais.
 | **superpowers** | Pousse les tests avant le code, le débogage systématique, la vérification avant de déclarer quoi que ce soit fini. |
 | **ponytail** | Plaide pour la chose la plus courte qui marche. Dis *« stop ponytail »* pour le couper sur la session. |
 | **taste-skill** | Fait que les interfaces générées aient l'air dessinées, pas gabaritées. |
+| **humanizer** | Retire de la documentation, des README et des textes d'interface les tics d'une prose écrite par une machine, sans changer ce qu'ils disent. |
 | **14 agents spécialistes** | Architecture, backend, frontend, revue, base de données, devops, prototypage, UI, UX, tests, accessibilité, appsec, rédaction technique. Contrairement aux skills, ceux-là s'appellent : *« utilise l'architecte backend pour ça »*. |
 
 Elles se recoupent parfois et se concurrencent. [`AGENTS.md`](AGENTS.md) § « When two skills

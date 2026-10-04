@@ -79,6 +79,7 @@ credit is due:
 | [`obra/superpowers`](https://github.com/obra/superpowers) | Jesse Vincent | MIT |
 | [`Leonxlnx/taste-skill`](https://github.com/Leonxlnx/taste-skill) | Leonxlnx | MIT |
 | [`DietrichGebert/ponytail`](https://github.com/DietrichGebert/ponytail) | DietrichGebert | MIT |
+| [`blader/humanizer`](https://github.com/blader/humanizer) | Siqi Chen | MIT |
 | [`msitarzewski/agency-agents`](https://github.com/msitarzewski/agency-agents) | AgentLand Contributors | MIT |
 | [`github/spec-kit`](https://github.com/github/spec-kit) | GitHub | MIT |
 | [`NVIDIA/Skillspector`](https://github.com/NVIDIA/Skillspector) | NVIDIA | Apache-2.0 |

@@ -200,6 +200,33 @@ aurait signalé onze chaque mois. Ce que la liste dit de chacun vient de son pro
 d'autre. Écartés de la liste : `kimi-cli` (archivé), `openfox` (sans licence), `openclaude`
 (licence non identifiable).
 
+## 2026-10-04 — `humanizer` passe en activation `default`
+
+**Décision de l'humain** : `humanizer` rejoint le plancher raccordé à chaque nouveau projet, aux
+côtés de `superpowers`, `taste-skill` et `ponytail`. Audité le même jour (entrée précédente) au
+commit `225a6f3`, inchangé.
+
+Ce qui le rend possible : c'est un plugin de skills, avec son propre
+`.claude-plugin/plugin.json` (`"skills": ["./"]`), donc il se lie exactement comme les trois
+autres — `check.py` le vérifie désormais pour les quatre.
+
+Ce que ça coûte : sa `description` (environ 430 caractères, soit de l'ordre de 100 tokens —
+estimé, pas mesuré) est chargée à chaque session ; le corps de la skill (32 Ko) ne l'est que
+lorsqu'elle se déclenche. Aucun hook, aucun script exécuté à l'usage.
+
+Recoupements : aucun avec les 84 skills de `curation/` ni avec les trois autres dépôts par
+défaut, à la lecture de leurs `description`. Le plus proche, `doc-coauthoring`
+(`anthropics-skills`, `on-demand`), a été écarté par Jev (voir l'entrée précédente). Rien
+n'est donc ajouté à `AGENTS.md` § « When two skills compete ».
+
+À savoir à l'usage : sans échantillon d'écriture de l'humain, sa règle §8 retire tous les
+tirets cadratins de la prose qu'il réécrit.
+
+Mis à jour : `catalog/repos.tsv`, `scripts/check.py` (liste des lignes `default`), les deux
+README (titre et puce), `SETUP.md` (étapes 2 et 4), les deux `QUICKSTART`, les deux
+`CHEATSHEET` (nouvelle section 8, les suivantes renumérotées) et `ATTRIBUTION.md`.
+39 contrôles, 0 échec.
+
 ---
 
 ## Avant de modifier ce fichier

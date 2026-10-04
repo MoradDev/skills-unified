@@ -24,8 +24,9 @@ everything the workspace itself ships or installs is listed in full.
 5. [superpowers (15)](#5-superpowers-15)
 6. [taste-skill (13)](#6-taste-skill-13)
 7. [ponytail (6)](#7-ponytail-6)
-8. [agency-agents](#8-agency-agents)
-9. [Optional tools](#9-optional-tools)
+8. [humanizer (1)](#8-humanizer-1)
+9. [agency-agents](#9-agency-agents)
+10. [Optional tools](#10-optional-tools)
 
 ---
 
@@ -79,8 +80,8 @@ The full procedure is in [`SETUP.md`](SETUP.md), written for an agent to execute
 | Check the repository against itself | `python scripts/check.py` (or `make check`) — recounts every number the docs state |
 
 Replace `.claude/skills/` with the path your agent reads. Windows junctions need no
-administrator rights. Link the three `default` plugins (superpowers, taste-skill, ponytail)
-the same way.
+administrator rights. Link the four `default` plugins (superpowers, taste-skill, ponytail,
+humanizer) the same way.
 
 ---
 
@@ -322,7 +323,22 @@ Claude Code may show the skills namespaced (`/ponytail:ponytail-review`). Codex 
 
 ---
 
-## 8. agency-agents
+## 8. humanizer (1)
+
+Rewrites AI-sounding prose so it reads like its writer, without changing what it says. Fires
+on its own when prose is edited or reviewed.
+
+| Command | What it does |
+|---|---|
+| `/humanizer` + pasted text | Returns a draft, the patterns still present, and the final rewrite |
+| `/humanizer` + a file name | Rewrites the file in place: prose only, with code, commands, paths and link targets left as they are |
+
+Give it a sample of your own writing first and it matches that voice, dashes included — which
+it otherwise removes. Claude Code may show it namespaced (`/humanizer:humanizer`).
+
+---
+
+## 9. agency-agents
 
 Specialist personas: engineering, design, marketing, security, testing, product, game
 development, GIS and more (297, in `mes_depots/agency-agents/<division>/`). **A core of 14 is
@@ -337,7 +353,7 @@ copied into every project; the rest are offered by division** — see `SETUP.md`
 
 ---
 
-## 9. Optional tools
+## 10. Optional tools
 
 Offered by `SETUP.md`, never installed unprompted.
 
@@ -352,5 +368,5 @@ Offered by `SETUP.md`, never installed unprompted.
 
 *Plugin lists reflect the commits pinned in [`catalog/repos.tsv`](catalog/repos.tsv),
 inspected on 2026-10-02: superpowers `8ca22db`, taste-skill `ce26fc2`, ponytail `e3ba2aa`,
-agency-agents `d3f71c4`. Their branches have very likely moved since — that is the point of
+agency-agents `d3f71c4`; humanizer `225a6f3`, inspected on 2026-10-04. Their branches have very likely moved since — that is the point of
 the pin. The curated skills in §4 only change when this repository does.*

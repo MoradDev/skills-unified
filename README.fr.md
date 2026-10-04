@@ -109,10 +109,10 @@ pourvues d'une `description`.
 
 ---
 
-## Les trois dépôts activés par défaut
+## Les quatre dépôts activés par défaut
 
-Trois dépôts amont sont raccordés à chaque nouveau projet sans passer par la curation
-ci-dessus : `superpowers`, `taste-skill` et `ponytail`. C'est une exception assumée, et la
+Quatre dépôts amont sont raccordés à chaque nouveau projet sans passer par la curation
+ci-dessus : `superpowers`, `taste-skill`, `ponytail` et `humanizer`. C'est une exception assumée, et la
 raison est simple — **c'est pour moi le minimum requis pour bien coder avec un harnais IA.**
 Pas une sélection triée : un plancher.
 
@@ -132,8 +132,14 @@ Ce que chacun apporte réellement, d'après son propre README et ses propres ski
   plus courte qui marche et relit un diff ou un dépôt entier à la recherche de
   sur-ingénierie. Son propre benchmark annonce ~54 % de code en moins sur 12 tâches, face au
   même agent sans lui.
+- **[`blader/humanizer`](https://github.com/blader/humanizer)** (1 skill) — réécrit une prose qui
+  sent la machine pour qu'elle sonne de nouveau comme son auteur, sans changer ce qu'elle dit :
+  oppositions qui n'apportent rien, phrases de chute, triades forcées, affirmations gonflées,
+  mots tout faits. Bâti sur la page « Signs of AI writing » de Wikipédia. Il se déclenche quand
+  on édite ou relit de la prose — documentation, README, textes d'interface — et laisse intacts
+  le code, les commandes et les chemins.
 
-Les trois sont des plugins de skills, chacun portant son `.claude-plugin/plugin.json` — c'est
+Les quatre sont des plugins de skills, chacun portant son `.claude-plugin/plugin.json` — c'est
 ce qui rend vrai, pour eux, le « on le lie et ça marche ».
 
 **[`msitarzewski/agency-agents`](https://github.com/msitarzewski/agency-agents) est le

@@ -389,7 +389,7 @@ def main(verbose: bool) -> int:
 
     # Documented default rows must match the catalogue.
     defaults = sorted(r["name"] for r in rows if r["activation"] == "default")
-    check("catalogue `default` rows", defaults, ["ponytail", "superpowers", "taste-skill"])
+    check("catalogue `default` rows", defaults, ["humanizer", "ponytail", "superpowers", "taste-skill"])
     # The headings spell the count as a word. Never index a dict by a count that malformed
     # input can change — a checker that raises instead of reporting is useless in CI.
     WORDS = {1: ("one", "un"), 2: ("two", "deux"), 3: ("three", "trois"),

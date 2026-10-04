@@ -8,7 +8,7 @@ skills	https://github.com/mattpocock/skills	source	curated	d81f3a183412e71a5b1e8
 ECC	https://github.com/affaan-m/ECC	source	curated	ef648e01899ba3e8dc6371642deaaf64b4477775	2026-10-02
 anthropics-skills	https://github.com/anthropics/skills	marketplace	on-demand	8a1541c4a3ffa5a20a5a91de0dcf3f0bab1d1ef4	2026-10-02
 Anthropic-Cybersecurity-Skills	https://github.com/mukul975/Anthropic-Cybersecurity-Skills	skills	on-demand	54a798831d2266a3ca61ce68a7acb80b81160d57	2026-10-02
-humanizer	https://github.com/blader/humanizer	skills	on-demand	225a6f39ac85f76ee48dbad772ea4abe4ed6c9d8	2026-10-04
+humanizer	https://github.com/blader/humanizer	skills	default	225a6f39ac85f76ee48dbad772ea4abe4ed6c9d8	2026-10-04
 i-have-adhd	https://github.com/ayghri/i-have-adhd	skills	on-demand	839872f9d1cd634fed642b4589ce7226199cc15f	2026-10-04
 agency-agents	https://github.com/msitarzewski/agency-agents	agents	core-set	d3f71c4bb8922d3eea7576237a870dd59b3cdd52	2026-10-02
 graphify	https://github.com/Graphify-Labs/graphify	cli	threshold	ef4450d9c28acb2b8cdc22d369c1777b77148eef	2026-10-02
