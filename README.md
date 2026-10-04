@@ -102,10 +102,10 @@ links, 0 broken. 84 skills, 84 distinct names, every one carrying a `description
 
 ---
 
-## The three repositories enabled by default
+## The four repositories enabled by default
 
-Three upstream repositories are linked into every new project without passing through the
-curation above: `superpowers`, `taste-skill` and `ponytail`. That is a deliberate exception,
+Four upstream repositories are linked into every new project without passing through the
+curation above: `superpowers`, `taste-skill`, `ponytail` and `humanizer`. That is a deliberate exception,
 and the reason is plain — **for me this is the minimum required to code well with an AI
 harness.** Not a vetted selection: a floor.
 
@@ -123,8 +123,13 @@ What each one actually contributes, from its own README and its own skills:
   permanent YAGNI mode, active from session start, that pushes the agent to the shortest
   solution that works and reviews a diff or a whole repository for over-engineering. Its own
   benchmark reports ~54 % less code across 12 feature tasks against the same agent without it.
+- **[`blader/humanizer`](https://github.com/blader/humanizer)** (1 skill) — rewrites prose that
+  reads as machine-written so it sounds like its writer again, without changing what it says:
+  contrasts that add nothing, one-line closers, forced triads, inflated claims, stock words.
+  Built from Wikipedia's "Signs of AI writing". It fires when prose is edited or reviewed —
+  documentation, READMEs, interface copy — and leaves code, commands and paths untouched.
 
-All three are skills plugins, each carrying its own `.claude-plugin/plugin.json`, which is
+All four are skills plugins, each carrying its own `.claude-plugin/plugin.json`, which is
 what makes "link it and it works" true for them.
 
 **[`msitarzewski/agency-agents`](https://github.com/msitarzewski/agency-agents) is the fourth,

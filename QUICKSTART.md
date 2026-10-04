@@ -81,6 +81,7 @@ You do not invoke these. They trigger on what you are doing.
 | **superpowers** | Pushes tests before code, systematic debugging, verification before anything is called done. |
 | **ponytail** | Argues for the shortest thing that works. Say *"stop ponytail"* to turn it off for the session. |
 | **taste-skill** | Makes generated interfaces look designed rather than templated. |
+| **humanizer** | Strips the tells of machine-written prose from docs, READMEs and interface copy, without changing what they say. |
 | **14 specialist agents** | Architecture, backend, frontend, review, database, devops, prototyping, UI, UX, test automation, accessibility, appsec, technical writing. Unlike skills, these you *do* call: *"use the backend architect for this"*. |
 
 They sometimes overlap and compete. [`AGENTS.md`](AGENTS.md) § "When two skills compete"

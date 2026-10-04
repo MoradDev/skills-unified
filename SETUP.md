@@ -60,9 +60,9 @@ Read `catalog/repos.tsv`. It is tab-separated, with six columns:
 | `commit` | The exact commit that was inspected. **Clone this, not the branch tip.** |
 | `scanned` | The date that commit was inspected, `YYYY-MM-DD` |
 
-**Clone at minimum** every row whose `activation` is `default`. Those three — `superpowers`,
-`taste-skill`, `ponytail` — are what the working method depends on, and all three are skills
-plugins.
+**Clone at minimum** every row whose `activation` is `default`. Those four — `superpowers`,
+`taste-skill`, `ponytail`, `humanizer` — are what the working method depends on, and all four
+are skills plugins.
 
 **Also clone the one `core-set` row**, `agency-agents`, unless the human declines: step 4b
 copies a named core of 14 personas from it into every project. It is 7.5 MB and it is not a
@@ -128,7 +128,7 @@ Replace `.agent/skills/` with whatever path your harness actually reads (see ste
 
 | Harness | What to do |
 |---|---|
-| **Claude Code** | Link `curation/` into `<project>/.claude/skills/curation`. It carries `.claude-plugin/plugin.json`, so it auto-loads as `curation@skills-dir` — no marketplace, no install command. The human must accept the workspace-trust prompt on first launch. Link the three `default` rows from `mes_depots/` the same way — each carries its own `.claude-plugin/plugin.json`. **Do not link `agency-agents` here**: it holds agent personas, not skills, and has no `plugin.json`. See step 4b. |
+| **Claude Code** | Link `curation/` into `<project>/.claude/skills/curation`. It carries `.claude-plugin/plugin.json`, so it auto-loads as `curation@skills-dir` — no marketplace, no install command. The human must accept the workspace-trust prompt on first launch. Link the four `default` rows from `mes_depots/` the same way — each carries its own `.claude-plugin/plugin.json`. **Do not link `agency-agents` here**: it holds agent personas, not skills, and has no `plugin.json`. See step 4b. |
 | **Codex / any AGENTS.md-aware agent** | Copy or symlink `AGENTS.md` to the project root. It already tells you to consult `curation/skills/`. |
 | **Cursor** | Point a rule file at `curation/skills/`, or symlink the folder into `.cursor/rules/`. |
 | **Gemini CLI, opencode, Aider, Continue, others** | No plugin system needed. Add `AGENTS.md` to the project and load `curation/skills/<name>/SKILL.md` on demand, as described in AGENTS.md § "For agents without a plugin system". |

@@ -26,8 +26,9 @@ une explicitement. Quand c'est le cas :
 5. [superpowers (15)](#5-superpowers-15)
 6. [taste-skill (13)](#6-taste-skill-13)
 7. [ponytail (6)](#7-ponytail-6)
-8. [agency-agents](#8-agency-agents)
-9. [Outils optionnels](#9-outils-optionnels)
+8. [humanizer (1)](#8-humanizer-1)
+9. [agency-agents](#9-agency-agents)
+10. [Outils optionnels](#10-outils-optionnels)
 
 ---
 
@@ -82,8 +83,8 @@ agent.
 | Contrôler le dépôt contre lui-même | `python scripts/check.py` (ou `make check`) — recompte tous les chiffres annoncés |
 
 Remplace `.claude/skills/` par le chemin que lit ton agent. Les jonctions Windows ne
-demandent pas de droits administrateur. Relie de la même façon les trois plugins
-`default` (superpowers, taste-skill, ponytail).
+demandent pas de droits administrateur. Relie de la même façon les quatre plugins
+`default` (superpowers, taste-skill, ponytail, humanizer).
 
 ---
 
@@ -325,7 +326,22 @@ Codex utilise `@ponytail`, `@ponytail-review` et `@ponytail-help`.
 
 ---
 
-## 8. agency-agents
+## 8. humanizer (1)
+
+Réécrit une prose qui sent l'IA pour qu'elle sonne comme son auteur, sans changer ce qu'elle
+dit. Se déclenche tout seul quand on édite ou relit de la prose.
+
+| Commande | Effet |
+|---|---|
+| `/humanizer` + texte collé | Rend un brouillon, les tics encore présents, et la réécriture finale |
+| `/humanizer` + un nom de fichier | Réécrit le fichier sur place : la prose seulement, sans toucher au code, aux commandes, aux chemins ni aux cibles de liens |
+
+Donne-lui d'abord un échantillon de ta propre écriture et il en reprend la voix, tirets compris
+— qu'il retire sinon. Claude Code peut l'afficher avec son espace de noms (`/humanizer:humanizer`).
+
+---
+
+## 9. agency-agents
 
 Des personas spécialisées : ingénierie, design, marketing, sécurité, tests, produit,
 jeu vidéo, SIG et d'autres (297, dans `mes_depots/agency-agents/<division>/`). **Un noyau de
@@ -341,7 +357,7 @@ jeu vidéo, SIG et d'autres (297, dans `mes_depots/agency-agents/<division>/`). 
 
 ---
 
-## 9. Outils optionnels
+## 10. Outils optionnels
 
 Proposés par `SETUP.md`, jamais installés sans qu'on le demande.
 
@@ -356,6 +372,6 @@ Proposés par `SETUP.md`, jamais installés sans qu'on le demande.
 
 *Les listes des plugins reflètent les commits épinglés dans
 [`catalog/repos.tsv`](catalog/repos.tsv), inspectés le 02/10/2026 : superpowers `8ca22db`,
-taste-skill `ce26fc2`, ponytail `e3ba2aa`, agency-agents `d3f71c4`. Leurs branches ont très
+taste-skill `ce26fc2`, ponytail `e3ba2aa`, agency-agents `d3f71c4` ; humanizer `225a6f3`, inspecté le 04/10/2026. Leurs branches ont très
 probablement bougé depuis — c'est tout l'objet de l'épinglage. Les skills de la curation (§4)
 ne changent qu'avec ce dépôt.*
