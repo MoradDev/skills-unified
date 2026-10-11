@@ -306,6 +306,21 @@ explicitly when that happens, rather than silently passing.
 skillspector scan <skill-folder> --no-llm
 ```
 
+**A whole repository goes through `scripts/scan.py`, not straight to Skillspector.** Pointed at
+a large repository, Skillspector counts almost every file as only partially inspected — a
+couple of lockfiles or slow dependency lists degrade whole analyzers — and `--recursive` only
+looks one directory down for a `SKILL.md`. The script hands it one unit per skill directory
+plus one for the executables and manifests outside them, leaves out lockfiles, binaries and
+files over 1 MB (listing each with its reason), and merges the reports onto the repository's
+own paths, sorted for reading. On `claude-quickstarts` full inspection went from 0 % (the whole
+tree, 2026-10-04) to 86 % of the 361 files it hands over; on `rtk`, 87 %. It sorts; it decides
+nothing, and it always exits 0. It keeps one network call: Skillspector sends dependency names
+and versions to api.osv.dev, which is how known-vulnerable dependencies are found.
+
+```bash
+python scripts/scan.py mes_depots/<name> --out <folder>
+```
+
 **Read the report with this filter, or it will mislead you.** In a scan of 2808 skills
 run on 2026-09-23, the tool produced 4969 findings, 157 of them CRITICAL — and not one
 was a real threat. 71 % of findings were raised on Markdown prose rather than code.

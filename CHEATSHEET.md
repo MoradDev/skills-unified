@@ -363,6 +363,7 @@ Offered by `SETUP.md`, never installed unprompted.
 | graphify | `/graphify .` | Build the codebase graph, then read `graph.html` / `GRAPH_REPORT.md` |
 | Skillspector | `uv tool install git+https://github.com/NVIDIA/Skillspector.git@<commit>` | Before trusting a skill from an unknown source. Pin to the `Skillspector` commit in `catalog/repos.tsv`. |
 | Skillspector | `skillspector scan <skill-folder> --no-llm` | Scan it. Only findings in `.py`, `.sh`, `.js`, `.ts`, `.ps1` files matter. |
+| Skillspector | `python scripts/scan.py mes_depots/<name> --out <folder>` | A whole repository: one unit per skill plus the executables, lockfiles and binaries left out, findings on executables sorted for reading. |
 | rtk | `cargo install --git https://github.com/rtk-ai/rtk --rev <commit>` | Installed by the human, never by the agent. Pin to the `rtk` commit in `catalog/repos.tsv`; needs Rust 1.91+. |
 | rtk | `rtk init --dry-run`, then `rtk init` in the project folder | Project only: a block in that project's `CLAUDE.md`, no hook. `-g` registers a global hook on every shell command: see `SETUP.md` step 5b first. `--uninstall` undoes either. |
 | rtk | `rtk gain` | Tokens saved so far |

