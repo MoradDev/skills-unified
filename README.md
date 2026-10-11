@@ -9,7 +9,7 @@
 
 Agent skills are scattered across dozens of repositories, with overlapping names,
 competing descriptions and wildly varying quality. This repository is the result of
-auditing the 25 catalogued in [`catalog/repos.tsv`](catalog/repos.tsv) — 2927 skill files
+auditing the 26 catalogued in [`catalog/repos.tsv`](catalog/repos.tsv) — 2939 skill files
 between them, counted at the commits now pinned there — and keeping the 84 that earn their
 place, with the reasoning kept in the open.
 
@@ -72,7 +72,7 @@ browser testing, and constraint-, doubt- and source-driven development.
 | **Desktop** | .NET, Rust, C++, native Windows E2E testing, Bun |
 | **Testing & delivery** | Playwright, Python/Go/C# testing, Docker, Kubernetes, deployment |
 
-Plus **per-language rulesets** for 22 languages and frameworks, and a **catalogue** of 25
+Plus **per-language rulesets** for 22 languages and frameworks, and a **catalogue** of 26
 upstream repositories with their role, activation policy and pinned commit.
 
 ---
