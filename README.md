@@ -9,7 +9,7 @@
 
 Agent skills are scattered across dozens of repositories, with overlapping names,
 competing descriptions and wildly varying quality. This repository is the result of
-auditing the 25 catalogued in [`catalog/repos.tsv`](catalog/repos.tsv) — 2927 skill files
+auditing the 26 catalogued in [`catalog/repos.tsv`](catalog/repos.tsv) — 2939 skill files
 between them, counted at the commits now pinned there — and keeping the 84 that earn their
 place, with the reasoning kept in the open.
 
@@ -72,7 +72,7 @@ browser testing, and constraint-, doubt- and source-driven development.
 | **Desktop** | .NET, Rust, C++, native Windows E2E testing, Bun |
 | **Testing & delivery** | Playwright, Python/Go/C# testing, Docker, Kubernetes, deployment |
 
-Plus **per-language rulesets** for 22 languages and frameworks, and a **catalogue** of 25
+Plus **per-language rulesets** for 22 languages and frameworks, and a **catalogue** of 26
 upstream repositories with their role, activation policy and pinned commit.
 
 ---
@@ -163,7 +163,9 @@ vision-language model it is better to reach for a known, already-inspected proje
 improvise one. `claude-quickstarts` plays the same part for an application that calls the Claude
 API: Anthropic's own starting points for a support agent, a data analyst, computer use and
 managed agents. Propose them as components of the application being built, never as part of the
-method.
+method. One caution for `claude-quickstarts`: at the pinned commit two of its demos
+(`customer-support-agent`, `financial-data-analyst`) pin Next.js 14.2.5 and 14.2.15, each with 16
+published advisories, one of them remote code execution. Upgrade `next` before building on them.
 
 ## On scanning skills for safety
 
@@ -192,6 +194,10 @@ hit was a project's own documented installer.
 
 *Caveat, stated plainly:* 1517 skills were marked "incomplete" by the scanner and 165
 files were never inspected at all, due to its 1 MB per-file ceiling. Coverage is not total.
+Since 2026-10-11 a whole repository goes through [`scripts/scan.py`](scripts/scan.py), which
+splits it into pieces the scanner can finish and lists every file it leaves out: on
+`claude-quickstarts`, full inspection went from 0 % to 86 % (`AGENTS.md` § "Scanning an
+untrusted skill").
 
 ---
 

@@ -262,7 +262,7 @@ file. Do not silently skip this step.
 
 Offer these; do not install them unprompted.
 
-Both are pinned, for the same reason as step 2.
+All three are pinned, for the same reason as step 2.
 
 ```bash
 # Skill security scanner — run it manually on untrusted skills, never as a gate
@@ -270,6 +270,9 @@ uv tool install git+https://github.com/NVIDIA/Skillspector.git@2226747e4ca97198b
 
 # Codebase graph — only once a project exceeds ~80 files
 uv tool install graphifyy==0.9.73
+
+# Token-saving proxy for shell commands — the human installs it, see below
+cargo install --git https://github.com/rtk-ai/rtk --rev a4cddfc5ce6e6412c66e9729c4200792d822a964
 ```
 
 **Do not install `graphifyy` now** — a fresh project has no codebase to map. The threshold is a
@@ -291,6 +294,24 @@ then read `graph.html` / `GRAPH_REPORT.md`. Below ~80, do not: it is pure overhe
 ```
 
 Tell the human the count the project starts at, so they know how far they are from it.
+
+**`rtk` is `manual`: mention it, never run its installer or `rtk init` yourself.** It is a
+single Rust binary that sits in front of shell commands and trims their output before the
+agent reads it. The command above builds it from the inspected commit and needs Rust 1.91 or
+later; its own `install.sh` fetches the *latest* release instead, which is not what was
+inspected. Its telemetry asks for consent before sending anything (`RTK_TELEMETRY_DISABLED=1`
+turns it off outright). Two things the human must know before choosing an `init`:
+
+- `rtk init -g` is **global**: it writes `~/.claude/RTK.md`, adds `@RTK.md` to
+  `~/.claude/CLAUDE.md` and registers a hook in the user settings that rewrites **every** shell
+  command of **every** project. That is the one exception to "nothing is installed globally",
+  so it is the human's call alone.
+- `rtk init` without `-g` installs no hook: it appends a block to the project's own
+  `CLAUDE.md` and writes a filters template. Run it in the project folder, never at the
+  workspace root, where it would edit this repository's `CLAUDE.md`.
+
+Both accept `--dry-run` to show what they would write, and `--uninstall` to undo it.
+The 12 skills under its `.claude/skills/` are for developing `rtk` itself: never link them.
 
 ---
 

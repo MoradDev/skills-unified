@@ -83,6 +83,7 @@ credit is due:
 | [`msitarzewski/agency-agents`](https://github.com/msitarzewski/agency-agents) | AgentLand Contributors | MIT |
 | [`github/spec-kit`](https://github.com/github/spec-kit) | GitHub | MIT |
 | [`NVIDIA/Skillspector`](https://github.com/NVIDIA/Skillspector) | NVIDIA | Apache-2.0 |
+| [`rtk-ai/rtk`](https://github.com/rtk-ai/rtk) | Patrick Szymkowiak | Apache-2.0 |
 | [`anthropics/skills`](https://github.com/anthropics/skills) | Anthropic | see repository |
 | [`Graphify-Labs/graphify`](https://github.com/Graphify-Labs/graphify) | Graphify Labs | see repository |
 | [`NandhaKishorM/laya`](https://github.com/NandhaKishorM/laya) | Nandakishor M (Convai Innovations) | Apache-2.0 |

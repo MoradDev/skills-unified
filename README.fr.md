@@ -9,8 +9,8 @@ lire `SETUP.md`, et il installe le reste lui-même.**
 
 Les skills d'agents sont dispersées dans des dizaines de dépôts, avec des noms qui se
 recouvrent, des descriptions qui se concurrencent et une qualité très inégale. Ce dépôt
-est le résultat de l'audit des 25 dépôts catalogués dans
-[`catalog/repos.tsv`](catalog/repos.tsv) — 2927 fichiers de skills à eux tous, comptés aux
+est le résultat de l'audit des 26 dépôts catalogués dans
+[`catalog/repos.tsv`](catalog/repos.tsv) — 2939 fichiers de skills à eux tous, comptés aux
 commits désormais épinglés — dont on a gardé les 84 qui méritent leur place, en laissant le
 raisonnement à découvert.
 
@@ -77,7 +77,7 @@ contraintes, par le doute et par les sources.
 | **Tests & livraison** | Playwright, tests Python/Go/C#, Docker, Kubernetes, déploiement |
 
 Plus les **rulesets par langage** pour 22 langages et frameworks, et un **catalogue** de
-25 dépôts amont avec leur rôle, leur politique d'activation et leur commit épinglé.
+26 dépôts amont avec leur rôle, leur politique d'activation et leur commit épinglé.
 
 ---
 
@@ -175,7 +175,10 @@ parole ou un modèle vision-langage, mieux vaut prendre un projet connu et déj�
 d'improviser. `claude-quickstarts` tient le même rôle pour une application qui appelle l'API
 Claude : les points de départ d'Anthropic pour un agent de support, un analyste de données,
 l'usage d'un ordinateur et les agents gérés. À proposer comme briques de l'application
-construite, jamais comme partie de la méthode.
+construite, jamais comme partie de la méthode. Une précaution pour `claude-quickstarts` : au
+commit épinglé, deux de ses démos (`customer-support-agent`, `financial-data-analyst`) figent
+Next.js 14.2.5 et 14.2.15, visés chacun par 16 avis de sécurité publiés, dont une exécution de
+code à distance. Mets `next` à jour avant de bâtir dessus.
 
 ## Sur l'analyse de sécurité des skills
 
@@ -208,7 +211,10 @@ occurrence : l'installeur documenté d'un projet, depuis son propre domaine.
 
 *Réserve, dite franchement :* 1517 skills ont été marquées « incomplete » par le scanner
 et 165 fichiers n'ont jamais été inspectés, à cause de son plafond d'1 Mo par fichier. La
-couverture n'est pas totale.
+couverture n'est pas totale. Depuis le 11/10/2026, un dépôt entier passe par
+[`scripts/scan.py`](scripts/scan.py), qui le découpe en morceaux que le scanner peut finir et
+liste chaque fichier écarté : sur `claude-quickstarts`, l'inspection complète est passée de 0 %
+à 86 % (`AGENTS.md` § « Scanning an untrusted skill »).
 
 ---
 

