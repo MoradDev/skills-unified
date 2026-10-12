@@ -331,6 +331,54 @@ par 16 avis publiés selon OSV, dont une exécution de code à distance dans l'A
 d'images. Pas malveillant, mais hérité par quiconque bâtit dessus : précaution ajoutée aux deux
 README, section du `stock`.
 
+## 2026-10-12 — Audit : `rea` écarté pour l'instant
+
+Candidats tirés des 24 étoiles ajoutées par l'humain les 2026-10-09 et 2026-10-11, triés sur leur
+README. Seize sont des applications auto-hébergées (holm, laranode, cmms, worklenz…), hors
+périmètre : ni skills ni outils d'agent. Sept outils d'agent ont été lus, mais ne sont pas audités
+(ai-memory, context-mode, ai-factory, hindsight, colibri, RuView, tinyfish-cookbook). Un seul
+a été audité à la demande : `rea`.
+
+**Écarté : `rea`** (`morluto/rea`, MIT). C'est un serveur MCP de rétro-ingénierie (binaires,
+Electron, .NET, APK, sites web) qui s'appuie sur Ghidra, IDA ou Hopper, et qui installe en plus
+une skill, `reverse-engineer-anything`.
+- **Méthode.** Clone de `main` à `c22111e` (2026-10-12). `python scripts/scan.py`, avec
+  Skillspector 2.11.2 en `--no-llm`. Lecture du code de l'installeur et des appels réseau.
+  Lecture, sans exécution, du tarball npm `rea-agents@6.4.0` : son `gitHead` est `a56f7bb`, et
+  son sha512 a été vérifié contre le registre. Rien du projet n'a été exécuté.
+- **Scan.** 2567 fichiers en 4 unités. 1203 constats sur des exécutables ou des manifestes
+  (10 CRITICAL, 79 HIGH), lus un par un : faux positifs ou comportement documenté (`exec()` sur
+  des fichiers du paquet, un `curl | bash` en commentaire). Aucun code malveillant trouvé.
+  Deux limites : la couverture complète n'est que de 9 fichiers, par le mécanisme décrit dans
+  l'entrée précédente, et `api.osv.dev` n'a pas répondu, donc **les dépendances vulnérables n'ont
+  pas été vérifiées**.
+- **Ce qui a décidé :**
+  - **Le code exécuté n'est pas celui qu'on inspecte.** Le paquet npm contient du JavaScript
+    compilé et un binaire Windows précompilé, absents du dépôt. `main` a 259 commits d'avance
+    sur la release npm.
+  - **L'épinglage est contourné.** La skill demande `npx -y rea-agents@latest` quand le CLI
+    manque (`SKILL.md`, l. 34-35).
+  - **Le rythme rend tout épinglage caduc en quelques jours.** 1658 commits en 7 jours,
+    9 releases en 8 jours, dont 3 changements de version majeure. `SECURITY.md` ne corrige que la
+    dernière version.
+  - **`rea setup` est global.** Il écrit `mcpServers.rea` dans `~/.claude.json` et copie la
+    skill dans `~/.claude/skills/`. Il n'installe toutefois ni hook ni permission.
+  - **Le support Windows est faible.** Ghidra n'y est qu'expérimental et la capture de processus
+    y est indisponible. Les outils d'exécution de cibles et d'ADB n'ont d'autre garde-fou que
+    l'approbation de Claude Code (« This is not a sandbox »).
+- **Recoupements avec `Anthropic-Cybersecurity-Skills`.** Le tri a suivi la chaîne Laya, puis
+  Jev, puis l'agent, au seuil de 0,85. Laya s'est abstenu sur les 5 paires. Jev retient une
+  concurrence avec les skills jadx et binwalk (0,85). L'agent la retient pour Ghidra. Deux paires
+  restent indécises (JavaScript, dnSpy) et sont sans objet tant que `rea` est écarté.
+- **Pour une réouverture.** Épingler le commit de la release npm, pas `main`, et le scanner avec
+  OSV joignable. Enregistrer le serveur à la main, en portée projet et à version exacte
+  (`claude mcp add --scope local rea -- cmd /d /c npx -y rea-agents@<version> mcp`), jamais avec
+  `rea setup`. Ne pas lier la skill. Utilisable dès maintenant ponctuellement, hors catalogue,
+  aux mêmes conditions.
+
+**Chiffres** : inchangés. 26 lignes au catalogue, 2939 fichiers `SKILL.md`. Le clone
+`mes_depots/rea` est hors catalogue et n'entre dans aucun compte.
+
 ---
 
 ## Avant de modifier ce fichier
