@@ -401,6 +401,62 @@ analyse donc bien le C qu'on lui remet. 39 contrôles, 0 échec.
 **Non fait.** `codebase-memory-mcp` n'a pas été rescanné avec la nouvelle liste ; à faire avant
 toute décision d'admission.
 
+## 2026-10-14 — Audit : `codegraph` ajouté en `manual`, `codebase-memory-mcp` écarté
+
+Deux concurrents de graphify, repérés le 2026-10-12 parmi six outils de graphe de code
+(GitNexus écarté d'office : licence PolyForm Noncommercial), audités en parallèle avec les mêmes
+rubriques pour que l'humain choisisse. Méthode de rtk et rea : clone au commit de la release,
+`scripts/scan.py`, lecture du code sensible (installeur, réseau, télémétrie, serveur, hooks),
+artefacts téléchargés et vérifiés sans être exécutés. Recoupements par Laya
+(`min_confidence=0.85`), puis Jev, puis l'agent.
+
+**Ajouté : `codegraph`** (`mcp`, `manual`, `6560052`, MIT, Colby Mchenry) — un index vivant du
+code source, resynchronisé à chaque modification, servi par MCP.
+- **Code exécuté et code inspecté.** Tag `v1.6.2` = `gitHead` du paquet npm. Attestation de
+  provenance GitHub vérifiée (`gh attestation verify`, source `0f0af7b`, parent de `6560052`
+  qui ne touche que `CHANGELOG.md`), signatures npm vérifiées. **JavaScript recompilé avec tsc
+  5.9.3 : 261 fichiers sur 261 identiques au paquet livré.** Seul le moteur Rust
+  (`codegraph-kernel.node`, non signé) repose sur la seule attestation ; `node.exe` est signé
+  par l'OpenJS Foundation. Aucun script npm de cycle de vie.
+- **Réserves, vérifiées dans le code.** Télémétrie **activée par défaut**
+  (`src/telemetry/index.ts`, `decidedBy: 'default'`), avertissement sur stderr seulement.
+  L'installeur écrit en portée utilisateur, autorise `mcp__codegraph__*` sans demander, ajoute
+  un hook `UserPromptSubmit` et un bloc `~/.claude/CLAUDE.md`, sans aperçu ; `codegraph
+  upgrade` remet le hook. D'où l'installation à la main de `SETUP.md` étape 5b : portée
+  projet, version exacte, télémétrie et vérification de mise à jour coupées, ni hook ni
+  autorisation automatique.
+- **Scan** (avec la liste corrigée le même jour) : 1 018 fichiers en 3 unités, couverture
+  complète 0 % (1 015 partiels, même mécanisme de dégradation que le 2026-10-11), 3 `parser.c`
+  de plus de 1 Mo écartés. 0 CRITICAL, 123 HIGH, 149 MEDIUM, 24 LOW sur exécutables. Les HIGH du
+  code livré, lus un par un : écriture documentée des configurations d'agents, la commande
+  `upgrade`, un `curl | sh` en commentaire. Les fichiers C ajoutent 26 MEDIUM, aucun HIGH
+  (grammaires tree-sitter vendorées). Aucun code malveillant.
+- **Concurrence avec graphify** : Laya, 0,88 au-dessus du seuil — la skill de graphify et les
+  instructions du serveur codegraph réclament toutes deux « explorer avant de lire ».
+  **Décision de l'humain** : partage par nature de fichier. graphify est la *carte*, à la
+  demande, sur la documentation (specs, ADR, docs, PDF) et parfois sur tout le projet,
+  installé par `graphify install` seul, sans hook (`graphify claude install` et
+  `graphify install --project` en posent un : lu dans `graphify/install.py`). codegraph est
+  l'*outil de requête* sur le code de l'application pendant qu'on code. Les fichiers de mise
+  en route (`CLAUDE.md`, `AGENTS.md`, `STATE.md`, artefacts spec-kit) restent lus directement.
+  Écrit dans `AGENTS.md` (étape 4 et tableau des concurrences) et dans le bloc de seuil de
+  `SETUP.md`.
+- Les 2 `SKILL.md` de son `.claude/skills/` servent au développement de codegraph : comptés,
+  jamais liés.
+
+**Écarté : `codebase-memory-mcp`** (`DeusData`, MIT, `v0.11.0` = `8972ea6`), décision de l'humain
+sur ces constats. Sa chaîne de release est bonne (attestation SLSA vérifiée, désignant le commit
+épinglé) et il n'a aucun appel sortant en production. Mais : binaire de 301 Mo non signé ;
+interface web locale sans authentification, active par défaut (liaison `127.0.0.1` vérifiée) ;
+installeur global (hooks sur Grep, Glob, Bash et Read, skill, trois agents, PATH) ;
+**stabilité Windows douteuse** — 125 tickets ouverts dont un écran bleu (#2021) et un PATH
+utilisateur effacé par l'installeur (#2045) ; 937 commits d'avance de `main` sur la release.
+C'est cet audit qui a révélé le défaut de `scan.py` corrigé dans l'entrée précédente ; le clone
+`mes_depots/codebase-memory-mcp` est hors catalogue.
+
+**Chiffres** : 27 lignes au catalogue ; fichiers `SKILL.md` aux commits épinglés, même méthode
+(`git ls-tree`, nom exact) : 2939 + 2 = **2941**. 39 contrôles, 0 échec.
+
 ---
 
 ## Avant de modifier ce fichier

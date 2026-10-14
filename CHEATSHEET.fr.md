@@ -371,6 +371,9 @@ Proposés par `SETUP.md`, jamais installés sans qu'on le demande.
 | rtk | `cargo install --git https://github.com/rtk-ai/rtk --rev <commit>` | Installé par l'humain, jamais par l'agent. Épingle-le au commit `rtk` de `catalog/repos.tsv` ; demande Rust 1.91 ou plus. |
 | rtk | `rtk init --dry-run`, puis `rtk init` dans le dossier du projet | Projet seulement : un bloc dans le `CLAUDE.md` de ce projet, aucun hook. `-g` installe un hook global sur toutes les commandes shell : lis d'abord `SETUP.md` étape 5b. `--uninstall` défait l'un comme l'autre. |
 | rtk | `rtk gain` | Tokens économisés jusqu'ici |
+| codegraph | `gh release download v1.6.2 -R colbymchenry/codegraph` + `gh attestation verify` | Installé par l'humain, jamais par l'agent, projet par projet. Jamais `codegraph install` ni `upgrade` : voir `SETUP.md` étape 5b. |
+| codegraph | `codegraph telemetry off`, puis `codegraph init` dans le dossier du projet | Télémétrie active par défaut : à couper avant tout le reste. `init` construit l'index. |
+| codegraph | `claude mcp add --scope local codegraph … serve --mcp` | L'enregistrer pour ce projet seulement, télémétrie et vérification de mise à jour coupées. L'outil de requête pendant le code ; graphify reste la carte. |
 
 ---
 

@@ -9,8 +9,8 @@ lire `SETUP.md`, et il installe le reste lui-même.**
 
 Les skills d'agents sont dispersées dans des dizaines de dépôts, avec des noms qui se
 recouvrent, des descriptions qui se concurrencent et une qualité très inégale. Ce dépôt
-est le résultat de l'audit des 26 dépôts catalogués dans
-[`catalog/repos.tsv`](catalog/repos.tsv) — 2939 fichiers de skills à eux tous, comptés aux
+est le résultat de l'audit des 27 dépôts catalogués dans
+[`catalog/repos.tsv`](catalog/repos.tsv) — 2941 fichiers de skills à eux tous, comptés aux
 commits désormais épinglés — dont on a gardé les 84 qui méritent leur place, en laissant le
 raisonnement à découvert.
 
@@ -77,7 +77,7 @@ contraintes, par le doute et par les sources.
 | **Tests & livraison** | Playwright, tests Python/Go/C#, Docker, Kubernetes, déploiement |
 
 Plus les **rulesets par langage** pour 22 langages et frameworks, et un **catalogue** de
-26 dépôts amont avec leur rôle, leur politique d'activation et leur commit épinglé.
+27 dépôts amont avec leur rôle, leur politique d'activation et leur commit épinglé.
 
 ---
 
