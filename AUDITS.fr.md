@@ -379,6 +379,28 @@ une skill, `reverse-engineer-anything`.
 **Chiffres** : inchangés. 26 lignes au catalogue, 2939 fichiers `SKILL.md`. Le clone
 `mes_depots/rea` est hors catalogue et n'entre dans aucun compte.
 
+## 2026-10-14 — `scripts/scan.py` voit enfin le C et le C++
+
+**Le défaut.** `EXEC_EXT`, la liste des extensions que `scan.py` remet à Skillspector hors des
+dossiers de skills, contenait Rust, Go et C#, mais ni `.c` ni `.h`. Constaté pendant l'audit de
+`DeusData/codebase-memory-mcp` (moteur natif en C) : ses 861 `.c` et 706 `.h`, c'est-à-dire tout
+ce qui compose son binaire, n'ont pas été remis au scanner. Seuls les scripts et manifestes l'ont
+été (305 fichiers, 90 % inspectés entièrement), ce qui donnait une couverture trompeuse. La
+lecture humaine des zones sensibles avait compensé ; le scan, non.
+
+**Le correctif.** `EXEC_EXT` ajoute C, C++ et Objective-C (`.c`, `.h`, `.cc`, `.cpp`, `.cxx`,
+`.hpp`, `.hh`, `.hxx`, `.m`, `.mm`), et les autres langages qu'un dépôt d'outils peut livrer
+(`.java`, `.kt`, `.swift`, `.rb`, `.php`, `.lua`, `.zig`, `.zsh`, `.psm1`, `.vbs`). La liste de
+`scripts/check.py`, qui ne concerne que les fichiers livrés dans `curation/`, est inchangée.
+
+**Mesure.** Un dépôt d'essai jetable, un `main.c` contenant un `system("curl … | sh")` en simple
+texte et un `main.h`, rien compilé ni exécuté. Ancienne version : 0 fichier, 0 constat. Nouvelle :
+2 fichiers entièrement inspectés, 1 constat HIGH « Supply Chain » à `src/main.c:3`. Skillspector
+analyse donc bien le C qu'on lui remet. 39 contrôles, 0 échec.
+
+**Non fait.** `codebase-memory-mcp` n'a pas été rescanné avec la nouvelle liste ; à faire avant
+toute décision d'admission.
+
 ---
 
 ## Avant de modifier ce fichier

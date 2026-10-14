@@ -44,9 +44,13 @@ import sys
 import tempfile
 
 # The extensions the README's reading rule calls executable, as scripts/check.py counts them,
-# plus the compiled languages a tool repository ships its behaviour in.
+# plus the compiled languages a tool repository ships its behaviour in. C and C++ headers are
+# in: a native engine (codebase-memory-mcp, 2026-10-14) is mostly .c and .h, and without them
+# its whole binary went unscanned.
 EXEC_EXT = {".py", ".sh", ".js", ".ts", ".ps1", ".mjs", ".cjs", ".tsx", ".jsx", ".bash",
-            ".rs", ".go", ".cs", ".cmd", ".bat"}
+            ".zsh", ".psm1", ".vbs", ".cmd", ".bat",
+            ".rs", ".go", ".cs", ".c", ".h", ".cc", ".cpp", ".cxx", ".hpp", ".hh", ".hxx",
+            ".m", ".mm", ".java", ".kt", ".swift", ".rb", ".php", ".lua", ".zig"}
 # Not executable, but they tell a harness or a package manager what to execute.
 MANIFESTS = {"hooks.json", "plugin.json", "marketplace.json", ".mcp.json", "settings.json",
              "package.json", "gemini-extension.json"}
