@@ -207,6 +207,22 @@ tool for you, see the `structured-decisions` skill in `curation/`.
    `/graphify .`, and read `graph.html` / `GRAPH_REPORT.md` before touching anything. Below
    ~80, do not — it is overhead with no return. Never install it without asking: it is a tool
    on the human's machine, not a file in the project.
+
+   Two graphs, split by the kind of file, not by where it sits:
+
+   - **graphify** is the *map*, built on demand. Use it on the project's documentation —
+     specs, ADRs, docs, PDFs — and, now and then, on the whole project to see how
+     everything fits together. It parses code locally for free, but sends prose to a model
+     on every rebuild, so do not rebuild it for routine work. Install it with plain
+     `graphify install`, which adds no hook; never `graphify claude install` or
+     `graphify install --project`, which add a `PreToolUse` hook that pushes every read
+     towards the graph.
+   - **codegraph** is the *query tool* while you code: a live index of the application's
+     source, kept in sync as files change. It is `manual` — the human installs it, per
+     project, as `SETUP.md` step 5b describes. If it is registered in the session, ask it
+     before reading source files one by one; if it is not, do not install it yourself.
+   - **The files you read at the start of a session** — `CLAUDE.md`, `AGENTS.md`,
+     `STATE.md`, the spec-kit artefacts — are read directly, in full, never through a graph.
 5. **Verify before declaring done.** Run the tests. Report failures with their output.
 
 ## For agents without a plugin system
@@ -252,6 +268,7 @@ them, and say which one you want.
 | `superpowers:requesting-code-review` / `receiving-code-review` vs `flutter-dart-code-review`, `doubt-driven-development` | "Code review" as a trigger phrase, against one language-specific and one decision-specific reviewer. | Fine together. `doubt-driven-development` reviews a *decision*, the others review *code*. |
 | `ponytail` vs `constraint-driven-development` | They pull in opposite directions by design: one lowers the amount of code, the other defends a quality bar. | When they disagree, that disagreement is the useful output. Decide it yourself rather than letting whichever fired first win. |
 | `superpowers:writing-skills` vs `context-engineering` | Both cover authoring the agent's own rules and skill files. | Either. |
+| `graphify` skill vs `codegraph` MCP instructions | Both claim "explore the codebase before reading files": graphify's skill fires on any question about a codebase, codegraph's server instructions ask for `codegraph_explore` before Read and Grep. Laya, 0.88 above its threshold. | Split by kind (step 4 of the working order): graphify for documentation and the occasional whole-project map, codegraph for querying the application's code while coding. Keep graphify without its hook. |
 | `agency-agents` personas vs curated skills on the same stack | Different mechanism — personas are delegated to, they do not auto-invoke — but 71 of them touch a domain a curated skill already covers (*Frontend Developer* vs `react-patterns`, *UI Designer* vs `design-system`/`accessibility`, *Database Optimizer* vs `postgres-patterns`, *DevOps Automator* vs `deployment-patterns`…). | The risk is duplicated advice, not a misfire. Copy only the divisions the project needs (see `SETUP.md` step 4b) and the overlap mostly disappears. |
 
 **Resolving these by editing an upstream file is not an option**: everything under
@@ -354,7 +371,8 @@ Deliberate choices, not oversights:
 - **`awesome-claude-skills`.** 832 of its 864 skills are SaaS connectors. Reference index
   only.
 - **817 cybersecurity skills.** Explicit security engagements only.
-- **Codebase graphing.** Only past the ~80-file threshold.
+- **Codebase graphing.** Only past the ~80-file threshold: graphify on demand, codegraph
+  only when the human has installed it for that project (`manual`).
 - **`agency-agents`' 297 personas, as a block.** A core of **14** is copied into every project
   by default — architecture, backend, frontend, review, database, devops, prototyping, UI, UX,
   test automation, accessibility, appsec, technical writing — for about **600 tokens per

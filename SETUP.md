@@ -291,6 +291,12 @@ count the project's source files, excluding dependencies, `.git` and build outpu
 Past ~80, reading files one at a time stops being a viable way to understand the system.
 Propose `uv tool install graphifyy==0.9.73 && graphify install && /graphify .` to the human,
 then read `graph.html` / `GRAPH_REPORT.md`. Below ~80, do not: it is pure overhead.
+
+Two graphs, split by kind: graphify maps the documentation (specs, ADRs, docs, PDFs) and,
+now and then, the whole project; codegraph, if the human installed it for this project, is
+the tool to query the application's code while coding. `CLAUDE.md`, `AGENTS.md`, `STATE.md`
+and the spec-kit artefacts are always read directly. Never `graphify claude install` or
+`graphify install --project`: they add a hook that pushes every read towards graphify.
 ```
 
 Tell the human the count the project starts at, so they know how far they are from it.
@@ -312,6 +318,47 @@ turns it off outright). Two things the human must know before choosing an `init`
 
 Both accept `--dry-run` to show what they would write, and `--uninstall` to undo it.
 The 12 skills under its `.claude/skills/` are for developing `rtk` itself: never link them.
+
+**`codegraph` is `manual` too: mention it past the ~80-file threshold, never install it
+yourself.** It keeps a live index of the application's source and serves it over MCP, so the
+agent queries it instead of reading files one by one: the query tool, next to graphify's map
+(see `AGENTS.md`, step 4 of the working order). Pinned to release `v1.6.2`, commit `6560052`.
+Its release is the best-attested in the catalogue: GitHub provenance attestation, npm
+signatures, and its JavaScript rebuilt from that commit byte for byte; only its Rust engine
+rests on the attestation alone. What the human must know:
+
+- **Never run its installer** (`codegraph install`, `install.ps1`, `install.sh`): it writes to
+  the user scope by default, auto-allows `mcp__codegraph__*`, adds a `UserPromptSubmit` hook
+  and a block to `~/.claude/CLAUDE.md`, with no dry run. `codegraph upgrade` puts the hook
+  back even after it was refused.
+- **Telemetry is on by default**, and the only notice goes to stderr, which an MCP server
+  never shows. Turn it off before the first command.
+
+The procedure, run by the human in the project folder (Windows shown):
+
+```powershell
+# 1. The exact bundle, checked: SHA-256 against SHA256SUMS, then the provenance attestation
+gh release download v1.6.2 -R colbymchenry/codegraph -p codegraph-win32-x64.zip -p SHA256SUMS
+gh attestation verify codegraph-win32-x64.zip -R colbymchenry/codegraph
+#    extract to %LOCALAPPDATA%\codegraph\1.6.2 — no installer, no PATH change
+
+# 2. Telemetry off, recorded, before anything else
+$env:DO_NOT_TRACK=1; & "$env:LOCALAPPDATA\codegraph\1.6.2\bin\codegraph.cmd" telemetry off
+
+# 3. Index this project, then register the server for this project only
+& "$env:LOCALAPPDATA\codegraph\1.6.2\bin\codegraph.cmd" init
+claude mcp add --scope local codegraph -e DO_NOT_TRACK=1 -e CODEGRAPH_TELEMETRY=0 `
+  -e CODEGRAPH_NO_UPDATE_CHECK=1 -e CODEGRAPH_NO_DOWNLOAD=1 `
+  -- cmd /c "$env:LOCALAPPDATA\codegraph\1.6.2\bin\codegraph.cmd" serve --mcp
+```
+
+The `cmd /c` wrapper is what Windows needs to start a `.cmd` file as an MCP server; this exact
+registration was written from the audit, not yet run, so check `claude mcp list` after it.
+No auto-allow, no hook: each tool call goes through the usual approval. To limit it to the
+application's own code, list what to leave out under `exclude` in its configuration
+(`.codegraph/config.json`). To remove it: `codegraph uninit`, `claude mcp remove codegraph`,
+then delete the extracted folder and `~/.codegraph`. The 2 skills under its
+`.claude/skills/` are for developing codegraph itself: never link them.
 
 ---
 
