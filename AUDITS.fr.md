@@ -564,6 +564,18 @@ Décision de l'humain ; à retirer si la redistribution devient un problème.
 **Chiffres** : 100 skills (19 méthode + 81 applicatif), 32 dépôts, 2958 fichiers `SKILL.md`,
 76 exécutables livrés sous `curation/`. 44 contrôles, 0 échec.
 
+## 2026-10-18 — `SwiftUI-Agent-Skill` écarté
+
+**Décision de l'humain** : ne pas intégrer `SwiftUI-Agent-Skill` (`ce32af1`, MIT). Le scan
+était propre — 19 fichiers sur 19 inspectés, **0 constat** — et le skill est de bonne qualité,
+mais il recouvre `swiftui-patterns` (architecture, état, navigation, performance) et les autres
+skills Swift déjà présentes : deux descriptions qui se déclenchent sur « review SwiftUI » se
+concurrencent, et l'ajout n'apportait pas de capacité nouvelle. Aucune ligne de catalogue,
+aucun fichier copié. Le clone reste hors catalogue dans `mes_depots/SwiftUI-Agent-Skill`,
+épinglé à `ce32af1`.
+
+**Chiffres** : inchangés — 100 skills, 32 dépôts, 2958 `SKILL.md`. 44 contrôles, 0 échec.
+
 ---
 
 ## Avant de modifier ce fichier
