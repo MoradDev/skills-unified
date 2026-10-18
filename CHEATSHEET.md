@@ -20,7 +20,7 @@ everything the workspace itself ships or installs is listed in full.
 1. [Claude Code essentials](#1-claude-code-essentials)
 2. [Workspace setup and maintenance](#2-workspace-setup-and-maintenance)
 3. [spec-kit](#3-spec-kit)
-4. [Curated skills (84)](#4-curated-skills-84)
+4. [Curated skills (100)](#4-curated-skills-100)
 5. [superpowers (15)](#5-superpowers-15)
 6. [taste-skill (13)](#6-taste-skill-13)
 7. [ponytail (6)](#7-ponytail-6)
@@ -126,11 +126,11 @@ In Claude Code these are called as `/speckit-constitution`, `/speckit-specify`, 
 
 ---
 
-## 4. Curated skills (84)
+## 4. Curated skills (100)
 
 All in `curation/skills/`. Per-language rulesets live in `curation/rules/`.
 
-### Method (18)
+### Method (19)
 
 | Skill | Use it to |
 |---|---|
@@ -148,6 +148,7 @@ All in `curation/skills/`. Per-language rulesets live in `curation/rules/`.
 | `deprecation-and-migration` | Retire code or migrate users and schemas safely |
 | `ci-cd-and-automation` | Set up build, test and deploy pipelines |
 | `security-and-hardening` | Harden input handling, auth, storage and dependencies |
+| `security-audit` | Run a six-phase security audit of a codebase, API or daemon |
 | `performance-optimization` | Find and fix performance problems |
 | `observability-and-instrumentation` | Add logging, metrics, tracing and alerts |
 | `browser-testing-with-devtools` | Test in a real browser through Chrome DevTools MCP |
@@ -248,6 +249,26 @@ All in `curation/skills/`. Per-language rulesets live in `curation/rules/`.
 | `docker-patterns` | Dockerfiles and Compose |
 | `kubernetes-patterns` | Kubernetes manifests and debugging |
 | `deployment-patterns` | CI/CD, containers, health checks, rollbacks |
+
+### Design, diagrams and CAD (15)
+
+| Skill | Use it for |
+|---|---|
+| `anatomy` | Isometric SVG/WebGL figures that explain how a system works |
+| `diagram-design` | 45 diagram types as self-contained HTML/SVG |
+| `logo-design` | Logo design from brief to SVG kit and brand guidelines |
+| `cad` | 3D models as STEP/GLB/STL/3MF, with the CAD workflow and viewer |
+| `dfm` | Design-for-manufacturing checks: CNC, sheet metal, moulding |
+| `dfam-check` | Additive-manufacturing geometry measurements |
+| `dxf` | DXF drawing generation |
+| `engineering-drawing` | Engineering drawings and drawing sheets |
+| `gcode` | G-code and OrcaSlicer presets |
+| `sdf` | SDF robot, world and simulator descriptions |
+| `srdf` | SRDF semantic robot descriptions |
+| `urdf` | URDF robot descriptions |
+| `step-parts` | Standard parts from the step.parts catalogue |
+| `bambu-labs` | Bambu Lab printer integration |
+| `sendcutsend` | SendCutSend sheet-metal quoting and ordering |
 
 ---
 

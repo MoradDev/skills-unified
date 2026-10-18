@@ -457,6 +457,113 @@ C'est cet audit qui a révélé le défaut de `scan.py` corrigé dans l'entrée 
 **Chiffres** : 27 lignes au catalogue ; fichiers `SKILL.md` aux commits épinglés, même méthode
 (`git ls-tree`, nom exact) : 2939 + 2 = **2941**. 39 contrôles, 0 échec.
 
+## 2026-10-18 — Audit : seize étoiles des 16, 17 et 18 octobre (constats, décisions en attente)
+
+**Périmètre.** Les 9 étoiles du 16/10 et les 7 du 17–18/10, celles que l'humain a demandé
+d'auditer. SHA relevés par `git ls-remote --symref` le 18/10 vers 13:40, clones `--depth 1`
+dans `mes_depots/`, HEAD vérifié égal au SHA pour les 16. Lecture manuelle des manifestes, des
+`SKILL.md`, des scripts exécutés à l'usage, des hooks, des écritures globales et des domaines
+sortants, puis `scripts/scan.py` (Skillspector v2.11.2, `--no-llm`) sur 7 dépôts. Laya et Jev
+n'étaient pas disponibles dans la session : les recoupements sont manuels, à recontrôler par la
+chaîne habituelle si l'humain le souhaite.
+
+**Aucun code malveillant** dans les 11 dépôts lus en profondeur. Les constats Skillspector sur
+exécutables sont, comme les fois précédentes, des fixtures : tests qui **rejettent** `/etc/passwd`
+et `../src/file.js`, `exec(compile(...))` d'exemples locaux, `{**os.environ}` passé à un
+sous-processus de test, CSS et géométrie 3D lus comme des prompts. Les 5 CRITICAL de `manimgx`
+sont tous des `exec()` de tests/docs ; les 29 HIGH de `diagram-design` sont tous dans les scripts
+de test/dév, **zéro dans les 6 scripts livrés**.
+
+**Admissions proposées (3).** `anatomy` (`e948829`, MIT) : skill d'illustrations isométriques,
+153 fichiers, Chrome headless local pour ses vérifications, réseau seulement vers le dépôt de
+galerie sur `--submit` explicite. `diagram-design` (`550fd66`, MIT) : 45 types de diagrammes,
+plugin sans hook, scripts d'usage sans réseau ; la sortie charge Google Fonts, documenté, avec
+option hors ligne. `security-audit-skill` (`c1c8a8c`, MIT) : audit défensif en 6 phases, markdown
+plus deux validateurs `.cjs` sans dépendance, aucun réseau ; sans bac à sable OS il reste en
+`needs_validation` au lieu d'exécuter la cible.
+
+**Réserves (3).** `text-to-cad` (`c8dec1e`, MIT) : le manifeste épingle `cadgen==0.7.22`, mais le
+code exécuté est le wheel PyPI, absent du dépôt ; télémétrie active par défaut ; premier lancement
+qui télécharge le runtime. `logo-design-skill` (`0ecf52e`, MIT + notice marques) : 1 432 logos
+réels que la licence MIT ne couvre pas, à ne pas redistribuer dans ce dépôt public ; une version
+lite existe. `SwiftUI-Agent-Skill` (`ce32af1`, MIT) : 25 fichiers markdown, 0 constat au scan,
+mais recoupement avec `swiftui-patterns` — à arbitrer (admettre avec la paire de concurrences, ou
+écarter).
+
+**Refus proposés (3).** `openfilm` (`5c2000b`, MIT) : le skill fait exécuter `npx -y openfilm@latest`,
+le code exécuté n'est jamais le commit épinglé, et le premier lancement télécharge un Chromium ;
+même classe que `hyperframes`. `billion-context` (`6d9620f`, MIT) : proxy avec cert-MITM pour
+plusieurs clients, **mise à jour automatique active par défaut** (15 min – 48 h, politique
+`auto-update-policy.json` récupérée anonymement, fail-open), 0.1.x ; non épinglable en pratique.
+`xerj` (`09705bf`, Apache-2.0) : 200 Mo, second démon local, `xerj init` écrit MCP + skill, et il
+double `graphify` + `codegraph` déjà choisis ; l'installeur vérifie le SHA-256 et échoue fermé,
+mais ce n'est pas une raison d'ajouter un troisième indexeur.
+
+**Hors périmètre (7).** `ghidra` (suite Java de rétro-ingénierie), `airllm` (inférence LLM),
+`xtool` (chaîne de build iOS), `ts-rust` (port de `tsc`), `ascii` (bibliothèque web),
+`manimgx` (moteur d'animation, brique d'application ; 0 constat dans `skills/manimgx/`),
+`DeepSeek-Bot` (plugin DSH, v0.1.7 preview, droits élevés du bot principal).
+
+**Couverture des scans.** `anatomy` 95/139 entièrement, `security-audit-skill` 16/20,
+`SwiftUI-Agent-Skill` 19/19, `diagram-design` 363/380, `text-to-cad` 86/2 613 (une unité expirée
+à 600 s), `xerj` 12/985 (une unité expirée), `manimgx` 1/1 190 (dégradation connue, 1 189
+partiels). Les 9 autres dépôts n'ont pas été scannés : `logo-design-skill`, `openfilm`,
+`billion-context`, `DeepSeek-Bot` et les cinq hors-périmètre. L'audit a été arrêté là pour
+contenir le contexte de la session, pas parce que la couverture était suffisante.
+
+**Piège à retenir.** `scripts/scan.py` échoue sous le bac à sable Windows : `tempfile.mkdtemp`
+crée des dossiers en 0700 que le bac à sable refuse ensuite en écriture. Un wrapper forçant
+`0o777` pour `tempfile.mkdtemp` fait passer le scan ; à intégrer au script si le problème se
+reproduit. Ne pas `git grep` sur tout `mes_depots/` non plus : un grep sur `xerj` est tombé dans
+des transcripts JSONL de `benchmarks/` et a déversé 14 Ko dans le contexte.
+
+**Chiffres** : 16 dépôts épinglés, 7 scannés (2 partiellement), **0 ligne de catalogue ajoutée ou
+retirée**. Les SHAs complets, le détail par dépôt et les quatre étapes de reprise sont dans
+`audit-2026-10-18.md`, fichier de travail non versionné. Décisions d'admission en attente de
+l'humain : rien n'est entré au catalogue, rien n'en est sorti.
+
+## 2026-10-18 — Décisions : cinq dépôts intégrés (catalogue à 32, curation à 100)
+
+**Décision de l'humain** sur l'audit ci-dessus : intégrer `anatomy`, `diagram-design`,
+`security-audit-skill`, `text-to-cad` et `logo-design-skill`. L'entrée précédente disait
+« 0 ligne ajoutée » ; celle-ci la complète, elle ne la réécrit pas.
+
+**`text-to-cad` : inspection terminée, réserve levée.** Le wheel `cadgen==0.7.22` a été
+téléchargé depuis PyPI et vérifié : SHA-256 `e1818b781343ca3fdcf5d96472825cb29e8590868a60514407728edcc19c72bf`,
+conforme à l'API PyPI ; 300 fichiers, Python pur. Un seul service sortant,
+`api.texttocad.dev` : télémétrie (`cadgen/analytics.py`) et vérification de version
+quotidienne (`cadgen/updates.py`). La télémétrie est active par défaut après notification,
+n'envoie ni chemin, ni prompt, ni message ; elle se coupe par `CADGEN_TELEMETRY=0` /
+`DO_NOT_TRACK=1`, ou de façon persistante par `uvx --from cadgen==0.7.22 cadgen telemetry off`.
+`CADGEN_UPDATE_CHECK=0` coupe le contrôle de version. Aucune chaîne téléchargement-exécution,
+aucun auto-update : le manifeste épingle la version et `updates.py` se contente de proposer une
+mise à jour. `SETUP.md` porte la commande de coupure. **Admis** avec cette réserve levée.
+
+**`logo-design-skill` : réserve de marques assumée.** Le skill est versé avec sa bibliothèque
+de 1 432 logos ; `TRADEMARKS.md` est copié à côté et `ATTRIBUTION.md` porte l'exception
+explicite : la licence MIT ne couvre pas ces fichiers, inclus comme référence seulement.
+Décision de l'humain ; à retirer si la redistribution devient un problème.
+
+**Ce qui a changé.**
+- `curation/skills/` : +16 skills — `anatomy`, `diagram-design`, `security-audit`, les 12 de
+  `text-to-cad` (`bambu-labs`, `cad`, `dfam-check`, `dfm`, `dxf`, `engineering-drawing`,
+  `gcode`, `sdf`, `sendcutsend`, `srdf`, `step-parts`, `urdf`) et `logo-design`. 84 → 100.
+  Les tests et fixtures de développement ne sont pas copiés (`anatomy` : `tests/`, `evals/`,
+  `*.test.mjs` ; `security-audit` : `*.test.cjs`) ; les fichiers d'exécution le sont.
+- `catalog/repos.tsv` : 5 lignes en `skills` / `on-demand`, aux commits épinglés du 18/10.
+  27 → 32 dépôts.
+- `README` et `README.fr` : familles 19 + 81, catégorie « Design, diagrammes et CAO » (15),
+  catalogue 32, 2958 `SKILL.md` aux commits épinglés, crédits 99 redistribués + 1 original.
+- Les deux `CHEATSHEET` : section 4 à 100, Méthode à 19, nouvelle catégorie à 15.
+- `AGENTS.md`, `SETUP.md`, `QUICKSTART` : mêmes chiffres ; `SETUP.md` porte la coupure de
+  télémétrie.
+- `ATTRIBUTION.md` : 5 sections, dont 4 au singulier ; `scripts/check.py` accepte désormais
+  `skill` au singulier, et sa liste nominative des exécutables livrés passe de 1 à 76 fichiers.
+- `scripts/check.py` : **44 contrôles, 0 échec**.
+
+**Chiffres** : 100 skills (19 méthode + 81 applicatif), 32 dépôts, 2958 fichiers `SKILL.md`,
+76 exécutables livrés sous `curation/`. 44 contrôles, 0 échec.
+
 ---
 
 ## Avant de modifier ce fichier

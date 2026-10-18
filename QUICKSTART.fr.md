@@ -79,7 +79,7 @@ Tu n'invoques pas ces choses. Elles se déclenchent sur ce que tu fais.
 
 | | Effet sur ta session |
 |---|---|
-| **84 skills sélectionnées** | Une question React appelle la skill React, une question Postgres celle de Postgres. Tu ne les nommes jamais. |
+| **100 skills sélectionnées** | Une question React appelle la skill React, une question Postgres celle de Postgres. Tu ne les nommes jamais. |
 | **superpowers** | Pousse les tests avant le code, le débogage systématique, la vérification avant de déclarer quoi que ce soit fini. |
 | **ponytail** | Plaide pour la chose la plus courte qui marche. Dis *« stop ponytail »* pour le couper sur la session. |
 | **taste-skill** | Fait que les interfaces générées aient l'air dessinées, pas gabaritées. |

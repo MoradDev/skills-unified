@@ -22,7 +22,7 @@ une explicitement. Quand c'est le cas :
 1. [L'essentiel de Claude Code](#1-lessentiel-de-claude-code)
 2. [Installer et entretenir le workspace](#2-installer-et-entretenir-le-workspace)
 3. [spec-kit](#3-spec-kit)
-4. [Skills de la curation (84)](#4-skills-de-la-curation-84)
+4. [Skills de la curation (100)](#4-skills-de-la-curation-100)
 5. [superpowers (15)](#5-superpowers-15)
 6. [taste-skill (13)](#6-taste-skill-13)
 7. [ponytail (6)](#7-ponytail-6)
@@ -129,11 +129,11 @@ Dans Claude Code, on les appelle `/speckit-constitution`, `/speckit-specify`, et
 
 ---
 
-## 4. Skills de la curation (84)
+## 4. Skills de la curation (100)
 
 Toutes dans `curation/skills/`. Les règles par langage sont dans `curation/rules/`.
 
-### Méthode (18)
+### Méthode (19)
 
 | Skill | Sert à |
 |---|---|
@@ -151,6 +151,7 @@ Toutes dans `curation/skills/`. Les règles par langage sont dans `curation/rule
 | `deprecation-and-migration` | Retirer du code, migrer des utilisateurs ou des schémas sans casse |
 | `ci-cd-and-automation` | Mettre en place les pipelines de build, de test et de déploiement |
 | `security-and-hardening` | Sécuriser les entrées, l'authentification, le stockage et les dépendances |
+| `security-audit` | Mener un audit de sécurité en six phases sur un codebase, une API ou un démon |
 | `performance-optimization` | Trouver et corriger les problèmes de performance |
 | `observability-and-instrumentation` | Ajouter logs, métriques, traces et alertes |
 | `browser-testing-with-devtools` | Tester dans un vrai navigateur via le MCP Chrome DevTools |
@@ -251,6 +252,26 @@ Toutes dans `curation/skills/`. Les règles par langage sont dans `curation/rule
 | `docker-patterns` | Dockerfiles et Compose |
 | `kubernetes-patterns` | Manifestes Kubernetes et débogage |
 | `deployment-patterns` | CI/CD, conteneurs, health checks, retours arrière |
+
+### Design, diagrammes et CAO (15)
+
+| Skill | Pour |
+|---|---|
+| `anatomy` | Figures isométriques SVG/WebGL qui expliquent le fonctionnement d'un système |
+| `diagram-design` | 45 types de diagrammes en HTML/SVG autonome |
+| `logo-design` | Design de logo, du brief au kit SVG et aux guidelines de marque |
+| `cad` | Modèles 3D en STEP/GLB/STL/3MF, avec le workflow CAO et le viewer |
+| `dfm` | Contrôles de fabricabilité : CNC, tôle, moulage |
+| `dfam-check` | Mesures géométriques pour la fabrication additive |
+| `dxf` | Génération de dessins DXF |
+| `engineering-drawing` | Dessins techniques et planches |
+| `gcode` | G-code et presets OrcaSlicer |
+| `sdf` | Descriptions SDF de robots, mondes et simulateurs |
+| `srdf` | Descriptions sémantiques SRDF de robots |
+| `urdf` | Descriptions URDF de robots |
+| `step-parts` | Pièces standard du catalogue step.parts |
+| `bambu-labs` | Intégration des imprimantes Bambu Lab |
+| `sendcutsend` | Devis et commandes de tôle chez SendCutSend |
 
 ---
 

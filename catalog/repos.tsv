@@ -26,3 +26,8 @@ VoiceStudio	https://github.com/debPalash/VoiceStudio	app-tool	stock	befc0a6f5b55
 voicebox	https://github.com/jamiepine/voicebox	app-tool	stock	51f49dea198384b4eb6087b72c17057c6eb1c1cd	2026-10-02
 SCAIL-2	https://github.com/zai-org/SCAIL-2	app-tool	stock	78fe19576bb06be96c2375e088574a262a300edb	2026-10-02
 claude-quickstarts	https://github.com/anthropics/claude-quickstarts	app-tool	stock	3994db7dc2464d9ab255aba1dfda3594fc994c21	2026-10-04
+anatomy	https://github.com/wheresryan22/anatomy	skills	on-demand	e9488296a44211c42701ff71705b7901470ec78f	2026-10-18
+diagram-design	https://github.com/cathrynlavery/diagram-design	skills	on-demand	550fd66edff058bc73056c3416b76d69cfe865ba	2026-10-18
+security-audit-skill	https://github.com/cloudflare/security-audit-skill	skills	on-demand	c1c8a8c1471069fb0e188eeaff69b8e8db6564a8	2026-10-18
+text-to-cad	https://github.com/earthtojake/text-to-cad	skills	on-demand	c8dec1ec7c56fc15355cbfc51a26573aa49af434	2026-10-18
+logo-design-skill	https://github.com/kaankiziltug/logo-design-skill	skills	on-demand	0ecf52e9a4b3ac92b714f7cc6e3148ab8c774134	2026-10-18
