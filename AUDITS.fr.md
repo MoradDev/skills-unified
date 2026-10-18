@@ -576,6 +576,16 @@ aucun fichier copié. Le clone reste hors catalogue dans `mes_depots/SwiftUI-Age
 
 **Chiffres** : inchangés — 100 skills, 32 dépôts, 2958 `SKILL.md`. 44 contrôles, 0 échec.
 
+## 2026-10-18 — L'annexe d'audit du 18/10 est versionnée
+
+`audit-2026-10-18.md` entre au dépôt. Il porte les 16 SHA complets, la couverture des scans et
+le détail par dépôt, que les entrées datées ci-dessus ne reprennent pas — sans lui, les dépôts
+écartés ou hors périmètre ne sont plus reproductibles. L'entrée de constat disait « fichier de
+travail non versionné » : c'était vrai sur le moment, ce ne l'est plus. Aucun autre changement.
+
+**Chiffres** : inchangés — 100 skills, 32 dépôts, 2958 `SKILL.md`, 76 exécutables livrés.
+44 contrôles, 0 échec.
+
 ---
 
 ## Avant de modifier ce fichier
