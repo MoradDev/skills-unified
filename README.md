@@ -9,8 +9,8 @@
 
 Agent skills are scattered across dozens of repositories, with overlapping names,
 competing descriptions and wildly varying quality. This repository is the result of
-auditing the 27 catalogued in [`catalog/repos.tsv`](catalog/repos.tsv) — 2941 skill files
-between them, counted at the commits now pinned there — and keeping the 84 that earn their
+auditing the 32 catalogued in [`catalog/repos.tsv`](catalog/repos.tsv) — 2958 skill files
+between them, counted at the commits now pinned there — and keeping the 100 that earn their
 place, with the reasoning kept in the open.
 
 **It is the opposite of vibe coding.** Nothing here is about letting an agent improvise its
@@ -47,7 +47,7 @@ Nothing is installed globally. Nothing is activated behind your back.
 
 ## What you get
 
-**84 curated skills**, in two families.
+**100 curated skills**, in two families.
 
 Plus the working method itself, built on [spec-kit](https://github.com/github/spec-kit):
 every project starts with `specify init`, then runs constitution → specify → clarify →
@@ -55,12 +55,12 @@ plan → tasks → analyze → implement → converge, repeating the last two un
 no gap left. Each step produces an artefact the next one consumes, which is what keeps an
 agent from inventing requirements halfway through.
 
-*Method* (18) — turning a vague idea into working software: structured interrogation of
-an idea before writing a spec, API design, CI/CD, security hardening, performance,
-observability, git workflow, ADRs, migration, incremental delivery, context engineering,
-browser testing, and constraint-, doubt- and source-driven development.
+*Method* (19) — turning a vague idea into working software: structured interrogation of
+an idea before writing a spec, API design, CI/CD, security hardening and security audits,
+performance, observability, git workflow, ADRs, migration, incremental delivery, context
+engineering, browser testing, and constraint-, doubt- and source-driven development.
 
-*Application building* (66) — the actual craft:
+*Application building* (81) — the actual craft:
 
 | Target | Coverage |
 |---|---|
@@ -70,9 +70,10 @@ browser testing, and constraint-, doubt- and source-driven development.
 | **Runtime decisions** | Choosing how an application decides on every request: rule, scoring function, typed-output classifier or LLM call |
 | **Mobile** | SwiftUI, Swift 6.2 concurrency, Liquid Glass, on-device foundation models, Android clean architecture, Kotlin, Compose Multiplatform, Flutter/Dart, React Native |
 | **Desktop** | .NET, Rust, C++, native Windows E2E testing, Bun |
+| **Design, diagrams and CAD** | Isometric SVG/WebGL explainer figures, 45 diagram types, logo design, CAD (STEP/GLB/STL/3MF), DFM and DfAM checks, engineering drawings, URDF/SRDF/SDF, G-code and fabrication services |
 | **Testing & delivery** | Playwright, Python/Go/C# testing, Docker, Kubernetes, deployment |
 
-Plus **per-language rulesets** for 22 languages and frameworks, and a **catalogue** of 27
+Plus **per-language rulesets** for 22 languages and frameworks, and a **catalogue** of 32
 upstream repositories with their role, activation policy and pinned commit.
 
 ---
@@ -97,8 +98,8 @@ Counted at the commits pinned in `catalog/repos.tsv`:
   `browser-qa` (covered by `browser-testing-with-devtools`).
 
 The selection is **closed under its own cross-references**: every `../skill/SKILL.md`
-link was followed transitively so nothing points into the void. Final check: 18 relative
-links, 0 broken. 84 skills, 84 distinct names, every one carrying a `description`.
+link was followed transitively so nothing points into the void. Final check: every relative
+link resolves. 100 skills, 100 distinct names, every one carrying a `description`.
 
 ---
 
@@ -282,13 +283,20 @@ by an agent rather than read by a human.
 
 ## Licence and credit
 
-MIT. **83 of the 84 skills were not written here** — for those, the contribution is the
+MIT. **99 of the 100 skills were not written here** — for those, the contribution is the
 selection, the de-duplication, the cross-reference repair and the method around them. The
-84th, `structured-decisions`, is original and covered by this repository's own licence.
+last, `structured-decisions`, is original and covered by this repository's own licence.
 
-The 83 come from [`affaan-m/ECC`](https://github.com/affaan-m/ECC) (65),
-[`addyosmani/agent-skills`](https://github.com/addyosmani/agent-skills) (16) and
-[`mattpocock/skills`](https://github.com/mattpocock/skills) (2), all MIT.
+The 99 come from [`affaan-m/ECC`](https://github.com/affaan-m/ECC) (65),
+[`addyosmani/agent-skills`](https://github.com/addyosmani/agent-skills) (16),
+[`mattpocock/skills`](https://github.com/mattpocock/skills) (2),
+[`wheresryan22/anatomy`](https://github.com/wheresryan22/anatomy) (1),
+[`cathrynlavery/diagram-design`](https://github.com/cathrynlavery/diagram-design) (1),
+[`cloudflare/security-audit-skill`](https://github.com/cloudflare/security-audit-skill) (1),
+[`earthtojake/text-to-cad`](https://github.com/earthtojake/text-to-cad) (12) and
+[`kaankiziltug/logo-design-skill`](https://github.com/kaankiziltug/logo-design-skill) (1), all MIT.
+The logo library inside `logo-design` is the one exception: its 1,432 real logos are trademarks
+and are not covered by the MIT licence.
 Full provenance, skill by skill, plus the three modifications made and the projects
 referenced but not redistributed: [`ATTRIBUTION.md`](ATTRIBUTION.md).
 

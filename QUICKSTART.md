@@ -77,7 +77,7 @@ You do not invoke these. They trigger on what you are doing.
 
 | | What it does to your session |
 |---|---|
-| **84 curated skills** | A React question pulls in the React skill, a Postgres question the Postgres one. You never name them. |
+| **100 curated skills** | A React question pulls in the React skill, a Postgres question the Postgres one. You never name them. |
 | **superpowers** | Pushes tests before code, systematic debugging, verification before anything is called done. |
 | **ponytail** | Argues for the shortest thing that works. Say *"stop ponytail"* to turn it off for the session. |
 | **taste-skill** | Makes generated interfaces look designed rather than templated. |

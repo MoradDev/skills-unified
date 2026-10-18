@@ -19,11 +19,11 @@ redistributed here; the skill quotes its documented Python API as an example.
 
 The MIT licence permits redistribution provided the copyright notice and permission
 notice travel with the work. That is the purpose of this file. The full licence text,
-identical for all three sources, is reproduced at the end.
+identical for all sources, is reproduced at the end.
 
-## Provenance of the 84 curated skills
+## Provenance of the 100 curated skills
 
-83 of the 84 are redistributed from upstream, and listed below. The 84th,
+99 of the 100 are redistributed from upstream, and listed below. The last,
 `structured-decisions`, is original — see the exception stated above.
 
 ### 65 skills from [`affaan-m/ECC`](https://github.com/affaan-m/ECC)
@@ -43,6 +43,43 @@ MIT License, Copyright (c) 2025 Addy Osmani.
 MIT License, Copyright (c) 2026 Matt Pocock.
 
 `grill-me`, `grilling`.
+
+### 1 skill from [`wheresryan22/anatomy`](https://github.com/wheresryan22/anatomy)
+
+MIT License, Copyright (c) 2026 Ryan.
+
+`anatomy`
+
+### 1 skill from [`cathrynlavery/diagram-design`](https://github.com/cathrynlavery/diagram-design)
+
+MIT License, Copyright (c) 2025 Cathryn Lavery.
+
+`diagram-design`
+
+### 1 skill from [`cloudflare/security-audit-skill`](https://github.com/cloudflare/security-audit-skill)
+
+MIT License, Copyright (c) 2025-2026 Cloudflare, Inc.
+
+`security-audit`
+
+### 12 skills from [`earthtojake/text-to-cad`](https://github.com/earthtojake/text-to-cad)
+
+MIT License, Copyright (c) 2026 Thompson Labs LLC.
+
+`bambu-labs`, `cad`, `dfam-check`, `dfm`, `dxf`, `engineering-drawing`, `gcode`, `sdf`,
+`sendcutsend`, `srdf`, `step-parts`, `urdf`
+
+### 1 skill from [`kaankiziltug/logo-design-skill`](https://github.com/kaankiziltug/logo-design-skill)
+
+MIT License, Copyright (c) 2026 kaankiziltug.
+
+`logo-design`
+
+**Exception inside the logo skill.** The folder
+`curation/skills/logo-design/assets/library/svg/` holds 1,432 logos of companies, products and
+open-source projects. They are trademarks of their owners, the MIT licence does **not** cover
+them, and they are included as reference material only — see
+`curation/skills/logo-design/TRADEMARKS.md`, copied from upstream.
 
 ## Other content
 
@@ -101,7 +138,9 @@ removed promptly — replaced by a pointer to your repository.
 ## MIT License
 
 Applies to the redistributed content above, under the respective copyright holders:
-Copyright (c) 2026 Affaan Mustafa · Copyright (c) 2025 Addy Osmani · Copyright (c) 2026 Matt Pocock
+Copyright (c) 2026 Affaan Mustafa · Copyright (c) 2025 Addy Osmani · Copyright (c) 2026 Matt Pocock ·
+Copyright (c) 2026 Ryan · Copyright (c) 2025 Cathryn Lavery · Copyright (c) 2025-2026 Cloudflare, Inc. ·
+Copyright (c) 2026 Thompson Labs LLC · Copyright (c) 2026 kaankiziltug
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
