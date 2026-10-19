@@ -31,7 +31,7 @@ After cloning, the repository root **is** the workspace root. It already contain
 
 ```
 <workspace>/
-├── curation/          100 skills, rules/ and references/ — the curated payload
+├── curation/          87 skills, rules/ and references/ — the curated payload
 ├── QUICKSTART.md      the short path, if you are setting this up for a human who is new
 ├── catalog/repos.tsv  the upstream repositories: role, activation, pinned commit
 ├── templates/         STATE.md template, copied into each new project
@@ -42,10 +42,14 @@ After cloning, the repository root **is** the workspace root. It already contain
 
 Nothing in `curation/` needs installing. It is plain Markdown and works as-is.
 
-One exception, for the CAD skills (`cad`, `dfm`, `dfam-check`, `dxf`, `engineering-drawing`,
-`gcode`, `sdf`, `sendcutsend`, `srdf`, `step-parts`, `urdf`, `bambu-labs`): they call
-`uvx --from cadgen==0.7.22`, so the wheel is fetched from PyPI on first use. Its telemetry is
-on by default. Disable it once, persistently:
+**CAD is not in the curation.** Its twelve skills (`cad`, `dfm`, `dfam-check`, `dxf`,
+`engineering-drawing`, `gcode`, `sdf`, `sendcutsend`, `srdf`, `step-parts`, `urdf`,
+`bambu-labs`) stay in the `text-to-cad` plugin, an `on-demand` row: clone it only for a project
+that designs physical parts, and link it into that project the way step 4 links the `default`
+rows — it carries its own `.claude-plugin/plugin.json`. Linking it also registers its MCP server
+`cad`, which runs the same pinned wheel. Everything calls `uvx --from cadgen==0.7.22`, so the
+wheel is fetched from PyPI on first use. Its telemetry is on by default. Disable it once,
+persistently:
 
 ```bash
 uvx --from cadgen==0.7.22 cadgen telemetry off
@@ -55,6 +59,13 @@ uvx --from cadgen==0.7.22 cadgen telemetry off
 also stops the once-a-day anonymous version check. The wheel's SHA-256 was verified against
 PyPI for this audit (`e1818b78…c19c72bf`), and its only outbound endpoints are
 `api.texttocad.dev` for those two calls.
+
+**Logo design is not in the curation either.** `logo-design-skill` is an `on-demand` row: clone
+it only for a project that needs a logo or a brand mark, and link it the same way (its own
+`.claude-plugin/plugin.json`, no hook, no MCP server). Linked from the local clone, it keeps its
+full library of 1,432 real logos, which are trademarks of their owners (its `TRADEMARKS.md`): for
+study only, never redistributed from this repository. Kept out of the default set because it
+competes with `taste-skill`'s `brandkit` and with `ios-icon-gen` on logo and app-icon requests.
 
 ---
 

@@ -22,7 +22,7 @@ une explicitement. Quand c'est le cas :
 1. [L'essentiel de Claude Code](#1-lessentiel-de-claude-code)
 2. [Installer et entretenir le workspace](#2-installer-et-entretenir-le-workspace)
 3. [spec-kit](#3-spec-kit)
-4. [Skills de la curation (100)](#4-skills-de-la-curation-100)
+4. [Skills de la curation (87)](#4-skills-de-la-curation-87)
 5. [superpowers (15)](#5-superpowers-15)
 6. [taste-skill (13)](#6-taste-skill-13)
 7. [ponytail (6)](#7-ponytail-6)
@@ -129,7 +129,7 @@ Dans Claude Code, on les appelle `/speckit-constitution`, `/speckit-specify`, et
 
 ---
 
-## 4. Skills de la curation (100)
+## 4. Skills de la curation (87)
 
 Toutes dans `curation/skills/`. Les règles par langage sont dans `curation/rules/`.
 
@@ -253,25 +253,16 @@ Toutes dans `curation/skills/`. Les règles par langage sont dans `curation/rule
 | `kubernetes-patterns` | Manifestes Kubernetes et débogage |
 | `deployment-patterns` | CI/CD, conteneurs, health checks, retours arrière |
 
-### Design, diagrammes et CAO (15)
+### Design et diagrammes (2)
 
 | Skill | Pour |
 |---|---|
 | `anatomy` | Figures isométriques SVG/WebGL qui expliquent le fonctionnement d'un système |
 | `diagram-design` | 45 types de diagrammes en HTML/SVG autonome |
-| `logo-design` | Design de logo, du brief au kit SVG et aux guidelines de marque |
-| `cad` | Modèles 3D en STEP/GLB/STL/3MF, avec le workflow CAO et le viewer |
-| `dfm` | Contrôles de fabricabilité : CNC, tôle, moulage |
-| `dfam-check` | Mesures géométriques pour la fabrication additive |
-| `dxf` | Génération de dessins DXF |
-| `engineering-drawing` | Dessins techniques et planches |
-| `gcode` | G-code et presets OrcaSlicer |
-| `sdf` | Descriptions SDF de robots, mondes et simulateurs |
-| `srdf` | Descriptions sémantiques SRDF de robots |
-| `urdf` | Descriptions URDF de robots |
-| `step-parts` | Pièces standard du catalogue step.parts |
-| `bambu-labs` | Intégration des imprimantes Bambu Lab |
-| `sendcutsend` | Devis et commandes de tôle chez SendCutSend |
+
+La CAO (STEP/GLB/STL/3MF, DFM, dessins, URDF/SRDF/SDF, G-code, services de fabrication) et le
+design de logo ne sont pas dans la curation : lie le plugin `text-to-cad` ou `logo-design-skill`
+au projet qui en a besoin (`SETUP.md` étape 1).
 
 ---
 

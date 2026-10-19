@@ -21,9 +21,9 @@ The MIT licence permits redistribution provided the copyright notice and permiss
 notice travel with the work. That is the purpose of this file. The full licence text,
 identical for all sources, is reproduced at the end.
 
-## Provenance of the 100 curated skills
+## Provenance of the 87 curated skills
 
-99 of the 100 are redistributed from upstream, and listed below. The last,
+86 of the 87 are redistributed from upstream, and listed below. The last,
 `structured-decisions`, is original — see the exception stated above.
 
 ### 65 skills from [`affaan-m/ECC`](https://github.com/affaan-m/ECC)
@@ -61,25 +61,6 @@ MIT License, Copyright (c) 2025 Cathryn Lavery.
 MIT License, Copyright (c) 2025-2026 Cloudflare, Inc.
 
 `security-audit`
-
-### 12 skills from [`earthtojake/text-to-cad`](https://github.com/earthtojake/text-to-cad)
-
-MIT License, Copyright (c) 2026 Thompson Labs LLC.
-
-`bambu-labs`, `cad`, `dfam-check`, `dfm`, `dxf`, `engineering-drawing`, `gcode`, `sdf`,
-`sendcutsend`, `srdf`, `step-parts`, `urdf`
-
-### 1 skill from [`kaankiziltug/logo-design-skill`](https://github.com/kaankiziltug/logo-design-skill)
-
-MIT License, Copyright (c) 2026 kaankiziltug.
-
-`logo-design`
-
-**Exception inside the logo skill.** The folder
-`curation/skills/logo-design/assets/library/svg/` holds 1,432 logos of companies, products and
-open-source projects. They are trademarks of their owners, the MIT licence does **not** cover
-them, and they are included as reference material only — see
-`curation/skills/logo-design/TRADEMARKS.md`, copied from upstream.
 
 ## Other content
 
@@ -122,6 +103,8 @@ credit is due:
 | [`NVIDIA/Skillspector`](https://github.com/NVIDIA/Skillspector) | NVIDIA | Apache-2.0 |
 | [`rtk-ai/rtk`](https://github.com/rtk-ai/rtk) | Patrick Szymkowiak | Apache-2.0 |
 | [`colbymchenry/codegraph`](https://github.com/colbymchenry/codegraph) | Colby Mchenry | MIT |
+| [`earthtojake/text-to-cad`](https://github.com/earthtojake/text-to-cad) | Thompson Labs LLC | MIT |
+| [`kaankiziltug/logo-design-skill`](https://github.com/kaankiziltug/logo-design-skill) | kaankiziltug | MIT (its logo library: trademarks of their owners, see its `TRADEMARKS.md`) |
 | [`anthropics/skills`](https://github.com/anthropics/skills) | Anthropic | see repository |
 | [`Graphify-Labs/graphify`](https://github.com/Graphify-Labs/graphify) | Graphify Labs | see repository |
 | [`NandhaKishorM/laya`](https://github.com/NandhaKishorM/laya) | Nandakishor M (Convai Innovations) | Apache-2.0 |

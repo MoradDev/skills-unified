@@ -586,6 +586,146 @@ travail non versionné » : c'était vrai sur le moment, ce ne l'est plus. Aucun
 **Chiffres** : inchangés — 100 skills, 32 dépôts, 2958 `SKILL.md`, 76 exécutables livrés.
 44 contrôles, 0 échec.
 
+## 2026-10-19 — Relecture de l'audit du 12 au 18/10, et cinq corrections
+
+Relecture par l'agent, à la demande de l'humain. **Vérifié et sain** : 44 contrôles, 0 échec ;
+les 32 dépôts à leur commit épinglé (seul l'écart Defender connu sur
+`Anthropic-Cybersecurity-Skills`) ; les 16 skills copiées le 18/10 identiques à leur source au
+commit épinglé, hors fichiers de test écartés comme annoncé (`diagram-design` ne diffère que par
+ses fins de ligne, `diff --strip-trailing-cr` identique). Cinq points corrigés, sur décision de
+l'humain.
+
+**1. La CAO sort de la curation.** Les cinq dépôts du 18/10 étaient en `on-demand` au catalogue,
+mais leurs 16 skills copiées dans `curation/`, qui se charge dans **chaque** projet : actives par
+défaut en pratique, pour environ 2 000 tokens de descriptions par session (mesuré : 7 973
+caractères), dont douze de CAO et de fabrication — le genre de spécialité que la sélection
+écarte depuis le premier audit (ECC santé, logistique). Retirées de `curation/` : `bambu-labs`,
+`cad`, `dfam-check`, `dfm`, `dxf`, `engineering-drawing`, `gcode`, `sdf`, `sendcutsend`, `srdf`,
+`step-parts`, `urdf`. `text-to-cad` reste au catalogue en `on-demand` et se lie au projet qui en a
+besoin comme les dépôts `default` : il porte son `.claude-plugin/plugin.json` (`"skills":
+"./skills/"`), et déclare en plus un serveur MCP `cad` (`claude.mcp.json`) qui lance le même wheel
+`cadgen==0.7.22` vérifié le 18/10 — écrit dans `SETUP.md`. `anatomy`, `diagram-design` et `security-audit-skill` passent de `on-demand` à `curated`, la
+valeur des dépôts dont la curation copie des skills (ECC, agent-skills). `logo-design-skill` : voir
+le point 3.
+
+**2. Recoupements des quatre skills restées, par la chaîne Laya puis Jev, au seuil de 0,85.**
+- Sans concurrence, Laya au-dessus du seuil : `security-audit` / `security-and-hardening`
+  (0,88), `anatomy` / `diagram-design` (0,92).
+- Laya s'abstient (0,77 à 0,79), Jev aussi, sous 0,85 — **décision de l'humain en attente** :
+  `diagram-design` / `design-system` (Jev : P(concurrence) 0,22 ; lecture de l'agent : pas de
+  concurrence, tâches distinctes) ; `logo-design` / `brandkit` de `taste-skill`, actif par défaut
+  (Jev 0,83 ; lecture de l'agent : concurrence, les deux se réclament de la conception de logo et
+  des guidelines de marque) ; `logo-design` / `ios-icon-gen` (Jev 0,51 ; lecture de l'agent :
+  concurrence partielle sur « une icône d'app », l'un dessine une marque, l'autre assemble des
+  icônes existantes).
+- **Décision de l'humain** : `diagram-design` reste dans la curation (pas de concurrence avec
+  `design-system`) ; `logo-design` sort de la curation et passe `on-demand` (point 3), ce qui rend
+  ses deux concurrences sans objet par défaut — écrit dans `SETUP.md` pour qui le lie à un projet.
+  Rien n'est donc ajouté à `AGENTS.md` § « When two skills compete ».
+
+**3. `logo-design` sort de la curation.** Proposé d'abord en version allégée (sans les 1 432 SVG
+de marques réelles, la forme que définit `tools/package_skill.py` de l'auteur), puis, sur décision
+de l'humain, retiré entièrement : `logo-design-skill` repasse en `on-demand`, se lie au projet qui
+en a besoin comme `text-to-cad` (son `.claude-plugin/plugin.json`, ni hook ni MCP), et garde alors
+sa bibliothèque complète depuis le clone local. **Le dépôt public ne redistribue plus aucun logo**
+(14 Mo retirés de `curation/`) ; `ATTRIBUTION.md` le range parmi les projets référencés, avec la
+mention des marques.
+
+**4. Clones hors catalogue supprimés.** 12 dossiers, environ 2,3 Go (`codebase-memory-mcp`
+1,4 Go, `ghidra` 366 Mo, `xerj`, `ts-rust`, `manimgx`, `billion-context`, `openfilm`, `xtool`,
+`airllm`, `ascii`, `DeepSeek-Bot`, `SwiftUI-Agent-Skill`). Chacun vérifié sans modification
+locale, et son commit noté dans ce journal ou dans `audit-2026-10-18.md` : reclonables à
+l'identique. Le cache compte de nouveau exactement les 32 lignes du catalogue.
+
+**5. `scripts/scan.py` sous le bac à sable Windows.** `tempfile.mkdtemp` demande le mode 0o700,
+que Windows applique depuis Python 3.13 par une ACL réservée au propriétaire : un Skillspector
+lancé dans le bac à sable se voit refuser l'écriture dans ses propres dossiers. Le script crée
+désormais ses dossiers temporaires en 0o777 (`make_temp_dir`), ce qui garde l'ACL héritée.
+Vérifié hors bac à sable (`humanizer`, 100 % inspecté) ; **pas encore vérifié sous le bac à sable**.
+
+**Chiffres** : 87 skills (19 méthode + 68 applicatif), 32 dépôts, 2958 fichiers `SKILL.md` aux
+commits épinglés (inchangé : le compte porte sur les clones, pas sur la curation),
+63 exécutables livrés sous `curation/`. 42 contrôles, 0 échec.
+
+## 2026-10-19 — Audit : Omnigent, installé en local hors catalogue
+
+Demandé par l'humain avant une installation sur sa machine Windows. Omnigent
+(`omnigent-ai/omnigent`, Apache-2.0) est un méta-harnais qui orchestre Claude Code, Codex, Cursor
+et d'autres, avec un serveur local et une interface web. Il figurait dans la liste des harnais
+« non audités » des README ; il y reste, avec cette exception notée, et **n'entre pas au
+catalogue** : ce n'est ni une skill ni une pièce de la méthode.
+
+**Méthode.** Tag `v0.18.0` = `a8676d2` (2026-10-13), cloné hors de `mes_depots/`. Wheel
+`omnigent-0.18.0-py3-none-any.whl` et ses deux sous-paquets `omnigent-client` et
+`omnigent-ui-sdk` 0.18.0 téléchargés sans être installés, SHA-256 vérifiés contre l'API PyPI.
+Lecture du code sensible (télémétrie, liaison réseau, authentification, protections CSRF,
+mise à jour, écritures hors de `~/.omnigent`, installations déclenchées), puis
+`scripts/scan.py`. Recherche des tickets ouverts sur Windows.
+
+**Code livré et code inspecté.** Pas d'attestation de provenance sur PyPI, d'où la comparaison
+à la main : **919 fichiers Python sur 920 du wheel sont identiques au tag** ; le dernier,
+`_build_info.py`, est généré à la construction (horodatage, `COMMIT_SHA` vide). Aucun binaire.
+Les 450 fichiers JavaScript sont l'interface web compilée, non recompilée ici, donc non vérifiée
+contre la source. Les 40 dépendances obligatoires sont en fourchettes de versions ; le
+`uv.lock` du tag les fige.
+
+**Constats, vérifiés dans le code :**
+- **Réseau.** `omnigent server` écoute par défaut sur `127.0.0.1:6767`
+  (`omnigent/cli.py`, `omnigent/host/local_server.py`). Sur une adresse non locale, il force les
+  comptes avec mot de passe (`_apply_bind_auth_defaults`). En mode local, toute requête portant un
+  `Origin` doit venir d'un hôte local (`server/routes/_origin.py`) et les routes JSON exigent le
+  bon type de contenu, ce qui ferme le CSRF et le rebinding DNS. `omnigent start` reste en mode
+  local tant qu'aucun `--server` n'est donné.
+- **Télémétrie active par défaut.** Coupée par `OMNIGENT_ANALYTICS=0`, `DO_NOT_TRACK=1`,
+  `DISABLE_TELEMETRY` ou `telemetry: false` dans `~/.omnigent/config.yaml`
+  (`omnigent/telemetry/client.py`). Coupée, elle ne crée pas d'identifiant d'installation et ne va
+  pas chercher sa configuration distante (`config.omnigent-telemetry.io`). Le module
+  OpenTelemetry n'exporte rien sans `OTEL_EXPORTER_OTLP_ENDPOINT`.
+- **Mise à jour.** Un avis seulement, après interrogation de PyPI (`omnigent/update_check.py`,
+  coupé par `OMNIGENT_NO_UPDATE_CHECK`) ; jamais de mise à jour automatique.
+- **Écritures hors de son dossier.** Seulement sur action explicite : retirer un fournisseur
+  Databricks nettoie la configuration que `ucode` avait posée dans `~/.codex/config.toml` ; se
+  déconnecter d'un abonnement lance `codex logout` ou `claude auth logout`, après confirmation
+  (Non par défaut). Rien à l'installation ni au démarrage.
+- **Installations de CLI tiers.** `onboarding/harness_install.py` lance `npm install -g` ou, pour
+  Claude, Hermes et Devin, `bash -c` sur un script `curl | bash`, y compris depuis l'interface
+  web (`host/connect.py`). Sous Windows, ce `bash` peut être celui de WSL (ticket #8659).
+- **Identifiants.** Il réutilise ceux qu'il trouve, dont la connexion à Claude Code, et transmet
+  l'environnement de l'utilisateur aux processus d'agents.
+- **Windows.** Mode dégradé documenté : pas de bac à sable système de fichiers ni réseau, seul un
+  Job Object borne l'arbre de processus. Le ticket #2422 (ouvert depuis juillet) décrit cinq
+  défauts qui empêchaient ce mode de tourner ; les deux bloquants (`os.getuid()` au chargement
+  des modules, erreur d'encodage à l'enregistrement de l'hôte) sont corrigés en 0.18.0, ce que
+  l'essai a confirmé. 44 tickets ouverts mentionnent Windows sur 852.
+
+**Scan.** 5 267 fichiers en 46 unités, rien d'écarté. **Couverture complète : 1 %** (72
+entièrement, 5 098 partiellement, 97 non inspectés), par le mécanisme de dégradation connu ; la
+lecture manuelle porte l'audit. 1 CRITICAL (`dev/repro.py`, un `subprocess.run` d'outil de
+développement non livré), 1 815 HIGH dont 193 dans le code livré. Ces 193, lus par catégorie :
+copies de l'environnement passées aux sous-processus, `os.execvp` (tmux, redémarrage de l'hôte),
+indications d'installation `curl | bash` affichées, et des « SSRF » qui sont le code de **défense**
+de son proxy de sortie. Aucun code malveillant.
+
+**Installation faite, sur décision de l'humain :**
+1. `~/.omnigent/config.yaml` écrit avant tout lancement, avec `telemetry: false` ; vérifié par
+   `omnigent.telemetry.client.is_disabled()` du paquet installé, sans variable d'environnement.
+2. Contraintes exportées du `uv.lock` du tag (`uv export --frozen --no-dev --no-hashes
+   --no-emit-workspace`, lignes `-e ./sdks/…` retirées), conservées dans
+   `~/.omnigent/install-constraints-0.18.0.txt`, puis
+   `uv tool install --python 3.12 omnigent==0.18.0 --constraints <ce fichier>`. Versions
+   installées conformes (fastapi 0.136.3, uvicorn 0.49.0, claude-agent-sdk 0.2.94, openai 2.41.0).
+3. Lanceur `~/.omnigent/lancer-omnigent.cmd` (`OMNIGENT_ANALYTICS=0`, puis `omnigent start`) et
+   deux raccourcis sur le bureau : « Omnigent » et « Arrêter Omnigent » (`omnigent stop`).
+4. Essai de bout en bout : écoute sur `127.0.0.1:6767` seulement (netstat), `/v1/info` en mode
+   utilisateur unique sans compte, interface web HTTP 200, machine enregistrée comme hôte, arrêt
+   propre. Seule erreur au journal : le CLI `codex` absent, sans conséquence.
+
+**À retenir pour l'usage** : installer soi-même les CLI d'agents plutôt que par les boutons de
+l'interface ; ne pas lier le serveur à une autre adresse que `127.0.0.1` ; mise à jour par
+`omni upgrade`, en refaisant l'export des contraintes depuis le `uv.lock` du nouveau tag.
+
+**Chiffres** : inchangés — 87 skills, 32 dépôts, 2958 `SKILL.md`. 42 contrôles, 0 échec.
+
 ---
 
 ## Avant de modifier ce fichier

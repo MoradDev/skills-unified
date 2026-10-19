@@ -10,7 +10,7 @@
 Agent skills are scattered across dozens of repositories, with overlapping names,
 competing descriptions and wildly varying quality. This repository is the result of
 auditing the 32 catalogued in [`catalog/repos.tsv`](catalog/repos.tsv) — 2958 skill files
-between them, counted at the commits now pinned there — and keeping the 100 that earn their
+between them, counted at the commits now pinned there — and keeping the 87 that earn their
 place, with the reasoning kept in the open.
 
 **It is the opposite of vibe coding.** Nothing here is about letting an agent improvise its
@@ -47,7 +47,7 @@ Nothing is installed globally. Nothing is activated behind your back.
 
 ## What you get
 
-**100 curated skills**, in two families.
+**87 curated skills**, in two families.
 
 Plus the working method itself, built on [spec-kit](https://github.com/github/spec-kit):
 every project starts with `specify init`, then runs constitution → specify → clarify →
@@ -60,7 +60,7 @@ an idea before writing a spec, API design, CI/CD, security hardening and securit
 performance, observability, git workflow, ADRs, migration, incremental delivery, context
 engineering, browser testing, and constraint-, doubt- and source-driven development.
 
-*Application building* (81) — the actual craft:
+*Application building* (68) — the actual craft:
 
 | Target | Coverage |
 |---|---|
@@ -70,7 +70,7 @@ engineering, browser testing, and constraint-, doubt- and source-driven developm
 | **Runtime decisions** | Choosing how an application decides on every request: rule, scoring function, typed-output classifier or LLM call |
 | **Mobile** | SwiftUI, Swift 6.2 concurrency, Liquid Glass, on-device foundation models, Android clean architecture, Kotlin, Compose Multiplatform, Flutter/Dart, React Native |
 | **Desktop** | .NET, Rust, C++, native Windows E2E testing, Bun |
-| **Design, diagrams and CAD** | Isometric SVG/WebGL explainer figures, 45 diagram types, logo design, CAD (STEP/GLB/STL/3MF), DFM and DfAM checks, engineering drawings, URDF/SRDF/SDF, G-code and fabrication services |
+| **Design and diagrams** | Isometric SVG/WebGL explainer figures, 45 diagram types. CAD (`text-to-cad`) and logo design (`logo-design-skill`) are in the catalogue, linked per project, not here |
 | **Testing & delivery** | Playwright, Python/Go/C# testing, Docker, Kubernetes, deployment |
 
 Plus **per-language rulesets** for 22 languages and frameworks, and a **catalogue** of 32
@@ -99,7 +99,7 @@ Counted at the commits pinned in `catalog/repos.tsv`:
 
 The selection is **closed under its own cross-references**: every `../skill/SKILL.md`
 link was followed transitively so nothing points into the void. Final check: every relative
-link resolves. 100 skills, 100 distinct names, every one carrying a `description`.
+link resolves. 87 skills, 87 distinct names, every one carrying a `description`.
 
 ---
 
@@ -257,9 +257,10 @@ holds that others would need.
 | **Cursor** | Point a rule file at `curation/skills/`. |
 | **Gemini CLI, opencode, Aider, Continue, …** | No plugin system needed — index the `description` frontmatter and open a `SKILL.md` when it matches the task. |
 
-**Other harnesses, listed but not audited.** These were looked at, not vetted: none is in the
-catalogue, none is pinned, and nothing here vouches for code that runs commands on your
-machine. What the right-hand column says comes from each project's own README.
+**Other harnesses, listed but not audited — one exception.** These were looked at, not vetted:
+none is in the catalogue, none is pinned, and nothing here vouches for code that runs commands on
+your machine. What the right-hand column says comes from each project's own README. The exception
+is Omnigent, audited on 2026-10-19 (`AUDITS.fr.md`); it is still not in the catalogue.
 
 | Harness | Licence | What its README documents |
 |---|---|---|
@@ -267,7 +268,7 @@ machine. What the right-hand column says comes from each project's own README.
 | [OpenClaw](https://github.com/openclaw/openclaw) | MIT | Its own skills and plugins system, with a registry (ClawHub). |
 | [Hermes Agent](https://github.com/NousResearch/hermes-agent) | MIT | Its own skills system, which writes and rewrites skills from experience, and MCP. |
 | [Pi](https://github.com/earendil-works/pi) | MIT | Its own skills, extensions and prompt templates. |
-| [Omnigent](https://github.com/omnigent-ai/omnigent) | Apache-2.0 | A layer over Claude Code, Codex, Cursor and others; it reads whatever the harness it drives reads. |
+| [Omnigent](https://github.com/omnigent-ai/omnigent) | Apache-2.0 | A layer over Claude Code, Codex, Cursor and others; it reads whatever the harness it drives reads. **Audited at `v0.18.0`**: the PyPI wheel matches the tag (919 of 920 Python files identical), local server on `127.0.0.1:6767` only, telemetry on by default but cleanly cut by `telemetry: false` in `~/.omnigent/config.yaml`. On Windows: no sandbox at all, agents get your environment and your rights. Install with `uv tool install --python 3.12 omnigent==0.18.0 --constraints <file>`, the file exported from the release's `uv.lock` (steps in `AUDITS.fr.md`). |
 | [Ruflo](https://github.com/ruvnet/ruflo) | MIT | Runs on top of Claude Code. Its full install **writes `CLAUDE.md` and `.claude/` into the workspace**, which would overwrite this repository's own. |
 | [DeepSeek Harness](https://github.com/deepseek-ai/deepseek-harness) | MIT | Nothing about reading a workspace's instructions. |
 | [supercli](https://github.com/yashdev9274/supercli) | MIT | Nothing about reading a workspace's instructions. |
@@ -283,21 +284,17 @@ by an agent rather than read by a human.
 
 ## Licence and credit
 
-MIT. **99 of the 100 skills were not written here** — for those, the contribution is the
+MIT. **86 of the 87 skills were not written here** — for those, the contribution is the
 selection, the de-duplication, the cross-reference repair and the method around them. The
 last, `structured-decisions`, is original and covered by this repository's own licence.
 
-The 99 come from [`affaan-m/ECC`](https://github.com/affaan-m/ECC) (65),
+The 86 come from [`affaan-m/ECC`](https://github.com/affaan-m/ECC) (65),
 [`addyosmani/agent-skills`](https://github.com/addyosmani/agent-skills) (16),
 [`mattpocock/skills`](https://github.com/mattpocock/skills) (2),
 [`wheresryan22/anatomy`](https://github.com/wheresryan22/anatomy) (1),
-[`cathrynlavery/diagram-design`](https://github.com/cathrynlavery/diagram-design) (1),
-[`cloudflare/security-audit-skill`](https://github.com/cloudflare/security-audit-skill) (1),
-[`earthtojake/text-to-cad`](https://github.com/earthtojake/text-to-cad) (12) and
-[`kaankiziltug/logo-design-skill`](https://github.com/kaankiziltug/logo-design-skill) (1), all MIT.
-The logo library inside `logo-design` is the one exception: its 1,432 real logos are trademarks
-and are not covered by the MIT licence.
-Full provenance, skill by skill, plus the three modifications made and the projects
+[`cathrynlavery/diagram-design`](https://github.com/cathrynlavery/diagram-design) (1) and
+[`cloudflare/security-audit-skill`](https://github.com/cloudflare/security-audit-skill) (1), all MIT.
+Full provenance, skill by skill, plus the modifications made and the projects
 referenced but not redistributed: [`ATTRIBUTION.md`](ATTRIBUTION.md).
 
 If you are one of those authors and would rather not be redistributed here, open an

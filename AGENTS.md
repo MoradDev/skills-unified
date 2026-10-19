@@ -8,7 +8,7 @@ Installation is a separate concern — see `SETUP.md`.
 
 | Path | Versioned? | What it is |
 |---|---|---|
-| `curation/` | **yes** | 100 curated skills, plus `rules/` and `references/`. The only non-reproducible content here. |
+| `curation/` | **yes** | 87 curated skills, plus `rules/` and `references/`. The only non-reproducible content here. |
 | `mes_depots/` | no | Disposable cache of upstream repositories, each pinned to the commit recorded in `catalog/repos.tsv`. Rebuildable from that file. |
 | `<project>/` | separately | One folder per project, with its own git repository. |
 | `<project>/STATE.md` | **yes** | Shared working state, readable by any harness. See below. |
@@ -28,14 +28,14 @@ ends with deleting the folder and re-cloning at the new SHA.
 
 ## The two families of skills
 
-`curation/skills/` holds 100 skills in two groups:
+`curation/skills/` holds 87 skills in two groups:
 
 **Method** (19) — how to work: `grill-me` and `grilling` for interrogating a vague idea
 into a spec; then API design, CI/CD, security hardening and security audits, performance,
 observability, git workflow, ADRs, deprecation and migration, incremental implementation,
 context engineering, browser testing, and constraint-, doubt- and source-driven development.
 
-**Application building** (81) — what to build with:
+**Application building** (68) — what to build with:
 
 | Target | Coverage |
 |---|---|
@@ -45,7 +45,7 @@ context engineering, browser testing, and constraint-, doubt- and source-driven 
 | Runtime decisions | Choosing how an application decides on every request: rule, scoring function, typed-output classifier or LLM call |
 | Mobile | SwiftUI, Swift 6.2 concurrency, Liquid Glass, on-device foundation models, Android clean architecture, Kotlin, Compose Multiplatform, Flutter/Dart, React Native |
 | Desktop | .NET, Rust, C++, native Windows E2E testing, Bun |
-| Design, diagrams and CAD | Isometric SVG/WebGL figures, 45 diagram types, logo design, CAD (STEP/GLB/STL/3MF), DFM/DfAM checks, engineering drawings, URDF/SRDF/SDF, G-code, fabrication services |
+| Design and diagrams | Isometric SVG/WebGL figures, 45 diagram types. CAD (`text-to-cad`) and logo design (`logo-design-skill`) are plugins linked only into a project that needs them |
 | Testing & delivery | Playwright, Python/Go/C# testing, Docker, Kubernetes, deployment |
 
 `curation/rules/` holds per-language rulesets for 22 languages and frameworks (React,
@@ -244,7 +244,7 @@ skill when its description matches what you are about to do. That is the whole m
 Descriptions are written as triggers ("Use when building or reviewing React components"),
 so they are meant to be matched against the task, not read end to end.
 
-Do not load all 100 at once. That defeats the purpose and floods your context.
+Do not load all 87 at once. That defeats the purpose and floods your context.
 
 ## When two skills compete
 
