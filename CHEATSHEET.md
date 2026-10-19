@@ -20,7 +20,7 @@ everything the workspace itself ships or installs is listed in full.
 1. [Claude Code essentials](#1-claude-code-essentials)
 2. [Workspace setup and maintenance](#2-workspace-setup-and-maintenance)
 3. [spec-kit](#3-spec-kit)
-4. [Curated skills (100)](#4-curated-skills-100)
+4. [Curated skills (87)](#4-curated-skills-87)
 5. [superpowers (15)](#5-superpowers-15)
 6. [taste-skill (13)](#6-taste-skill-13)
 7. [ponytail (6)](#7-ponytail-6)
@@ -126,7 +126,7 @@ In Claude Code these are called as `/speckit-constitution`, `/speckit-specify`, 
 
 ---
 
-## 4. Curated skills (100)
+## 4. Curated skills (87)
 
 All in `curation/skills/`. Per-language rulesets live in `curation/rules/`.
 
@@ -250,25 +250,16 @@ All in `curation/skills/`. Per-language rulesets live in `curation/rules/`.
 | `kubernetes-patterns` | Kubernetes manifests and debugging |
 | `deployment-patterns` | CI/CD, containers, health checks, rollbacks |
 
-### Design, diagrams and CAD (15)
+### Design and diagrams (2)
 
 | Skill | Use it for |
 |---|---|
 | `anatomy` | Isometric SVG/WebGL figures that explain how a system works |
 | `diagram-design` | 45 diagram types as self-contained HTML/SVG |
-| `logo-design` | Logo design from brief to SVG kit and brand guidelines |
-| `cad` | 3D models as STEP/GLB/STL/3MF, with the CAD workflow and viewer |
-| `dfm` | Design-for-manufacturing checks: CNC, sheet metal, moulding |
-| `dfam-check` | Additive-manufacturing geometry measurements |
-| `dxf` | DXF drawing generation |
-| `engineering-drawing` | Engineering drawings and drawing sheets |
-| `gcode` | G-code and OrcaSlicer presets |
-| `sdf` | SDF robot, world and simulator descriptions |
-| `srdf` | SRDF semantic robot descriptions |
-| `urdf` | URDF robot descriptions |
-| `step-parts` | Standard parts from the step.parts catalogue |
-| `bambu-labs` | Bambu Lab printer integration |
-| `sendcutsend` | SendCutSend sheet-metal quoting and ordering |
+
+CAD (STEP/GLB/STL/3MF, DFM, drawings, URDF/SRDF/SDF, G-code, fabrication services) and logo design
+are not in the curation: link the `text-to-cad` or `logo-design-skill` plugin into the project
+that needs it (`SETUP.md` step 1).
 
 ---
 

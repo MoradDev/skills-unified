@@ -11,7 +11,7 @@ Les skills d'agents sont dispersées dans des dizaines de dépôts, avec des nom
 recouvrent, des descriptions qui se concurrencent et une qualité très inégale. Ce dépôt
 est le résultat de l'audit des 32 dépôts catalogués dans
 [`catalog/repos.tsv`](catalog/repos.tsv) — 2958 fichiers de skills à eux tous, comptés aux
-commits désormais épinglés — dont on a gardé les 100 qui méritent leur place, en laissant le
+commits désormais épinglés — dont on a gardé les 87 qui méritent leur place, en laissant le
 raisonnement à découvert.
 
 **C'est l'inverse du vibe coding.** Rien ici ne consiste à laisser un agent improviser
@@ -50,7 +50,7 @@ Rien n'est installé globalement. Rien n'est activé à ton insu.
 
 ## Ce que tu obtiens
 
-**100 skills sélectionnées**, en deux familles.
+**87 skills sélectionnées**, en deux familles.
 
 Plus la méthode de travail elle-même, bâtie sur [spec-kit](https://github.com/github/spec-kit) :
 tout projet démarre par `specify init`, puis enchaîne constitution → specify → clarify →
@@ -64,7 +64,7 @@ sécurité et audits de sécurité, performance, observabilité, workflow git, A
 livraison incrémentale, ingénierie de contexte, tests navigateur, et développement piloté
 par les contraintes, par le doute et par les sources.
 
-*Création d'applications* (81) — le métier proprement dit :
+*Création d'applications* (68) — le métier proprement dit :
 
 | Cible | Couverture |
 |---|---|
@@ -74,7 +74,7 @@ par les contraintes, par le doute et par les sources.
 | **Décisions à l'exécution** | Choisir comment une application décide à chaque requête : règle, fonction de score, classifieur à sortie typée ou appel LLM |
 | **Mobile** | SwiftUI, concurrence Swift 6.2, Liquid Glass, modèles de fondation embarqués, architecture clean Android, Kotlin, Compose Multiplatform, Flutter/Dart, React Native |
 | **Desktop** | .NET, Rust, C++, tests E2E Windows natif, Bun |
-| **Design, diagrammes et CAO** | Figures isométriques SVG/WebGL, 45 types de diagrammes, design de logo, CAO (STEP/GLB/STL/3MF), contrôles DFM et DfAM, dessins techniques, URDF/SRDF/SDF, G-code et services de fabrication |
+| **Design et diagrammes** | Figures isométriques SVG/WebGL, 45 types de diagrammes. La CAO (`text-to-cad`) et le design de logo (`logo-design-skill`) sont au catalogue, liés projet par projet, pas ici |
 | **Tests & livraison** | Playwright, tests Python/Go/C#, Docker, Kubernetes, déploiement |
 
 Plus les **rulesets par langage** pour 22 langages et frameworks, et un **catalogue** de
@@ -105,7 +105,7 @@ Comptés aux commits épinglés dans `catalog/repos.tsv` :
 
 La sélection est **fermée sous ses propres références croisées** : chaque lien
 `../skill/SKILL.md` a été suivi transitivement pour que rien ne pointe dans le vide.
-Contrôle final : chaque lien relatif résout. 100 skills, 100 noms distincts, toutes
+Contrôle final : chaque lien relatif résout. 87 skills, 87 noms distincts, toutes
 pourvues d'une `description`.
 
 ---
@@ -304,21 +304,17 @@ d'installation, écrite pour être exécutée par un agent plutôt que lue par u
 
 ## Licence et crédit
 
-MIT. **99 des 100 skills n'ont pas été écrites ici** — pour celles-là, la contribution, c'est
+MIT. **86 des 87 skills n'ont pas été écrites ici** — pour celles-là, la contribution, c'est
 la sélection, la déduplication, la réparation des références croisées et la méthode qui les
 entoure. La dernière, `structured-decisions`, est originale et couverte par la licence de ce dépôt.
 
-Les 99 viennent de [`affaan-m/ECC`](https://github.com/affaan-m/ECC) (65),
+Les 86 viennent de [`affaan-m/ECC`](https://github.com/affaan-m/ECC) (65),
 [`addyosmani/agent-skills`](https://github.com/addyosmani/agent-skills) (16),
 [`mattpocock/skills`](https://github.com/mattpocock/skills) (2),
 [`wheresryan22/anatomy`](https://github.com/wheresryan22/anatomy) (1),
-[`cathrynlavery/diagram-design`](https://github.com/cathrynlavery/diagram-design) (1),
-[`cloudflare/security-audit-skill`](https://github.com/cloudflare/security-audit-skill) (1),
-[`earthtojake/text-to-cad`](https://github.com/earthtojake/text-to-cad) (12) et
-[`kaankiziltug/logo-design-skill`](https://github.com/kaankiziltug/logo-design-skill) (1), toutes en MIT.
-La bibliothèque de logos de `logo-design` est la seule exception : ses 1 432 logos réels sont des
-marques et ne sont pas couverts par la licence MIT.
-Provenance complète skill par skill, les trois modifications apportées et les projets
+[`cathrynlavery/diagram-design`](https://github.com/cathrynlavery/diagram-design) (1) et
+[`cloudflare/security-audit-skill`](https://github.com/cloudflare/security-audit-skill) (1), toutes en MIT.
+Provenance complète skill par skill, les modifications apportées et les projets
 référencés mais non redistribués : [`ATTRIBUTION.md`](ATTRIBUTION.md).
 
 Si tu es l'un de ces auteurs et que tu préfères ne pas être redistribué ici, ouvre une

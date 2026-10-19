@@ -71,6 +71,25 @@ def is_binary(path: str) -> bool:
         return True
 
 
+def make_temp_dir(prefix: str) -> str:
+    """A fresh temporary directory that a sandboxed child process can still write into.
+
+    `tempfile.mkdtemp` asks for mode 0o700, and since Python 3.13 Windows honours it with an
+    owner-only ACL: a Skillspector run under the Windows sandbox is then refused writes in its
+    own staging and report folders. Creating the directory with 0o777 keeps the default,
+    inherited ACL (on POSIX the umask still applies).
+    """
+    base = tempfile.gettempdir()
+    for _ in range(100):
+        path = os.path.join(base, prefix + os.urandom(4).hex())
+        try:
+            os.mkdir(path, 0o777)
+            return path
+        except FileExistsError:
+            continue
+    raise FileExistsError(f"no free temporary directory name under {base}")
+
+
 def walk(root: str):
     for dirpath, dirnames, filenames in os.walk(root):
         dirnames[:] = sorted(d for d in dirnames if d not in SKIP_DIRS)
@@ -116,7 +135,7 @@ def plan(root: str) -> tuple[dict[str, list[str]], dict[str, str]]:
 
 
 def run_unit(root: str, unit: str, rels: list[str], out_dir: str, timeout: int) -> dict:
-    stage = tempfile.mkdtemp(prefix="ss-")
+    stage = make_temp_dir("ss-")
     try:
         prefix = "" if unit.startswith("(") or unit == "." else unit + "/"
         for rel in rels:
@@ -151,7 +170,7 @@ def main() -> int:
         print("skillspector is not on PATH: install it as SETUP.md step 5b says.", file=sys.stderr)
         return 2
     root = os.path.abspath(args.repo)
-    out_dir = os.path.abspath(args.out) if args.out else tempfile.mkdtemp(prefix="skillspector-scan-")
+    out_dir = os.path.abspath(args.out) if args.out else make_temp_dir("skillspector-scan-")
     os.makedirs(out_dir, exist_ok=True)
 
     units, left_out = plan(root)

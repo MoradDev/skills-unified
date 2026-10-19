@@ -586,6 +586,67 @@ travail non versionné » : c'était vrai sur le moment, ce ne l'est plus. Aucun
 **Chiffres** : inchangés — 100 skills, 32 dépôts, 2958 `SKILL.md`, 76 exécutables livrés.
 44 contrôles, 0 échec.
 
+## 2026-10-19 — Relecture de l'audit du 12 au 18/10, et cinq corrections
+
+Relecture par l'agent, à la demande de l'humain. **Vérifié et sain** : 44 contrôles, 0 échec ;
+les 32 dépôts à leur commit épinglé (seul l'écart Defender connu sur
+`Anthropic-Cybersecurity-Skills`) ; les 16 skills copiées le 18/10 identiques à leur source au
+commit épinglé, hors fichiers de test écartés comme annoncé (`diagram-design` ne diffère que par
+ses fins de ligne, `diff --strip-trailing-cr` identique). Cinq points corrigés, sur décision de
+l'humain.
+
+**1. La CAO sort de la curation.** Les cinq dépôts du 18/10 étaient en `on-demand` au catalogue,
+mais leurs 16 skills copiées dans `curation/`, qui se charge dans **chaque** projet : actives par
+défaut en pratique, pour environ 2 000 tokens de descriptions par session (mesuré : 7 973
+caractères), dont douze de CAO et de fabrication — le genre de spécialité que la sélection
+écarte depuis le premier audit (ECC santé, logistique). Retirées de `curation/` : `bambu-labs`,
+`cad`, `dfam-check`, `dfm`, `dxf`, `engineering-drawing`, `gcode`, `sdf`, `sendcutsend`, `srdf`,
+`step-parts`, `urdf`. `text-to-cad` reste au catalogue en `on-demand` et se lie au projet qui en a
+besoin comme les dépôts `default` : il porte son `.claude-plugin/plugin.json` (`"skills":
+"./skills/"`), et déclare en plus un serveur MCP `cad` (`claude.mcp.json`) qui lance le même wheel
+`cadgen==0.7.22` vérifié le 18/10 — écrit dans `SETUP.md`. `anatomy`, `diagram-design` et `security-audit-skill` passent de `on-demand` à `curated`, la
+valeur des dépôts dont la curation copie des skills (ECC, agent-skills). `logo-design-skill` : voir
+le point 3.
+
+**2. Recoupements des quatre skills restées, par la chaîne Laya puis Jev, au seuil de 0,85.**
+- Sans concurrence, Laya au-dessus du seuil : `security-audit` / `security-and-hardening`
+  (0,88), `anatomy` / `diagram-design` (0,92).
+- Laya s'abstient (0,77 à 0,79), Jev aussi, sous 0,85 — **décision de l'humain en attente** :
+  `diagram-design` / `design-system` (Jev : P(concurrence) 0,22 ; lecture de l'agent : pas de
+  concurrence, tâches distinctes) ; `logo-design` / `brandkit` de `taste-skill`, actif par défaut
+  (Jev 0,83 ; lecture de l'agent : concurrence, les deux se réclament de la conception de logo et
+  des guidelines de marque) ; `logo-design` / `ios-icon-gen` (Jev 0,51 ; lecture de l'agent :
+  concurrence partielle sur « une icône d'app », l'un dessine une marque, l'autre assemble des
+  icônes existantes).
+- **Décision de l'humain** : `diagram-design` reste dans la curation (pas de concurrence avec
+  `design-system`) ; `logo-design` sort de la curation et passe `on-demand` (point 3), ce qui rend
+  ses deux concurrences sans objet par défaut — écrit dans `SETUP.md` pour qui le lie à un projet.
+  Rien n'est donc ajouté à `AGENTS.md` § « When two skills compete ».
+
+**3. `logo-design` sort de la curation.** Proposé d'abord en version allégée (sans les 1 432 SVG
+de marques réelles, la forme que définit `tools/package_skill.py` de l'auteur), puis, sur décision
+de l'humain, retiré entièrement : `logo-design-skill` repasse en `on-demand`, se lie au projet qui
+en a besoin comme `text-to-cad` (son `.claude-plugin/plugin.json`, ni hook ni MCP), et garde alors
+sa bibliothèque complète depuis le clone local. **Le dépôt public ne redistribue plus aucun logo**
+(14 Mo retirés de `curation/`) ; `ATTRIBUTION.md` le range parmi les projets référencés, avec la
+mention des marques.
+
+**4. Clones hors catalogue supprimés.** 12 dossiers, environ 2,3 Go (`codebase-memory-mcp`
+1,4 Go, `ghidra` 366 Mo, `xerj`, `ts-rust`, `manimgx`, `billion-context`, `openfilm`, `xtool`,
+`airllm`, `ascii`, `DeepSeek-Bot`, `SwiftUI-Agent-Skill`). Chacun vérifié sans modification
+locale, et son commit noté dans ce journal ou dans `audit-2026-10-18.md` : reclonables à
+l'identique. Le cache compte de nouveau exactement les 32 lignes du catalogue.
+
+**5. `scripts/scan.py` sous le bac à sable Windows.** `tempfile.mkdtemp` demande le mode 0o700,
+que Windows applique depuis Python 3.13 par une ACL réservée au propriétaire : un Skillspector
+lancé dans le bac à sable se voit refuser l'écriture dans ses propres dossiers. Le script crée
+désormais ses dossiers temporaires en 0o777 (`make_temp_dir`), ce qui garde l'ACL héritée.
+Vérifié hors bac à sable (`humanizer`, 100 % inspecté) ; **pas encore vérifié sous le bac à sable**.
+
+**Chiffres** : 87 skills (19 méthode + 68 applicatif), 32 dépôts, 2958 fichiers `SKILL.md` aux
+commits épinglés (inchangé : le compte porte sur les clones, pas sur la curation),
+63 exécutables livrés sous `curation/`. 42 contrôles, 0 échec.
+
 ---
 
 ## Avant de modifier ce fichier
