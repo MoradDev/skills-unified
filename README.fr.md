@@ -278,9 +278,11 @@ mémoire privée d'un agent contient et que les autres devraient savoir.
 | **Cursor** | Fais pointer un fichier de règles vers `curation/skills/`. |
 | **Gemini CLI, opencode, Aider, Continue…** | Aucun système de plugins nécessaire — indexe les `description` du frontmatter et ouvre un `SKILL.md` quand il correspond à la tâche. |
 
-**Autres harnais, listés mais non audités.** Ils ont été regardés, pas vérifiés : aucun n'est
-au catalogue, aucun n'est épinglé, et rien ici ne se porte garant d'un code qui exécute des
-commandes sur ta machine. La colonne de droite reprend ce que dit le README de chaque projet.
+**Autres harnais, listés mais non audités — une exception.** Ils ont été regardés, pas vérifiés :
+aucun n'est au catalogue, aucun n'est épinglé, et rien ici ne se porte garant d'un code qui exécute
+des commandes sur ta machine. La colonne de droite reprend ce que dit le README de chaque projet.
+L'exception est Omnigent, audité le 19/10/2026 (`AUDITS.fr.md`) ; il n'est pas pour autant au
+catalogue.
 
 | Harnais | Licence | Ce que documente son README |
 |---|---|---|
@@ -288,7 +290,7 @@ commandes sur ta machine. La colonne de droite reprend ce que dit le README de c
 | [OpenClaw](https://github.com/openclaw/openclaw) | MIT | Son propre système de skills et de plugins, avec un registre (ClawHub). |
 | [Hermes Agent](https://github.com/NousResearch/hermes-agent) | MIT | Son propre système de skills, qui écrit et réécrit des skills à partir de l'expérience, et MCP. |
 | [Pi](https://github.com/earendil-works/pi) | MIT | Ses propres skills, extensions et modèles de prompts. |
-| [Omnigent](https://github.com/omnigent-ai/omnigent) | Apache-2.0 | Une couche au-dessus de Claude Code, Codex, Cursor et d'autres ; il lit ce que lit le harnais qu'il pilote. |
+| [Omnigent](https://github.com/omnigent-ai/omnigent) | Apache-2.0 | Une couche au-dessus de Claude Code, Codex, Cursor et d'autres ; il lit ce que lit le harnais qu'il pilote. **Audité en `v0.18.0`** : le wheel PyPI correspond au tag (919 fichiers Python sur 920 identiques), serveur local sur `127.0.0.1:6767` seulement, télémétrie active par défaut mais coupée proprement par `telemetry: false` dans `~/.omnigent/config.yaml`. Sous Windows : aucun bac à sable, les agents reçoivent ton environnement et tes droits. S'installe par `uv tool install --python 3.12 omnigent==0.18.0 --constraints <fichier>`, le fichier exporté du `uv.lock` de la release (étapes dans `AUDITS.fr.md`). |
 | [Ruflo](https://github.com/ruvnet/ruflo) | MIT | Tourne par-dessus Claude Code. Son installation complète **écrit `CLAUDE.md` et `.claude/` dans le workspace**, ce qui écraserait ceux de ce dépôt. |
 | [DeepSeek Harness](https://github.com/deepseek-ai/deepseek-harness) | MIT | Rien sur la lecture des instructions d'un workspace. |
 | [supercli](https://github.com/yashdev9274/supercli) | MIT | Rien sur la lecture des instructions d'un workspace. |

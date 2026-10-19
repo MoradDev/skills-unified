@@ -257,9 +257,10 @@ holds that others would need.
 | **Cursor** | Point a rule file at `curation/skills/`. |
 | **Gemini CLI, opencode, Aider, Continue, …** | No plugin system needed — index the `description` frontmatter and open a `SKILL.md` when it matches the task. |
 
-**Other harnesses, listed but not audited.** These were looked at, not vetted: none is in the
-catalogue, none is pinned, and nothing here vouches for code that runs commands on your
-machine. What the right-hand column says comes from each project's own README.
+**Other harnesses, listed but not audited — one exception.** These were looked at, not vetted:
+none is in the catalogue, none is pinned, and nothing here vouches for code that runs commands on
+your machine. What the right-hand column says comes from each project's own README. The exception
+is Omnigent, audited on 2026-10-19 (`AUDITS.fr.md`); it is still not in the catalogue.
 
 | Harness | Licence | What its README documents |
 |---|---|---|
@@ -267,7 +268,7 @@ machine. What the right-hand column says comes from each project's own README.
 | [OpenClaw](https://github.com/openclaw/openclaw) | MIT | Its own skills and plugins system, with a registry (ClawHub). |
 | [Hermes Agent](https://github.com/NousResearch/hermes-agent) | MIT | Its own skills system, which writes and rewrites skills from experience, and MCP. |
 | [Pi](https://github.com/earendil-works/pi) | MIT | Its own skills, extensions and prompt templates. |
-| [Omnigent](https://github.com/omnigent-ai/omnigent) | Apache-2.0 | A layer over Claude Code, Codex, Cursor and others; it reads whatever the harness it drives reads. |
+| [Omnigent](https://github.com/omnigent-ai/omnigent) | Apache-2.0 | A layer over Claude Code, Codex, Cursor and others; it reads whatever the harness it drives reads. **Audited at `v0.18.0`**: the PyPI wheel matches the tag (919 of 920 Python files identical), local server on `127.0.0.1:6767` only, telemetry on by default but cleanly cut by `telemetry: false` in `~/.omnigent/config.yaml`. On Windows: no sandbox at all, agents get your environment and your rights. Install with `uv tool install --python 3.12 omnigent==0.18.0 --constraints <file>`, the file exported from the release's `uv.lock` (steps in `AUDITS.fr.md`). |
 | [Ruflo](https://github.com/ruvnet/ruflo) | MIT | Runs on top of Claude Code. Its full install **writes `CLAUDE.md` and `.claude/` into the workspace**, which would overwrite this repository's own. |
 | [DeepSeek Harness](https://github.com/deepseek-ai/deepseek-harness) | MIT | Nothing about reading a workspace's instructions. |
 | [supercli](https://github.com/yashdev9274/supercli) | MIT | Nothing about reading a workspace's instructions. |
