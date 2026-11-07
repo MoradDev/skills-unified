@@ -10,7 +10,7 @@ lire `SETUP.md`, et il installe le reste lui-même.**
 Les skills d'agents sont dispersées dans des dizaines de dépôts, avec des noms qui se
 recouvrent, des descriptions qui se concurrencent et une qualité très inégale. Ce dépôt
 est le résultat de l'audit des 32 dépôts catalogués dans
-[`catalog/repos.tsv`](catalog/repos.tsv) — 2958 fichiers de skills à eux tous, comptés aux
+[`catalog/repos.tsv`](catalog/repos.tsv) — 3001 fichiers de skills à eux tous, comptés aux
 commits désormais épinglés — dont on a gardé les 87 qui méritent leur place, en laissant le
 raisonnement à découvert.
 

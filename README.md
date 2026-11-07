@@ -9,7 +9,7 @@
 
 Agent skills are scattered across dozens of repositories, with overlapping names,
 competing descriptions and wildly varying quality. This repository is the result of
-auditing the 32 catalogued in [`catalog/repos.tsv`](catalog/repos.tsv) — 2958 skill files
+auditing the 32 catalogued in [`catalog/repos.tsv`](catalog/repos.tsv) — 3001 skill files
 between them, counted at the commits now pinned there — and keeping the 87 that earn their
 place, with the reasoning kept in the open.
 
