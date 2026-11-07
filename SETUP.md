@@ -249,7 +249,7 @@ the human decide, and it is the number nobody was given before.
 `AGENTS.md`: every new project starts with it.
 
 ```bash
-uv tool install specify-cli --from git+https://github.com/github/spec-kit.git@838f1184d1b2ed254a99e8b818dbc23aa80a7f1f
+uv tool install specify-cli --from git+https://github.com/github/spec-kit.git@7370e592f3cd9c06e5b698983957e227c75b30e2
 ```
 
 The `@<sha>` suffix pins the install to the commit recorded in `catalog/repos.tsv`, for the
