@@ -726,6 +726,147 @@ l'interface ; ne pas lier le serveur à une autre adresse que `127.0.0.1` ; mise
 
 **Chiffres** : inchangés — 87 skills, 32 dépôts, 2958 `SKILL.md`. 42 contrôles, 0 échec.
 
+## 2026-11-07 — Mises à jour amont (issue #10) : 12 épinglages déplacés, 14 laissés
+
+**Point de départ.** L'issue #10, tenue par `upstream-watch` (passage du 2026-11-01), listait
+26 dépôts en avance sur leur épinglage. Chacun a été audité au SHA cité dans l'issue, pas à la
+pointe de la branche, pour que l'audit soit reproductible.
+
+**Méthode.** Sept sous-agents en lecture seule (lots A à G), chacun dans des clones neufs hors
+du dépôt, sans exécuter de code amont. Pour chaque dépôt : `git diff --stat` et journal entre
+les deux SHA, liste des fichiers exécutables et des manifestes touchés, lecture de ces diffs,
+extraction des domaines ajoutés, recherche de `curl | sh`, `eval` ou `exec` réseau,
+télémétrie, écriture hors projet, nouvelles dépendances, changement de licence. Pour les gros
+dépôts, la lecture est ciblée, pas ligne à ligne ; chaque rapport de lot dit ce qu'il n'a pas
+couvert. Le scanner n'a pesé dans aucun verdict. Les décisions sont de l'humain, sur
+recommandation.
+
+**Intégrés (12), épinglés au SHA audité le 2026-11-07.**
+
+| Dépôt | Ancien → nouveau | Motif |
+|---|---|---|
+| `superpowers` | `8ca22db` → `2ce8aa1` | v7.0.1. Les −14 013 lignes sont 17 anciens documents de plan supprimés et du contenu déplacé vers `references/` (limite de 20 000 caractères après compaction). Crochets Windows durcis : plus de `bash` résolu dans le dossier courant. |
+| `humanizer` | `225a6f3` → `0ef9fe5` | 2 fichiers, aucun exécutable, `SKILL.md` inchangé. |
+| `i-have-adhd` | `839872f` → `1ecea19` | Seul le plugin OpenCode change ; crochets Claude intacts. |
+| `logo-design-skill` | `0ecf52e` → `7340903` | Échappement du titre SVG par `html.escape`, plus des tests. |
+| `skills` (mattpocock) | `d81f3a1` → `4ae2317` | `grilling` recopié (deux ajouts) ; `grill-me` inchangé. |
+| `agency-agents` | `d3f71c4` → `b37b5bb` | Une persona ajoutée hors noyau ; 8 des 14 du noyau retouchées. |
+| `anatomy` | `e948829` → `1482e84` | Impression A4/Letter. Recopié au même périmètre, sans les neuf PDF d'exemples (~15 Mo). |
+| `diagram-design` | `550fd66` → `0cf73c3` | Variante box plot ; scripts toujours en bibliothèque standard. |
+| `agent-skills` | `9d0c60d` → `8bfcc1f` | 13 des 16 skills et 4 des 7 checklists changent, dont un correctif d'injection shell dans `ci-cd-and-automation`. |
+| `ECC` | `ef648e0` → `b38be6a` | 7 des 65 skills retenues changent ; 6 recopiées. |
+| `spec-kit` | `838f118` → `7370e59` | 1.2.6.dev0. Mêmes dix skills `/speckit-*`, même `tasks.md`. |
+| `graphify` | `ef4450d` → `f5155ba` | 0.9.100 ; corrige des fichiers lus en partie mis en cache comme complets. |
+
+**Vérifications faites en plus des rapports de lot.**
+- *Copies de `curation/` avant écrasement.* Chaque copie a été comparée à l'ancien épinglage
+  (fins de ligne ignorées). Les copies d'`anatomy`, `diagram-design` et `grilling` étaient
+  identiques. Dans `agent-skills`, quatre fichiers différaient : retrouvés par hash de blob
+  dans l'historique amont (`cda4542` du 30/07, `4be4bb7` du 28/08, `45fd4a0` du 04/09), donc
+  d'anciens états jamais rafraîchis, sans adaptation locale. Pour ECC, la comparaison à trois
+  (notre copie, ancien, nouveau) sur les 65 skills ne montre aucune skill à la fois modifiée en
+  amont et adaptée ici. Les adaptations connues (`react-*`) ne sont pas touchées.
+- *`quality-gate.mjs`* (agent-skills) lu en entier : il lit un rapport JSON local et rend un
+  code de sortie, sans réseau ni exécution.
+- *`bun-runtime`* : Bun 1.4, avec un runtime réécrit de Zig en Rust, est bien sorti le
+  2026-08-20 (presse spécialisée ; les notes de version officielles n'ont pas été ouvertes).
+- *`django-security`* : retire `SECURE_BROWSER_XSS_FILTER`, supprimé en Django 4.0, et passe
+  `CSRF_COOKIE_HTTPONLY` à `False`, comme le recommande la documentation de Django.
+- *spec-kit* : `specify init demo --integration claude --non-interactive
+  --ignore-agent-tools`, lancé par `uvx` sur un projet jetable. Il installe les dix skills et
+  les gabarits, n'écrit que dans le projet (rien dans `~/.specify`, aucun crochet, pas de
+  `settings.json`).
+- *graphify* : `install()` lu. `graphify install` copie la skill et inscrit son bloc dans
+  `CLAUDE.md`, sans crochet ; les crochets ne viennent que de `graphify claude install`. Le
+  wheel `graphifyy-0.9.100-py3-none-any.whl` (SHA-256
+  `64c5ed6f2dcc8c28b6a96c87023851c1644c16f55a87f45dbc9127119eb6e769`) est identique au commit :
+  233 fichiers sur 233, même hash de blob, aucun `.pth`. 0.9.103 existe sur PyPI mais n'est pas
+  audité.
+
+**Incident : `graphify install` 0.9.100 a effacé deux sections d'un `CLAUDE.md` global.** Au
+passage de 0.9.73 à 0.9.100 sur la machine de l'humain, l'installation a supprimé « Panneau
+Sprint pendant l'implémentation » et « Fin de session ». La cause est dans
+`_replace_or_append_section` : la 0.9.100 *remplace* son bloc au lieu de l'ajouter, et le bloc
+court de `# graphify` jusqu'à la prochaine ligne commençant par `# `, donc les sections `##`
+placées après lui en font partie. La 0.9.73 n'ajoutait que si le bloc manquait. Le fichier a
+été restauré depuis une copie prise juste avant, puis le bloc `# graphify` a été déplacé en
+fin de fichier ; un essai à blanc avec la fonction de graphify ne modifie alors plus rien.
+`SETUP.md` (étape 5b et le texte recopié dans chaque projet) et `AGENTS.md` portent la
+consigne : sauvegarder `CLAUDE.md` et garder ce bloc en dernier. **L'audit du lot D avait
+cherché les crochets, pas ce comportement : il n'est apparu qu'à l'installation réelle.**
+
+**Écartés : épinglage laissé en place (14).**
+- `ponytail` : un module « band » qui écoute chaque appel d'outil, écrit par défaut dans
+  `~/.config/ponytail/band/` un registre contenant le début des prompts, et peut tout envoyer à
+  un webhook. Il ajoute aussi une carte du code d'environ 2 000 caractères à chaque session, et
+  ses `description` de revue et d'audit entrent en collision avec six skills. Pour une skill
+  `default`, le coût dépasse le gain.
+- `taste-skill` : les 13 skills sont fondues en une (`design-taste-frontend`), le
+  `plugin.json` racine disparaît, les classiques partent dans `Leonxlnx/taste-skill-classics`.
+  C'est une refonte : à évaluer comme un nouveau dépôt si besoin.
+- `laya` : 0.3.23 → 0.4.20 change la calibration (seuils 0,75 et 0,85), et `min_confidence=-1`
+  est désormais refusé. Activé seulement sur demande, rien ne presse.
+- `Skillspector` : le nouveau SHA n'est pas une release (« publication pending ») et rendrait
+  non reproductibles les taux de couverture déjà publiés. On attend un tag.
+- `text-to-cad` : la 0.8.4 pousse l'agent vers `curl https://texttocad.dev/install.sh | sh`,
+  qui suit toujours la dernière version, et son wheel installe un `.pth` exécuté à chaque
+  démarrage de Python.
+- `codegraph` : le commit n'est pas une release ; le workspace installe le bundle `v1.6.2`
+  vérifié par attestation, et déplacer l'épinglage casserait cette preuve.
+- `rtk` : le crate `engine/` passe en BUSL-1.1, lié au binaire par défaut. La version ajoute un
+  proxy LLM sans authentification et un post-crochet qui réécrit aussi les sorties de Read,
+  Grep et WebFetch. Aucune release taguée.
+- Sans objet, rien de ce qui change n'étant utilisé ici : `anthropics-skills`, `headroom`
+  (télémétrie active par défaut, proxy sur `0.0.0.0:8787`, à savoir si on l'active un jour),
+  `OmniRoute`, `code-on-incus`, `VoiceStudio`, `voicebox`, `claude-quickstarts`.
+
+Au prochain passage d'`upstream-watch`, ces 14 réapparaîtront : la décision n'est à revoir que
+si leur diff a changé de nature depuis ces SHA.
+
+**Ce qui a changé dans le dépôt.**
+- `catalog/repos.tsv` : 12 lignes, chacune dans son propre commit avec le lien de comparaison.
+- `curation/` : `grilling`, `anatomy`, `diagram-design`, les 16 skills d'`agent-skills` et ses
+  7 checklists, 6 skills d'ECC (`bun-runtime`, `django-security`, `fastapi-patterns`,
+  `golang-patterns`, `laravel-security`, `python-testing`). `docker-patterns` reste à
+  `ef648e0` : sa seule mise à jour décrit un relais d'authentification Codex propre au harnais
+  d'ECC, qui écoute sur `0.0.0.0`. Toujours 87 skills.
+- Exécutables livrés : 63 → 71. Sept d'`anatomy` (`print.mjs`, `print-sheet.mjs`,
+  `kit/pdf-button.mjs`, `push-button/build.mjs` et trois `sheet.mjs` ; le message de commit
+  en annonce six, c'est une erreur de compte) et `quality-gate.mjs`. Tous déclarés par nom dans
+  `scripts/check.py`.
+- `scripts/check.py` : le calcul des ancres rognait le titre *après* avoir retiré la
+  ponctuation, et rejetait donc `#-url` pour `## § URL`, que GitHub accepte. Corrigé en rognant
+  d'abord, ce qui a fait passer trois ancres valides d'`onboarding.md` (diagram-design).
+- `SETUP.md` : spec-kit à `7370e59`, graphify à 0.9.100, piège de `graphify install`.
+  `AGENTS.md` et les deux `CHEATSHEET` : graphify 0.9.100.
+- Chiffres en prose : 297 → 298 personas, 293 → 294 laissées de côté ; ECC 293 → 314 skills,
+  228 → 249 hors sélection ; 2958 → 3001 `SKILL.md`.
+
+**Comment les chiffres ont été comptés.**
+- `SKILL.md` : nom exact, `git ls-tree -r --name-only` au commit épinglé de chacune des 32
+  lignes. La même commande appliquée aux anciens épinglages redonne 2958, d'où la confiance
+  dans 3001. Les variations : `skills` 37 → 39, ECC 1027 → 1068, le reste inchangé.
+- ECC : `skills/*/SKILL.md` au commit épinglé, 293 → 314.
+- Personas : fichiers `.md` dont le nom commence par une minuscule, dans les dossiers de
+  division. La seule différence entre les deux commits est l'ajout
+  d'`engineering/engineering-electrical-engineer.md`, d'où +1. (Recompter de zéro selon cette
+  règle donne 296 → 297 ; la valeur publiée, 297, comptait aussi
+  `integrations/mcp-memory/backend-architect-with-memory.md`. On a gardé cette convention.)
+
+**Hors du dépôt, sur la machine de l'humain.**
+- `specify` passe de 1.0.7.dev0 à 1.2.6.dev0. Il était en 1.0.7, déjà en retard sur l'ancien
+  épinglage (1.0.14.dev0).
+- `graphify` passe de 0.9.73 à 0.9.100, avec `graphify install` (voir l'incident).
+- **Omnigent est cassé, sans lien avec cette session** : `omnigent --version` échoue sur
+  `No module named 'omnigent'`, et l'environnement d'outil n'a plus de `Lib`. Ses fichiers
+  restants datent du 2026-10-19 14 h 20. À réinstaller selon l'entrée du 19/10.
+- `mes_depots/Anthropic-Cybersecurity-Skills` a perdu
+  `skills/detecting-fileless-malware-techniques/SKILL.md` ; c'est vraisemblablement une
+  quarantaine de l'antivirus. Rien n'y a été touché.
+
+**Chiffres** : 87 skills (inchangé), 32 dépôts, 3001 fichiers `SKILL.md` aux commits épinglés,
+71 exécutables livrés sous `curation/`. 42 contrôles, 0 échec.
+
 ---
 
 ## Avant de modifier ce fichier
