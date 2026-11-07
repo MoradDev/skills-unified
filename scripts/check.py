@@ -200,8 +200,10 @@ def check_anchors() -> None:
             # GitHub strips punctuation, then maps each remaining space to one hyphen — so
             # "AI & LLM Security" becomes "ai--llm-security", with two hyphens where the
             # ampersand was. Collapsing runs of spaces here would reject working anchors.
-            slug = re.sub(r"[^\w\s-]", "", heading.lower(), flags=re.U)
-            headings.add(slug.strip().replace(" ", "-"))
+            # Trim the heading before stripping punctuation, never after: "§ URL" is "-url"
+            # on GitHub, the space left by the section sign becoming a leading hyphen.
+            slug = re.sub(r"[^\w\s-]", "", heading.strip().lower(), flags=re.U)
+            headings.add(slug.replace(" ", "-"))
         for anchor in re.findall(r"\]\(#([^)]+)\)", text):
             if anchor not in headings:
                 fail(f"{rel}: in-page anchor #{anchor} matches no heading")
