@@ -356,14 +356,14 @@ Donne-lui d'abord un échantillon de ta propre écriture et il en reprend la voi
 ## 9. agency-agents
 
 Des personas spécialisées : ingénierie, design, marketing, sécurité, tests, produit,
-jeu vidéo, SIG et d'autres (297, dans `mes_depots/agency-agents/<division>/`). **Un noyau de
+jeu vidéo, SIG et d'autres (298, dans `mes_depots/agency-agents/<division>/`). **Un noyau de
 14 est copié dans chaque projet ; le reste est proposé par division** — voir `SETUP.md`
 étape 4b.
 
 | Tâche | Commande |
 |---|---|
 | Les ajouter à un projet Claude Code | Copier **une division à la fois**, seulement les noms en minuscules : `Get-ChildItem mes_depots\agency-agents\engineering -Filter *.md \| Where-Object { $_.Name -cmatch '^[a-z]' } \| Copy-Item -Destination <projet>\.claude\agents` (copier, pas relier) |
-| Savoir ce que ça coûte | ~55 tokens de `description` par persona, chargés à **chaque session**. Les 297 font ~15 800 tokens. `engineering` + `design` + `testing` en font 84. |
+| Savoir ce que ça coûte | ~55 tokens de `description` par persona, chargés à **chaque session**. Les 298 font ~15 800 tokens. `engineering` + `design` + `testing` en font 84. |
 | Les installer pour un autre outil | `./scripts/install.sh --tool <outil>` depuis `mes_depots/agency-agents/` |
 | En utiliser une | Demande la spécialité par son nom : *« Utilise l'agent Backend Architect pour… »* |
 

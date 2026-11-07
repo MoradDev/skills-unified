@@ -134,7 +134,7 @@ All four are skills plugins, each carrying its own `.claude-plugin/plugin.json`,
 what makes "link it and it works" true for them.
 
 **[`msitarzewski/agency-agents`](https://github.com/msitarzewski/agency-agents) is the fourth,
-handled differently.** Its 297 specialist personas are genuinely useful —
+handled differently.** Its 298 specialist personas are genuinely useful —
 engineering, design, security, testing, product and more, so a narrow task goes to something
 written for it instead of to the generalist. But they are *agents*, not skills, and a harness
 that lists its agents loads every one of their `description` fields into **every session**:

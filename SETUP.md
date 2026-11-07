@@ -204,7 +204,7 @@ for p in engineering/engineering-software-architect engineering/engineering-back
 done
 ```
 
-**Then offer more, by division, and only what the project will use.** Copying all 297 is the
+**Then offer more, by division, and only what the project will use.** Copying all 298 is the
 thing to avoid: they carry about **15,800 tokens of `description`**, and a harness that lists
 its agents loads every one of them into **every session**, before the human has typed
 anything, for a project that will use a handful. That is the same cost this repository refuses

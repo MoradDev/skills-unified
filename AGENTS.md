@@ -374,9 +374,9 @@ Deliberate choices, not oversights:
 - **817 cybersecurity skills.** Explicit security engagements only.
 - **Codebase graphing.** Only past the ~80-file threshold: graphify on demand, codegraph
   only when the human has installed it for that project (`manual`).
-- **`agency-agents`' 297 personas, as a block.** A core of **14** is copied into every project
+- **`agency-agents`' 298 personas, as a block.** A core of **14** is copied into every project
   by default — architecture, backend, frontend, review, database, devops, prototyping, UI, UX,
   test automation, accessibility, appsec, technical writing — for about **600 tokens per
-  session**. All 297 would cost about **15,800 tokens** in every session, before anything is
+  session**. All 298 would cost about **15,800 tokens** in every session, before anything is
   asked, for a project that will use a handful. The rest are offered **by division**, on
   request. `SETUP.md` step 4b has the list and the commands.

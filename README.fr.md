@@ -144,7 +144,7 @@ Les quatre sont des plugins de skills, chacun portant son `.claude-plugin/plugin
 ce qui rend vrai, pour eux, le « on le lie et ça marche ».
 
 **[`msitarzewski/agency-agents`](https://github.com/msitarzewski/agency-agents) est le
-quatrième, traité autrement.** Ses 297 personas spécialistes sont réellement
+quatrième, traité autrement.** Ses 298 personas spécialistes sont réellement
 utiles — ingénierie, design, sécurité, tests, produit et bien d'autres, pour qu'une tâche
 étroite aille à quelque chose écrit pour elle plutôt qu'au généraliste. Mais ce sont des
 *agents*, pas des skills, et un harnais qui liste ses agents charge chacun de leurs champs
