@@ -150,7 +150,7 @@ utiles — ingénierie, design, sécurité, tests, produit et bien d'autres, pou
 *agents*, pas des skills, et un harnais qui liste ses agents charge chacun de leurs champs
 `description` dans **chaque session** : mesuré, cela fait environ **15 800 tokens avant que
 l'humain ait tapé quoi que ce soit**, pour un projet qui en utilisera trois ou quatre. Payer
-ça pour les 293 autres contredit l'argument que cette page défend deux sections plus haut.
+ça pour les 294 autres contredit l'argument que cette page défend deux sections plus haut.
 `SETUP.md` copie donc un **noyau de 14** dans chaque projet — architecture, backend, frontend,
 revue, base de données, devops, prototypage, UI, UX, automatisation des tests, accessibilité,
 appsec, rédaction technique — pour environ **600 tokens par session**, et propose le reste

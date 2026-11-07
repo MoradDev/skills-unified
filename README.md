@@ -139,7 +139,7 @@ engineering, design, security, testing, product and more, so a narrow task goes 
 written for it instead of to the generalist. But they are *agents*, not skills, and a harness
 that lists its agents loads every one of their `description` fields into **every session**:
 measured, that is about **15,800 tokens before the human has typed anything**, for a project
-that will use three or four of them. Paying that for the other 293 contradicts the argument
+that will use three or four of them. Paying that for the other 294 contradicts the argument
 this page makes two sections above. So `SETUP.md` copies a **core of 14** into every project — architecture, backend, frontend,
 review, database, devops, prototyping, UI, UX, test automation, accessibility, appsec,
 technical writing — for about **600 tokens per session**, and offers the rest **by division**
