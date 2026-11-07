@@ -27,7 +27,7 @@ voicebox	https://github.com/jamiepine/voicebox	app-tool	stock	51f49dea198384b4eb
 SCAIL-2	https://github.com/zai-org/SCAIL-2	app-tool	stock	78fe19576bb06be96c2375e088574a262a300edb	2026-10-02
 claude-quickstarts	https://github.com/anthropics/claude-quickstarts	app-tool	stock	3994db7dc2464d9ab255aba1dfda3594fc994c21	2026-10-04
 anatomy	https://github.com/wheresryan22/anatomy	skills	curated	1482e8469b0a9e0d8cc18ea2740a01423d29ae80	2026-11-07
-diagram-design	https://github.com/cathrynlavery/diagram-design	skills	curated	550fd66edff058bc73056c3416b76d69cfe865ba	2026-10-18
+diagram-design	https://github.com/cathrynlavery/diagram-design	skills	curated	0cf73c3fcc56667ad91a9a04c439ac6ccfabc9d1	2026-11-07
 security-audit-skill	https://github.com/cloudflare/security-audit-skill	skills	curated	c1c8a8c1471069fb0e188eeaff69b8e8db6564a8	2026-10-18
 text-to-cad	https://github.com/earthtojake/text-to-cad	skills	on-demand	c8dec1ec7c56fc15355cbfc51a26573aa49af434	2026-10-18
 logo-design-skill	https://github.com/kaankiziltug/logo-design-skill	skills	on-demand	734090317a2155c5bf1ae8bd4cc85c6848a0128f	2026-11-07
