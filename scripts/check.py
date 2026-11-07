@@ -508,6 +508,7 @@ def main(verbose: bool) -> int:
           "curation/skills/anatomy/scripts/turn-bench.mjs",
           "curation/skills/anatomy/scripts/turn-check.mjs",
           "curation/skills/anatomy/scripts/turn-fidelity.mjs",
+          "curation/skills/constraint-driven-development/scripts/quality-gate.mjs",
           "curation/skills/diagram-design/scripts/drawio_extract.py",
           "curation/skills/diagram-design/scripts/excalidraw_extract.py",
           "curation/skills/diagram-design/scripts/export_png.py",
