@@ -322,9 +322,27 @@ now and then, the whole project; codegraph, if the human installed it for this p
 the tool to query the application's code while coding. `CLAUDE.md`, `AGENTS.md`, `STATE.md`
 and the spec-kit artefacts are always read directly. Never `graphify claude install` or
 `graphify install --project`: they add a hook that pushes every read towards graphify.
+
+Before `graphify install`, back up `~/.claude/CLAUDE.md` and check that its `# graphify`
+block is the last thing in the file: the install rewrites everything from that heading to
+the next `# ` heading, `##` sections included.
 ```
 
 Tell the human the count the project starts at, so they know how far they are from it.
+
+**`graphify install` can delete your own instructions.** Since 0.9.100 it no longer only
+appends its `# graphify` block to `~/.claude/CLAUDE.md` (or `$CLAUDE_CONFIG_DIR/CLAUDE.md`):
+it *replaces* the block in place, and the block runs from that heading to the next line
+starting with `# `. Any `##` section written after it counts as part of the block and is
+deleted, silently. It happened on 2026-11-07, on two sections of a real global `CLAUDE.md`,
+restored from a copy taken just before. So, before every `graphify install`:
+
+- copy `~/.claude/CLAUDE.md` somewhere first;
+- keep the `# graphify` block at the very end of the file, where nothing follows it. Once it
+  is last, a reinstall rewrites only those three lines.
+
+0.9.73 only appended, and never rewrote a block it found, which is why nothing showed until
+the upgrade.
 
 **`rtk` is `manual`: mention it, never run its installer or `rtk init` yourself.** It is a
 single Rust binary that sits in front of shell commands and trims their output before the

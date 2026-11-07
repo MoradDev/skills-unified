@@ -207,7 +207,9 @@ tool for you, see the `structured-decisions` skill in `curation/`.
    Past ~80, propose `uv tool install graphifyy==0.9.100`, then `graphify install` and
    `/graphify .`, and read `graph.html` / `GRAPH_REPORT.md` before touching anything. Below
    ~80, do not — it is overhead with no return. Never install it without asking: it is a tool
-   on the human's machine, not a file in the project.
+   on the human's machine, not a file in the project. And back up `~/.claude/CLAUDE.md` before
+   `graphify install`: it rewrites everything from its `# graphify` heading to the next `# `
+   heading, so keep that block last (`SETUP.md` step 5b).
 
    Two graphs, split by the kind of file, not by where it sits:
 
