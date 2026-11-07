@@ -66,7 +66,7 @@ If the human asked for agent personas, copy them into `<project>/.claude/agents/
 than linking — Claude Code reads that directory directly, so a junction to a repository full
 of READMEs and scripts is not it. Copy **by division** and only files whose name starts with a
 lowercase letter; `SETUP.md` step 4b has the exact commands and the reason the whole block is
-not copied by default (about 15,800 tokens of agent descriptions per session for 297 personas,
+not copied by default (about 15,800 tokens of agent descriptions per session for 298 personas,
 against three or four actually used).
 
 Note that subagents execute inside the main session, so any isolation mechanism that

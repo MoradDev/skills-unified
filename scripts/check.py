@@ -200,8 +200,10 @@ def check_anchors() -> None:
             # GitHub strips punctuation, then maps each remaining space to one hyphen — so
             # "AI & LLM Security" becomes "ai--llm-security", with two hyphens where the
             # ampersand was. Collapsing runs of spaces here would reject working anchors.
-            slug = re.sub(r"[^\w\s-]", "", heading.lower(), flags=re.U)
-            headings.add(slug.strip().replace(" ", "-"))
+            # Trim the heading before stripping punctuation, never after: "§ URL" is "-url"
+            # on GitHub, the space left by the section sign becoming a leading hyphen.
+            slug = re.sub(r"[^\w\s-]", "", heading.strip().lower(), flags=re.U)
+            headings.add(slug.replace(" ", "-"))
         for anchor in re.findall(r"\]\(#([^)]+)\)", text):
             if anchor not in headings:
                 fail(f"{rel}: in-page anchor #{anchor} matches no heading")
@@ -449,10 +451,14 @@ def main(verbose: bool) -> int:
           "curation/skills/anatomy/examples/arcade-cabinet/live.js",
           "curation/skills/anatomy/examples/arcade-cabinet/parts.mjs",
           "curation/skills/anatomy/examples/arcade-cabinet/screen.mjs",
+          "curation/skills/anatomy/examples/arcade-cabinet/sheet.mjs",
           "curation/skills/anatomy/examples/desk-computer/build.mjs",
           "curation/skills/anatomy/examples/dial-indicator/build.mjs",
+          "curation/skills/anatomy/examples/push-button/build.mjs",
+          "curation/skills/anatomy/examples/push-button/sheet.mjs",
           "curation/skills/anatomy/examples/raptor-engine/build.mjs",
           "curation/skills/anatomy/examples/raptor-engine/live.js",
+          "curation/skills/anatomy/examples/raptor-engine/sheet.mjs",
           "curation/skills/anatomy/examples/ripple-tank/build.mjs",
           "curation/skills/anatomy/examples/ripple-tank/live.js",
           "curation/skills/anatomy/examples/ripple-tank/model.mjs",
@@ -480,6 +486,7 @@ def main(verbose: bool) -> int:
           "curation/skills/anatomy/kit/iso-kit.mjs",
           "curation/skills/anatomy/kit/iso-kit.ts",
           "curation/skills/anatomy/kit/lathe.mjs",
+          "curation/skills/anatomy/kit/pdf-button.mjs",
           "curation/skills/anatomy/kit/react/draw.tsx",
           "curation/skills/anatomy/kit/react/live.tsx",
           "curation/skills/anatomy/kit/tube.mjs",
@@ -494,11 +501,14 @@ def main(verbose: bool) -> int:
           "curation/skills/anatomy/scripts/inline-kit.mjs",
           "curation/skills/anatomy/scripts/line-ends.mjs",
           "curation/skills/anatomy/scripts/lines.mjs",
+          "curation/skills/anatomy/scripts/print-sheet.mjs",
+          "curation/skills/anatomy/scripts/print.mjs",
           "curation/skills/anatomy/scripts/publish.mjs",
           "curation/skills/anatomy/scripts/session.mjs",
           "curation/skills/anatomy/scripts/turn-bench.mjs",
           "curation/skills/anatomy/scripts/turn-check.mjs",
           "curation/skills/anatomy/scripts/turn-fidelity.mjs",
+          "curation/skills/constraint-driven-development/scripts/quality-gate.mjs",
           "curation/skills/diagram-design/scripts/drawio_extract.py",
           "curation/skills/diagram-design/scripts/excalidraw_extract.py",
           "curation/skills/diagram-design/scripts/export_png.py",

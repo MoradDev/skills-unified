@@ -204,10 +204,12 @@ tool for you, see the `structured-decisions` skill in `curation/`.
    git ls-files | grep -vE '^(node_modules|dist|build|vendor|\.venv)/' | wc -l
    ```
 
-   Past ~80, propose `uv tool install graphifyy==0.9.73`, then `graphify install` and
+   Past ~80, propose `uv tool install graphifyy==0.9.100`, then `graphify install` and
    `/graphify .`, and read `graph.html` / `GRAPH_REPORT.md` before touching anything. Below
    ~80, do not — it is overhead with no return. Never install it without asking: it is a tool
-   on the human's machine, not a file in the project.
+   on the human's machine, not a file in the project. And back up `~/.claude/CLAUDE.md` before
+   `graphify install`: it rewrites everything from its `# graphify` heading to the next `# `
+   heading, so keep that block last (`SETUP.md` step 5b).
 
    Two graphs, split by the kind of file, not by where it sits:
 
@@ -364,7 +366,7 @@ updating one" has the commands.
 Deliberate choices, not oversights:
 
 - **The full `ECC` plugin.** Its 65 best application skills are already in `curation/`.
-  The other 228 are off-topic for most projects (healthcare, logistics, trading, homelab)
+  The other 249 are off-topic for most projects (healthcare, logistics, trading, homelab)
   or duplicate the stack.
 - **The full `agent-skills` plugin.** Its 16 best skills are already here. Linking all of
   it reintroduces an exact name collision on `test-driven-development` plus 8 conceptual
@@ -374,9 +376,9 @@ Deliberate choices, not oversights:
 - **817 cybersecurity skills.** Explicit security engagements only.
 - **Codebase graphing.** Only past the ~80-file threshold: graphify on demand, codegraph
   only when the human has installed it for that project (`manual`).
-- **`agency-agents`' 297 personas, as a block.** A core of **14** is copied into every project
+- **`agency-agents`' 298 personas, as a block.** A core of **14** is copied into every project
   by default — architecture, backend, frontend, review, database, devops, prototyping, UI, UX,
   test automation, accessibility, appsec, technical writing — for about **600 tokens per
-  session**. All 297 would cost about **15,800 tokens** in every session, before anything is
+  session**. All 298 would cost about **15,800 tokens** in every session, before anything is
   asked, for a project that will use a handful. The rest are offered **by division**, on
   request. `SETUP.md` step 4b has the list and the commands.

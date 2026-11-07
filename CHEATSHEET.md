@@ -353,13 +353,13 @@ it otherwise removes. Claude Code may show it namespaced (`/humanizer:humanizer`
 ## 9. agency-agents
 
 Specialist personas: engineering, design, marketing, security, testing, product, game
-development, GIS and more (297, in `mes_depots/agency-agents/<division>/`). **A core of 14 is
+development, GIS and more (298, in `mes_depots/agency-agents/<division>/`). **A core of 14 is
 copied into every project; the rest are offered by division** — see `SETUP.md` step 4b.
 
 | Task | Command |
 |---|---|
 | Add them to a Claude Code project | Copy **one division at a time**, lowercase filenames only: `Get-ChildItem mes_depotsgency-agents\engineering -Filter *.md \| Where-Object { $_.Name -cmatch '^[a-z]' } \| Copy-Item -Destination <project>\.claudegents` (copy, do not link) |
-| Know what it costs | ~55 tokens of `description` per persona, loaded **every session**. All 297 is ~15,800 tokens. `engineering` + `design` + `testing` is 84. |
+| Know what it costs | ~55 tokens of `description` per persona, loaded **every session**. All 298 is ~15,800 tokens. `engineering` + `design` + `testing` is 84. |
 | Install them for another tool | `./scripts/install.sh --tool <tool>` from `mes_depots/agency-agents/` |
 | Use one | Ask for the specialist by name: *"Use the Backend Architect agent to…"* |
 
@@ -371,7 +371,7 @@ Offered by `SETUP.md`, never installed unprompted.
 
 | Tool | Command | When |
 |---|---|---|
-| graphify | `uv tool install graphifyy==0.9.73`, then `graphify install` | Once a project passes ~80 files |
+| graphify | `uv tool install graphifyy==0.9.100`, then `graphify install` | Once a project passes ~80 files |
 | graphify | `/graphify .` | Build the codebase graph, then read `graph.html` / `GRAPH_REPORT.md` |
 | Skillspector | `uv tool install git+https://github.com/NVIDIA/Skillspector.git@<commit>` | Before trusting a skill from an unknown source. Pin to the `Skillspector` commit in `catalog/repos.tsv`. |
 | Skillspector | `skillspector scan <skill-folder> --no-llm` | Scan it. Only findings in `.py`, `.sh`, `.js`, `.ts`, `.ps1` files matter. |

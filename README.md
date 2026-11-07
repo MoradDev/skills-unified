@@ -9,7 +9,7 @@
 
 Agent skills are scattered across dozens of repositories, with overlapping names,
 competing descriptions and wildly varying quality. This repository is the result of
-auditing the 32 catalogued in [`catalog/repos.tsv`](catalog/repos.tsv) — 2958 skill files
+auditing the 32 catalogued in [`catalog/repos.tsv`](catalog/repos.tsv) — 3001 skill files
 between them, counted at the commits now pinned there — and keeping the 87 that earn their
 place, with the reasoning kept in the open.
 
@@ -88,7 +88,7 @@ So the selection rejects more than it keeps:
 
 Counted at the commits pinned in `catalog/repos.tsv`:
 
-- **228 of ECC's 293 skills** — off-topic for most projects (healthcare, logistics,
+- **249 of ECC's 314 skills** — off-topic for most projects (healthcare, logistics,
   trading, homelab) or duplicating what is already here.
 - **832 of awesome-claude-skills' 864** — SaaS connectors, kept as a reference index only.
 - **9 of agent-skills' 25** — one exact name collision on `test-driven-development`, plus
@@ -134,12 +134,12 @@ All four are skills plugins, each carrying its own `.claude-plugin/plugin.json`,
 what makes "link it and it works" true for them.
 
 **[`msitarzewski/agency-agents`](https://github.com/msitarzewski/agency-agents) is the fourth,
-handled differently.** Its 297 specialist personas are genuinely useful —
+handled differently.** Its 298 specialist personas are genuinely useful —
 engineering, design, security, testing, product and more, so a narrow task goes to something
 written for it instead of to the generalist. But they are *agents*, not skills, and a harness
 that lists its agents loads every one of their `description` fields into **every session**:
 measured, that is about **15,800 tokens before the human has typed anything**, for a project
-that will use three or four of them. Paying that for the other 293 contradicts the argument
+that will use three or four of them. Paying that for the other 294 contradicts the argument
 this page makes two sections above. So `SETUP.md` copies a **core of 14** into every project — architecture, backend, frontend,
 review, database, devops, prototyping, UI, UX, test automation, accessibility, appsec,
 technical writing — for about **600 tokens per session**, and offers the rest **by division**

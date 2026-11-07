@@ -10,7 +10,7 @@ lire `SETUP.md`, et il installe le reste lui-même.**
 Les skills d'agents sont dispersées dans des dizaines de dépôts, avec des noms qui se
 recouvrent, des descriptions qui se concurrencent et une qualité très inégale. Ce dépôt
 est le résultat de l'audit des 32 dépôts catalogués dans
-[`catalog/repos.tsv`](catalog/repos.tsv) — 2958 fichiers de skills à eux tous, comptés aux
+[`catalog/repos.tsv`](catalog/repos.tsv) — 3001 fichiers de skills à eux tous, comptés aux
 commits désormais épinglés — dont on a gardé les 87 qui méritent leur place, en laissant le
 raisonnement à découvert.
 
@@ -93,7 +93,7 @@ La sélection écarte donc plus qu'elle ne retient :
 
 Comptés aux commits épinglés dans `catalog/repos.tsv` :
 
-- **228 des 293 skills d'ECC** — hors sujet pour la plupart des projets (santé,
+- **249 des 314 skills d'ECC** — hors sujet pour la plupart des projets (santé,
   logistique, trading, homelab) ou redondantes avec l'existant.
 - **832 des 864 d'awesome-claude-skills** — des connecteurs SaaS, conservés comme simple
   annuaire de veille.
@@ -144,13 +144,13 @@ Les quatre sont des plugins de skills, chacun portant son `.claude-plugin/plugin
 ce qui rend vrai, pour eux, le « on le lie et ça marche ».
 
 **[`msitarzewski/agency-agents`](https://github.com/msitarzewski/agency-agents) est le
-quatrième, traité autrement.** Ses 297 personas spécialistes sont réellement
+quatrième, traité autrement.** Ses 298 personas spécialistes sont réellement
 utiles — ingénierie, design, sécurité, tests, produit et bien d'autres, pour qu'une tâche
 étroite aille à quelque chose écrit pour elle plutôt qu'au généraliste. Mais ce sont des
 *agents*, pas des skills, et un harnais qui liste ses agents charge chacun de leurs champs
 `description` dans **chaque session** : mesuré, cela fait environ **15 800 tokens avant que
 l'humain ait tapé quoi que ce soit**, pour un projet qui en utilisera trois ou quatre. Payer
-ça pour les 293 autres contredit l'argument que cette page défend deux sections plus haut.
+ça pour les 294 autres contredit l'argument que cette page défend deux sections plus haut.
 `SETUP.md` copie donc un **noyau de 14** dans chaque projet — architecture, backend, frontend,
 revue, base de données, devops, prototypage, UI, UX, automatisation des tests, accessibilité,
 appsec, rédaction technique — pour environ **600 tokens par session**, et propose le reste

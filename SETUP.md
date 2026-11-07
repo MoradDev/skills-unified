@@ -204,7 +204,7 @@ for p in engineering/engineering-software-architect engineering/engineering-back
 done
 ```
 
-**Then offer more, by division, and only what the project will use.** Copying all 297 is the
+**Then offer more, by division, and only what the project will use.** Copying all 298 is the
 thing to avoid: they carry about **15,800 tokens of `description`**, and a harness that lists
 its agents loads every one of them into **every session**, before the human has typed
 anything, for a project that will use a handful. That is the same cost this repository refuses
@@ -249,7 +249,7 @@ the human decide, and it is the number nobody was given before.
 `AGENTS.md`: every new project starts with it.
 
 ```bash
-uv tool install specify-cli --from git+https://github.com/github/spec-kit.git@838f1184d1b2ed254a99e8b818dbc23aa80a7f1f
+uv tool install specify-cli --from git+https://github.com/github/spec-kit.git@7370e592f3cd9c06e5b698983957e227c75b30e2
 ```
 
 The `@<sha>` suffix pins the install to the commit recorded in `catalog/repos.tsv`, for the
@@ -294,7 +294,7 @@ All three are pinned, for the same reason as step 2.
 uv tool install git+https://github.com/NVIDIA/Skillspector.git@2226747e4ca97198bb82faf5085b8a75f2e1dc02
 
 # Codebase graph — only once a project exceeds ~80 files
-uv tool install graphifyy==0.9.73
+uv tool install graphifyy==0.9.100
 
 # Token-saving proxy for shell commands — the human installs it, see below
 cargo install --git https://github.com/rtk-ai/rtk --rev a4cddfc5ce6e6412c66e9729c4200792d822a964
@@ -314,7 +314,7 @@ count the project's source files, excluding dependencies, `.git` and build outpu
     git ls-files | grep -vE '^(node_modules|dist|build|vendor|\.venv)/' | wc -l
 
 Past ~80, reading files one at a time stops being a viable way to understand the system.
-Propose `uv tool install graphifyy==0.9.73 && graphify install && /graphify .` to the human,
+Propose `uv tool install graphifyy==0.9.100 && graphify install && /graphify .` to the human,
 then read `graph.html` / `GRAPH_REPORT.md`. Below ~80, do not: it is pure overhead.
 
 Two graphs, split by kind: graphify maps the documentation (specs, ADRs, docs, PDFs) and,
@@ -322,9 +322,27 @@ now and then, the whole project; codegraph, if the human installed it for this p
 the tool to query the application's code while coding. `CLAUDE.md`, `AGENTS.md`, `STATE.md`
 and the spec-kit artefacts are always read directly. Never `graphify claude install` or
 `graphify install --project`: they add a hook that pushes every read towards graphify.
+
+Before `graphify install`, back up `~/.claude/CLAUDE.md` and check that its `# graphify`
+block is the last thing in the file: the install rewrites everything from that heading to
+the next `# ` heading, `##` sections included.
 ```
 
 Tell the human the count the project starts at, so they know how far they are from it.
+
+**`graphify install` can delete your own instructions.** Since 0.9.100 it no longer only
+appends its `# graphify` block to `~/.claude/CLAUDE.md` (or `$CLAUDE_CONFIG_DIR/CLAUDE.md`):
+it *replaces* the block in place, and the block runs from that heading to the next line
+starting with `# `. Any `##` section written after it counts as part of the block and is
+deleted, silently. It happened on 2026-11-07, on two sections of a real global `CLAUDE.md`,
+restored from a copy taken just before. So, before every `graphify install`:
+
+- copy `~/.claude/CLAUDE.md` somewhere first;
+- keep the `# graphify` block at the very end of the file, where nothing follows it. Once it
+  is last, a reinstall rewrites only those three lines.
+
+0.9.73 only appended, and never rewrote a block it found, which is why nothing showed until
+the upgrade.
 
 **`rtk` is `manual`: mention it, never run its installer or `rtk init` yourself.** It is a
 single Rust binary that sits in front of shell commands and trims their output before the
