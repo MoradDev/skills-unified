@@ -88,7 +88,7 @@ So the selection rejects more than it keeps:
 
 Counted at the commits pinned in `catalog/repos.tsv`:
 
-- **228 of ECC's 293 skills** — off-topic for most projects (healthcare, logistics,
+- **249 of ECC's 314 skills** — off-topic for most projects (healthcare, logistics,
   trading, homelab) or duplicating what is already here.
 - **832 of awesome-claude-skills' 864** — SaaS connectors, kept as a reference index only.
 - **9 of agent-skills' 25** — one exact name collision on `test-driven-development`, plus

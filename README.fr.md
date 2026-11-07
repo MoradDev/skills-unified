@@ -93,7 +93,7 @@ La sélection écarte donc plus qu'elle ne retient :
 
 Comptés aux commits épinglés dans `catalog/repos.tsv` :
 
-- **228 des 293 skills d'ECC** — hors sujet pour la plupart des projets (santé,
+- **249 des 314 skills d'ECC** — hors sujet pour la plupart des projets (santé,
   logistique, trading, homelab) ou redondantes avec l'existant.
 - **832 des 864 d'awesome-claude-skills** — des connecteurs SaaS, conservés comme simple
   annuaire de veille.

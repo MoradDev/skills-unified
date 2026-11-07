@@ -364,7 +364,7 @@ updating one" has the commands.
 Deliberate choices, not oversights:
 
 - **The full `ECC` plugin.** Its 65 best application skills are already in `curation/`.
-  The other 228 are off-topic for most projects (healthcare, logistics, trading, homelab)
+  The other 249 are off-topic for most projects (healthcare, logistics, trading, homelab)
   or duplicate the stack.
 - **The full `agent-skills` plugin.** Its 16 best skills are already here. Linking all of
   it reintroduces an exact name collision on `test-driven-development` plus 8 conceptual
