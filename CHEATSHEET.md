@@ -371,7 +371,7 @@ Offered by `SETUP.md`, never installed unprompted.
 
 | Tool | Command | When |
 |---|---|---|
-| graphify | `uv tool install graphifyy==0.9.73`, then `graphify install` | Once a project passes ~80 files |
+| graphify | `uv tool install graphifyy==0.9.100`, then `graphify install` | Once a project passes ~80 files |
 | graphify | `/graphify .` | Build the codebase graph, then read `graph.html` / `GRAPH_REPORT.md` |
 | Skillspector | `uv tool install git+https://github.com/NVIDIA/Skillspector.git@<commit>` | Before trusting a skill from an unknown source. Pin to the `Skillspector` commit in `catalog/repos.tsv`. |
 | Skillspector | `skillspector scan <skill-folder> --no-llm` | Scan it. Only findings in `.py`, `.sh`, `.js`, `.ts`, `.ps1` files matter. |

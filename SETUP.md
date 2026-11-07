@@ -294,7 +294,7 @@ All three are pinned, for the same reason as step 2.
 uv tool install git+https://github.com/NVIDIA/Skillspector.git@2226747e4ca97198bb82faf5085b8a75f2e1dc02
 
 # Codebase graph — only once a project exceeds ~80 files
-uv tool install graphifyy==0.9.73
+uv tool install graphifyy==0.9.100
 
 # Token-saving proxy for shell commands — the human installs it, see below
 cargo install --git https://github.com/rtk-ai/rtk --rev a4cddfc5ce6e6412c66e9729c4200792d822a964
@@ -314,7 +314,7 @@ count the project's source files, excluding dependencies, `.git` and build outpu
     git ls-files | grep -vE '^(node_modules|dist|build|vendor|\.venv)/' | wc -l
 
 Past ~80, reading files one at a time stops being a viable way to understand the system.
-Propose `uv tool install graphifyy==0.9.73 && graphify install && /graphify .` to the human,
+Propose `uv tool install graphifyy==0.9.100 && graphify install && /graphify .` to the human,
 then read `graph.html` / `GRAPH_REPORT.md`. Below ~80, do not: it is pure overhead.
 
 Two graphs, split by kind: graphify maps the documentation (specs, ADRs, docs, PDFs) and,
